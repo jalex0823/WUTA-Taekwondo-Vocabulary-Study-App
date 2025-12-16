@@ -2474,6 +2474,44 @@ body.page-terms.theme-arcade.theme-screenshot .auto-controls {
     border-top: 1px solid rgba(255,255,255,0.16);
 }
 
+/* Fix unreadable dark text inside the black Auto Guide panel */
+body.page-terms.theme-arcade.theme-screenshot .auto-guide-banner {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.14);
+}
+
+body.page-terms.theme-arcade.theme-screenshot .auto-guide-steps {
+    color: rgba(255,255,255,0.92);
+}
+
+body.page-terms.theme-arcade.theme-screenshot .auto-guide-steps .step {
+    background: rgba(255,255,255,0.90);
+    border-color: rgba(0,0,0,0.10);
+    color: rgba(0,0,0,0.82);
+}
+
+body.page-terms.theme-arcade.theme-screenshot .auto-guide-steps .arrow {
+    color: rgba(255,255,255,0.55);
+}
+
+body.page-terms.theme-arcade.theme-screenshot .auto-guide-sub {
+    color: rgba(255,255,255,0.72);
+}
+
+body.page-terms.theme-arcade.theme-screenshot .auto-guide-help summary {
+    color: rgba(255,255,255,0.80);
+}
+
+body.page-terms.theme-arcade.theme-screenshot .auto-guide-help .help-text {
+    background: rgba(0,0,0,0.42);
+    border-color: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.78);
+}
+
+body.page-terms.theme-arcade.theme-screenshot .repeat-time-control label {
+    color: rgba(255,255,255,0.78);
+}
+
 body.theme-arcade .auto-guide-banner {
     background: rgba(14, 165, 233, 0.10);
     border: 1px solid rgba(14, 165, 233, 0.22);

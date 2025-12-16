@@ -106,6 +106,15 @@
                             <option value="7">7 sec</option>
                         </select>
                     </div>
+
+                    <div class="repeat-time-control" style="flex: 1;">
+                        <label>Repeat Card:</label>
+                        <select id="autoRepeatSelect" onchange="updateAutoRepeatCount()">
+                            <option value="1" selected>1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                        </select>
+                    </div>
                 </div>
                 <button class="auto-btn play-btn" id="playPauseBtn" onclick="toggleAutoPlay()" style="width: 100%; padding: 15px; font-size: 18px;">
                     <span id="playPauseIcon">▶️</span>
@@ -350,6 +359,7 @@
         let currentMode = 'manual';
         let isAutoPlaying = false;
         let repeatTime = 5; // seconds
+        let autoRepeatCount = 1; // times to repeat audio per card in Auto Guide
         let countdownInterval = null;
         let progressTimeout = null;
         
@@ -985,9 +995,8 @@
                 if (!window.isAutoPlaying) {
                     const playPauseText = document.getElementById('playPauseText');
                     if (playPauseText) {
-                        playPauseText.textContent = on
-                            ? '🎵 Start Auto Play - Korean + English'
-                            : '🎵 Start Auto Play - Korean only';
+                        // Auto Guide always plays Korean + English.
+                        playPauseText.textContent = '🎵 Start Auto Play - Korean + English';
                     }
                 }
             } catch (e) {}
@@ -1063,6 +1072,15 @@
             repeatTime = parseInt(document.getElementById('repeatTimeSelect').value);
         }
 
+        function updateAutoRepeatCount() {
+            playTapSound();
+            vibrateDevice([30]);
+            const el = document.getElementById('autoRepeatSelect');
+            if (!el) return;
+            const v = parseInt(el.value);
+            autoRepeatCount = Number.isFinite(v) ? Math.max(1, Math.min(3, v)) : 1;
+        }
+
         // ============ AUTO-PROGRESSION ============
         
         function toggleAutoPlay() {
@@ -1106,7 +1124,8 @@
             playPauseBtn.style.padding = '15px';
             playPauseBtn.style.fontSize = '18px';
             playPauseIcon.textContent = '▶️';
-            playPauseText.textContent = (window.translationEnabled ? '🎵 Resume Auto Play - Korean + English' : '🎵 Resume Auto Play - Korean only');
+            // Auto Guide always plays Korean + English.
+            playPauseText.textContent = '🎵 Resume Auto Play - Korean + English';
             
             // Clear timers
             if (countdownInterval) {
@@ -1145,7 +1164,8 @@
             }
             
             const term = terms[currentCard];
-            const audioUrl = window.translationEnabled ? `/audio/${term.id}` : `/audio/${term.id}?mode=korean`;
+            // Auto Guide should always speak Korean THEN English, even if Translation is OFF.
+            const audioUrl = `/audio/${term.id}`;
             
             // Stop previous audio
             if (currentAudio) {
@@ -1153,17 +1173,20 @@
             }
             
             // Play audio - bilingual: Korean + pause + English
+            // Repeat (optional) before starting the between-cards countdown.
             currentAudio = new Audio(audioUrl);
             const activeCard = document.querySelector('.flashcard.active');
             const visualizer = activeCard.querySelector('.audio-visualizer');
             
             visualizer.classList.remove('hidden');
             
-            // Auto mode has user interaction from Start button, so audio will play
-            currentAudio.play().catch(err => {
+            const repeatTotal = Math.max(1, autoRepeatCount || 1);
+            let repeatsRemaining = repeatTotal;
+
+            const handleError = (err) => {
                 console.error('Error playing audio in auto mode:', err);
                 visualizer.classList.add('hidden');
-                
+
                 // IMPORTANT: Still advance even if audio fails
                 // This ensures auto-mode continues even with old cached audio or network issues
                 if (isAutoPlaying) {
@@ -1175,16 +1198,41 @@
                     // Start countdown anyway so we still auto-advance
                     startCountdown();
                 }
-            });
+            };
 
-            currentAudio.onended = () => {
+            const handleEnded = () => {
                 visualizer.classList.add('hidden');
-                
-                // Start countdown for repeat time
+                repeatsRemaining -= 1;
+
+                // Repeat the full bilingual audio if requested
+                if (isAutoPlaying && repeatsRemaining > 0) {
+                    setTimeout(() => {
+                        if (!isAutoPlaying) return;
+                        startPlayback();
+                    }, 350);
+                    return;
+                }
+
+                // Start countdown for the between-cards pause
                 if (isAutoPlaying) {
                     startCountdown();
                 }
             };
+
+            const startPlayback = () => {
+                try { if (currentAudio) currentAudio.pause(); } catch (e) {}
+                try {
+                    currentAudio = new Audio(audioUrl);
+                    currentAudio.onended = handleEnded;
+                    visualizer.classList.remove('hidden');
+                    currentAudio.play().catch(handleError);
+                } catch (e) {
+                    handleError(e);
+                }
+            };
+
+            // Kick it off
+            startPlayback();
         }
 
         function startCountdown() {
