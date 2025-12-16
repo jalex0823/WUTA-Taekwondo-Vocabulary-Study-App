@@ -47,7 +47,7 @@ def _should_upgrade_audio(audio_path: Path, meta: dict | None):
     if not audio_path.exists():
         return True
 
-    if meta and meta.get("schema_version") == 1 and meta.get("mode") == "bilingual":
+    if meta and meta.get("schema_version") == 2 and meta.get("mode") == "bilingual":
         return False
 
     # Legacy cache: if we don't know, only upgrade obviously-small files.
@@ -73,14 +73,15 @@ def _generate_bilingual_mp3(term: dict, out_path: Path):
     korean_tts.write_to_fp(korean_audio_bytes)
     korean_audio_bytes.seek(0)
 
-    english_tts = gTTS(text=term["english"], lang="en", slow=True)
+    # English translation at a normal pace (Korean stays slow for learning).
+    english_tts = gTTS(text=term["english"], lang="en", slow=False)
     english_audio_bytes = io.BytesIO()
     english_tts.write_to_fp(english_audio_bytes)
     english_audio_bytes.seek(0)
 
     korean_audio = AudioSegment.from_mp3(korean_audio_bytes)
     english_audio = AudioSegment.from_mp3(english_audio_bytes)
-    pause = AudioSegment.silent(duration=500)
+    pause = AudioSegment.silent(duration=650)
     combined = korean_audio + pause + english_audio
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -152,8 +153,13 @@ def get_audio(term_id):
     # Ensure directory exists even under gunicorn (where __main__ doesn't run).
     AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 
-    audio_file = AUDIO_DIR / f"{term_id}.mp3"
-    audio_meta = AUDIO_DIR / f"{term_id}.meta.json"
+    mode = (request.args.get("mode") or "bilingual").strip().lower()
+    want_korean_only = mode in {"korean", "ko", "korean_only"}
+
+    # Keep separate cache files per mode so toggling doesn't overwrite the bilingual track.
+    audio_suffix = ".ko" if want_korean_only else ""
+    audio_file = AUDIO_DIR / f"{term_id}{audio_suffix}.mp3"
+    audio_meta = AUDIO_DIR / f"{term_id}{audio_suffix}.meta.json"
 
     data = load_data()
     term = _find_term_by_id(data, term_id)
@@ -161,6 +167,34 @@ def get_audio(term_id):
         abort(404)
 
     meta = _load_audio_meta(audio_meta)
+
+    # Korean-only mode: generate once and keep it.
+    if want_korean_only:
+        if not audio_file.exists():
+            tmp_file = AUDIO_DIR / f"{term_id}{audio_suffix}.tmp.mp3"
+            try:
+                _generate_korean_only_mp3(term, tmp_file)
+                tmp_file.replace(audio_file)
+                _write_audio_meta(
+                    audio_meta,
+                    {
+                        "schema_version": 2,
+                        "mode": "korean_only",
+                        "term_id": term_id,
+                        "generated_at": int(time.time()),
+                    },
+                )
+            except Exception as e:
+                try:
+                    if tmp_file.exists():
+                        tmp_file.unlink()
+                except Exception:
+                    pass
+                print(f"Error generating Korean-only audio for {term_id}: {e}")
+                abort(500)
+
+        return send_file(audio_file, mimetype="audio/mpeg")
+
     needs_upgrade = _should_upgrade_audio(audio_file, meta)
 
     if needs_upgrade:
@@ -173,7 +207,7 @@ def get_audio(term_id):
             _write_audio_meta(
                 audio_meta,
                 {
-                    "schema_version": 1,
+                    "schema_version": 2,
                     "mode": "bilingual",
                     "term_id": term_id,
                     "generated_at": int(time.time()),
@@ -196,7 +230,7 @@ def get_audio(term_id):
                     _write_audio_meta(
                         audio_meta,
                         {
-                            "schema_version": 1,
+                            "schema_version": 2,
                             "mode": "korean_only",
                             "term_id": term_id,
                             "generated_at": int(time.time()),
@@ -211,7 +245,7 @@ def get_audio(term_id):
                     _write_audio_meta(
                         audio_meta,
                         {
-                            "schema_version": 1,
+                            "schema_version": 2,
                             "mode": meta.get("mode") if meta else "unknown",
                             "term_id": term_id,
                             "generated_at": int(time.time()),

@@ -28,9 +28,19 @@
     
     <!-- Confetti is implemented locally (see inline script) to avoid third-party tracking/storage warnings. -->
 </head>
-<body>
+<body class="theme-arcade theme-screenshot page-terms">
     <div class="container">
         <header class="terms-header" style="--belt-color: {{ belt.belt_color }}">
+            <div class="terms-brand" aria-hidden="true">
+                <picture class="terms-brand-mascot">
+                    <img
+                        src="{{ url_for('static', filename='images/TVTA_Neal.png') }}"
+                        alt=""
+                        loading="eager"
+                        onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/branding/mascot.png') }}'; this.onerror=function(){this.onerror=null; this.src='{{ url_for('static', filename='images/branding/mascot.svg') }}';};"
+                    >
+                </picture>
+            </div>
             <a href="/" class="back-button">← Back to Main Menu</a>
             <h1>{{ belt.belt_name }}</h1>
             <p class="term-counter">
@@ -39,7 +49,24 @@
             </p>
         </header>
 
+        <div class="music-controls" aria-label="Background music controls">
+            <div class="music-controls__row">
+                <span class="music-controls__label" id="bgmLabel">🎵 Music</span>
+                <button class="music-toggle" id="bgmToggle" type="button" aria-pressed="true">Music: ON</button>
+            </div>
+            <div class="music-controls__row">
+                <label class="music-controls__vol" for="bgmVolume">Volume</label>
+                <input id="bgmVolume" class="music-volume" type="range" min="0" max="100" step="1" value="22" />
+            </div>
+        </div>
+
         <div class="mode-controls">
+            <div class="translation-toggle-row">
+                <button class="translation-toggle tkd-translate-toggle" id="translationToggle" type="button" onclick="toggleTranslation()" aria-pressed="true">
+                    Translation: ON
+                </button>
+            </div>
+
             <div class="mode-toggle">
                 <button class="mode-btn active" id="manualModeBtn" onclick="setMode('manual')">
                     <span class="mode-icon">👆</span>
@@ -52,12 +79,22 @@
             </div>
             
             <div class="auto-controls hidden" id="autoControls">
-                <div style="background: #4ECDC4; color: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; text-align: center; font-size: 14px;">
-                    🎵 <strong>Auto Play:</strong> Korean → English → Next Word<br>
-                    <small style="opacity: 0.9;">Will play through all {{ total_terms }} terms automatically</small><br>
-                    <small style="opacity: 0.8; font-size: 11px; margin-top: 5px; display: block;">
-                        ℹ️ If hearing only Korean: clear browser cache or contact admin to clear server audio files
-                    </small>
+                <div class="auto-guide-banner" aria-label="How Auto Guide works">
+                    <div class="auto-guide-steps" aria-hidden="true">
+                        <span class="step">🇰🇷 Listen</span>
+                        <span class="arrow">→</span>
+                        <span class="step">🇺🇸 Repeat</span>
+                        <span class="arrow">→</span>
+                        <span class="step">➡️ Next</span>
+                    </div>
+                    <div class="auto-guide-sub">Plays through {{ total_terms }} cards</div>
+
+                    <details class="auto-guide-help">
+                        <summary>Need help?</summary>
+                        <div class="help-text">
+                            If you only hear Korean, try refreshing the page. If it still happens, clear browser cache or ask an admin to clear server audio files.
+                        </div>
+                    </details>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center; justify-content: center; margin-bottom: 10px;">
                     <div class="repeat-time-control" style="flex: 1;">
@@ -92,36 +129,65 @@
 
         <div class="flashcard-container">
             {% for t in belt.terms %}
-            <div class="flashcard {% if loop.first %}active{% endif %}" data-term-index="{{ loop.index0 }}">
+            <div class="flashcard {% if loop.first %}active{% endif %}"
+                 data-term-index="{{ loop.index0 }}"
+                 data-hangul="{{ t.hangul }}"
+                 data-romanization="{{ t.romanization }}"
+                 data-english="{{ t.english }}"
+                 data-category="{{ t.category }}"
+                 data-image="{{ t.image_path or '' }}">
                 <div class="card-inner">
                     <div class="card-front">
-                        <div class="english-preview">{{ t.english }}</div>
-                        <div class="hangul-text">{{ t.hangul }}</div>
-                        <div class="category-badge">{{ t.category }}</div>
-                        
-                        <button class="audio-button" onclick="playAudio('{{ t.id }}', this)" title="Read this card (Korean + English)">
-                            <svg class="speaker-icon" viewBox="0 0 24 24" width="48" height="48">
-                                <path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-                            </svg>
-                            <span class="audio-text">🔊 Read Card</span>
-                        </button>
+                        <div class="ref-card" aria-label="Vocabulary card">
+                            <div class="ref-mascot" aria-hidden="true">
+                                <img
+                                    src="{{ url_for('static', filename='images/TVTA_Neal.png') }}"
+                                    alt=""
+                                    loading="eager"
+                                    onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/branding/mascot.png') }}';"
+                                >
+                            </div>
 
-                        <div class="audio-visualizer hidden">
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
-                            <div class="bar"></div>
+                            <div class="ref-belt">{{ belt.belt_name }}</div>
+
+                            <div class="ref-divider" aria-hidden="true"></div>
+
+                            <div class="ref-hangul">{{ t.hangul }}</div>
+                            <div class="ref-roman">{{ t.romanization }}</div>
+
+                            <div class="ref-english-row">
+                                <div class="ref-english">{{ t.english }}</div>
+                            </div>
+
+                            <div class="ref-definition">Category: {{ t.category }}</div>
+
+                            <button class="ref-read" type="button" onclick="playAudio('{{ t.id }}', this, true)" title="Read Card">
+                                <span class="ref-read__ico" aria-hidden="true">🔊</span>
+                                <span class="ref-read__txt">Read Card</span>
+                            </button>
+
+                            <div class="audio-visualizer hidden" aria-hidden="true">
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                            </div>
+
+                            <div class="ref-divider ref-divider--bottom" aria-hidden="true"></div>
+
+                            <div class="ref-nav" aria-label="Card navigation">
+                                <button class="ref-navbtn ref-navbtn--prev" type="button" onclick="prevCard()">Previous &lt;</button>
+                                <button class="ref-navbtn ref-navbtn--next" type="button" onclick="nextCard()">Next &gt;</button>
+                            </div>
                         </div>
-
-                        <button class="flip-button" onclick="flipCard(this)">
-                            See Details →
-                        </button>
                     </div>
 
                     <div class="card-back">
                         <div class="romanization">{{ t.romanization }}</div>
                         <div class="english-text">{{ t.english }}</div>
+
+                        <div class="tap-hint" aria-hidden="true">👆 Tap the card to go back</div>
                         
                         {% if t.image_path %}
                         <div class="move-image-container">
@@ -155,8 +221,10 @@
             <span class="dot {% if loop.first %}active{% endif %}" onclick="goToCard({{ loop.index0 }})"></span>
             {% endfor %}
         </div>
+
     </div>
 
+    <script src="{{ url_for('static', filename='wuta_audio.js') }}"></script>
     <script>
         // ============ TINY LOCAL CONFETTI (NO EXTERNAL CDN) ============
         // Minimal confetti implementation to avoid third-party script warnings.
@@ -581,6 +649,15 @@
             document.getElementById('current-term').textContent = index + 1;
             document.getElementById('prevBtn').disabled = index === 0;
             document.getElementById('nextBtn').disabled = index === totalCards - 1;
+
+            // Reference-style in-card nav buttons (if present)
+            try {
+                const active = document.querySelector('.flashcard.active');
+                const prev = active?.querySelector('.ref-navbtn--prev');
+                const next = active?.querySelector('.ref-navbtn--next');
+                if (prev) prev.disabled = index === 0;
+                if (next) next.disabled = index === totalCards - 1;
+            } catch (e) {}
             
             // Mark term as viewed
             const termId = terms[index].id;
@@ -655,6 +732,9 @@
         }
 
         function goToCard(index) {
+            playSFX('nav');
+            playTapSound();
+            vibrateDevice([20]);
             currentCard = index;
             showCard(currentCard);
             if (isAutoPlaying && currentMode === 'auto') {
@@ -670,27 +750,34 @@
             cardInner.classList.toggle('flipped');
         }
 
-        function _speakCardText(term, cardEl, visualizer) {
+        function _speakCardText(term, cardEl, visualizer, includeEnglish) {
             if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
                 return false;
             }
 
-            const inner = cardEl?.querySelector('.card-inner');
-            const isFlipped = inner?.classList.contains('flipped');
+            // Backwards compatible signature:
+            // - includeEnglish: boolean
+            // - includeEnglish: { includeEnglish, koreanRate, englishRate, pauseMs }
+            const opts = (includeEnglish && typeof includeEnglish === 'object') ? includeEnglish : { includeEnglish };
+
+            const wantEnglish = (opts.includeEnglish === undefined) ? !!window.translationEnabled : !!opts.includeEnglish;
+            const koRate = (typeof opts.koreanRate === 'number') ? opts.koreanRate : 0.68;
+            const enRate = (typeof opts.englishRate === 'number') ? opts.englishRate : 0.92;
+            const pauseMs = (typeof opts.pauseMs === 'number') ? opts.pauseMs : 420;
 
             const sequence = [];
             const hangul = (term?.hangul || '').trim();
             const romanization = (term?.romanization || '').trim();
             const english = (term?.english || '').trim();
 
-            // "Read the card": read what's relevant to the side the user is viewing.
-            if (!isFlipped) {
-                if (hangul) sequence.push({ text: hangul, lang: 'ko-KR', rate: 0.85 });
-                if (english) sequence.push({ text: english, lang: 'en-US', rate: 0.95 });
-            } else {
-                if (romanization) sequence.push({ text: romanization, lang: 'en-US', rate: 0.95 });
-                if (english) sequence.push({ text: english, lang: 'en-US', rate: 0.95 });
+            // WUTA is a Korean vocabulary study app: always speak Korean first (slowly), then English (optional).
+            if (hangul) {
+                sequence.push({ text: hangul, lang: 'ko-KR', rate: koRate });
+            } else if (romanization) {
+                // Fallback only if Hangul is missing.
+                sequence.push({ text: romanization, lang: 'en-US', rate: enRate });
             }
+            if (wantEnglish && english) sequence.push({ text: english, lang: 'en-US', rate: enRate });
 
             if (sequence.length === 0) return false;
 
@@ -709,7 +796,10 @@
                     const utter = new SpeechSynthesisUtterance(item.text);
                     utter.lang = item.lang;
                     utter.rate = item.rate ?? 1;
-                    utter.onend = () => speakNext(idx + 1);
+                    utter.onend = () => {
+                        // Small pause between Korean and English for clarity.
+                        setTimeout(() => speakNext(idx + 1), pauseMs);
+                    };
                     utter.onerror = () => {
                         // Hide visualizer and stop the chain on any error.
                         if (visualizer) visualizer.classList.add('hidden');
@@ -725,15 +815,19 @@
             }
         }
 
-        function playAudio(termId, button) {
+        function playAudio(termId, button, forceBilingual = false) {
             playTapSound();
             vibrateDevice([30]);
 
             // User explicitly clicked the speaker: use this gesture to unlock audio.
             unlockAudio();
             
-            const visualizer = button.nextElementSibling;
-            const audioUrl = `/audio/${termId}`;
+            const cardRoot = button?.closest?.('.flashcard') || null;
+            const visualizer = (cardRoot && cardRoot.querySelector('.audio-visualizer')) ? cardRoot.querySelector('.audio-visualizer') : button.nextElementSibling;
+
+            // If forceBilingual is true (Read Card), always do Korean then English.
+            const includeEnglish = forceBilingual ? true : !!window.translationEnabled;
+            const audioUrl = includeEnglish ? `/audio/${termId}` : `/audio/${termId}?mode=korean`;
             
             // Stop previous audio if playing
             if (currentAudio) {
@@ -753,7 +847,10 @@
             try {
                 const term = terms.find(t => t.id === termId) || terms.find(t => t.legacy_id === termId);
                 const cardEl = button.closest('.flashcard');
-                const spoke = _speakCardText(term, cardEl, visualizer);
+                const ttsOpts = forceBilingual
+                    ? { includeEnglish: true, koreanRate: 0.56, englishRate: 0.92, pauseMs: 700 }
+                    : includeEnglish;
+                const spoke = _speakCardText(term, cardEl, visualizer, ttsOpts);
                 if (spoke) {
                     currentAudio = null;
                     return;
@@ -779,7 +876,7 @@
 
         function playAudioForCurrentCard() {
             const term = terms[currentCard];
-            const audioUrl = `/audio/${term.id}`;
+            const audioUrl = window.translationEnabled ? `/audio/${term.id}` : `/audio/${term.id}?mode=korean`;
             
             // Stop previous audio if playing
             if (currentAudio) {
@@ -793,7 +890,7 @@
             // Prefer device TTS when possible (still counts as a user gesture when Next/Prev was clicked).
             try {
                 const speakerBtn = activeCard.querySelector('.audio-button');
-                const spoke = _speakCardText(term, activeCard, visualizer);
+                const spoke = _speakCardText(term, activeCard, visualizer, !!window.translationEnabled);
                 if (spoke) {
                     currentAudio = null;
                     return;
@@ -801,10 +898,10 @@
             } catch (e) {
                 // Ignore and fall back to MP3.
             }
-            
+
             currentAudio = new Audio(audioUrl);
             visualizer.classList.remove('hidden');
-            
+
             currentAudio.play().catch(err => {
                 console.error('Error playing audio:', err);
                 visualizer.classList.add('hidden');
@@ -828,6 +925,112 @@
                 currentAudio = null;
             };
         }
+
+        // ============ TRANSLATION TOGGLE ============
+        window.translationEnabled = true;
+
+        function _loadTranslationSetting() {
+            try {
+                // Prefer the new key, but stay backwards compatible.
+                const rawNew = localStorage.getItem('translationEnabled');
+                if (rawNew !== null) return rawNew === 'true';
+
+                const rawOld = localStorage.getItem('wuta_translation_enabled');
+                if (rawOld !== null) return rawOld === 'true';
+
+                // Default: ON (keeps existing behavior)
+                return true;
+            } catch (e) {
+                return true;
+            }
+        }
+
+        function _setTranslationSetting(enabled) {
+            window.translationEnabled = !!enabled;
+            try {
+                // Write both keys so older builds and newer logic stay in sync.
+                localStorage.setItem('translationEnabled', String(window.translationEnabled));
+                localStorage.setItem('wuta_translation_enabled', String(window.translationEnabled));
+            } catch (e) {}
+            _renderTranslationToggle();
+        }
+
+        function _renderTranslationToggle() {
+            const btn = document.getElementById('translationToggle');
+            if (!btn) return;
+            const on = !!window.translationEnabled;
+            btn.textContent = on ? 'Translation: ON' : 'Translation: OFF';
+            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            btn.classList.toggle('is-on', on);
+            btn.classList.toggle('is-off', !on);
+
+            // Keep the card UI in sync.
+            try {
+                document.body.classList.toggle('translation-off', !on);
+            } catch (e) {}
+
+            // Reference-style API: body[data-translation]
+            try {
+                document.body.dataset.translation = on ? 'on' : 'off';
+            } catch (e) {}
+
+            // Also expose a data-attribute for CSS rules (requested API).
+            try {
+                const fc = document.querySelector('.flashcard-container');
+                if (fc) fc.dataset.translation = on ? 'on' : 'off';
+            } catch (e) {}
+
+            // Keep Auto Play button label in sync when not currently playing.
+            try {
+                if (!window.isAutoPlaying) {
+                    const playPauseText = document.getElementById('playPauseText');
+                    if (playPauseText) {
+                        playPauseText.textContent = on
+                            ? '🎵 Start Auto Play - Korean + English'
+                            : '🎵 Start Auto Play - Korean only';
+                    }
+                }
+            } catch (e) {}
+        }
+
+        function toggleTranslation() {
+            playSFX('mode');
+            playTapSound();
+            vibrateDevice([20]);
+
+            // Stop anything currently speaking/playing so the new mode applies immediately.
+            try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+            try {
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                }
+            } catch (e) {}
+            document.querySelectorAll('.audio-visualizer').forEach(v => v.classList.add('hidden'));
+
+            _setTranslationSetting(!window.translationEnabled);
+        }
+
+        // Initialize translation toggle UI/state.
+        window.addEventListener('DOMContentLoaded', () => {
+            _setTranslationSetting(_loadTranslationSetting());
+        });
+
+        // Initialize background music (Polar Serenade) on this page.
+        window.addEventListener('DOMContentLoaded', () => {
+            try {
+                if (window.WutaAudio && typeof window.WutaAudio.initBgm === 'function') {
+                    window.WutaAudio.initBgm({
+                        src: '{{ url_for("static", filename="audio/sfx/Polar_Serenade.mp3") }}',
+                        enabledDefault: true,
+                        volumeDefault: 0.22,
+                        toggleId: 'bgmToggle',
+                        volumeId: 'bgmVolume',
+                        labelId: 'bgmLabel'
+                    });
+                }
+            } catch (e) {}
+        });
 
         // ============ MODE SWITCHING ============
         
@@ -903,7 +1106,7 @@
             playPauseBtn.style.padding = '15px';
             playPauseBtn.style.fontSize = '18px';
             playPauseIcon.textContent = '▶️';
-            playPauseText.textContent = '🎵 Resume Auto Play - Korean + English';
+            playPauseText.textContent = (window.translationEnabled ? '🎵 Resume Auto Play - Korean + English' : '🎵 Resume Auto Play - Korean only');
             
             // Clear timers
             if (countdownInterval) {
@@ -942,7 +1145,7 @@
             }
             
             const term = terms[currentCard];
-            const audioUrl = `/audio/${term.id}`;
+            const audioUrl = window.translationEnabled ? `/audio/${term.id}` : `/audio/${term.id}?mode=korean`;
             
             // Stop previous audio
             if (currentAudio) {
@@ -1071,10 +1274,69 @@
             // Instead, show a friendly prompt and unlock audio on the user's first gesture.
             showAudioUnlockPrompt('Tap once to enable audio');
 
+            // Kid-friendly UX: tap the card (not the buttons) to flip.
+            // Use a small movement threshold so swipes don't accidentally flip.
+            const flashcardContainer = document.querySelector('.flashcard-container');
+            let tapStart = null;
+
+            const isInteractiveTarget = (el) => {
+                if (!el) return false;
+                return Boolean(el.closest('button, a, select, option, input, label, textarea, svg'));
+            };
+
+            const toggleActiveFlip = () => {
+                const active = document.querySelector('.flashcard.active');
+                const inner = active?.querySelector('.card-inner');
+                if (!inner) return;
+                // Reference-style card is single-face; don't flip.
+                if (active && active.querySelector('.ref-card')) return;
+                playSFX('flip');
+                playTapSound();
+                vibrateDevice([30]);
+                inner.classList.toggle('flipped');
+            };
+
+            if (flashcardContainer) {
+                flashcardContainer.addEventListener('pointerdown', (e) => {
+                    if (e.pointerType === 'mouse' && e.button !== 0) return;
+                    if (isInteractiveTarget(e.target)) return;
+                    tapStart = { x: e.clientX, y: e.clientY };
+                }, { passive: true });
+
+                flashcardContainer.addEventListener('pointerup', (e) => {
+                    if (!tapStart) return;
+                    const dx = e.clientX - tapStart.x;
+                    const dy = e.clientY - tapStart.y;
+                    tapStart = null;
+
+                    // Ignore if it was more like a swipe than a tap.
+                    if (Math.hypot(dx, dy) > 12) return;
+
+                    if (isInteractiveTarget(e.target)) return;
+
+                    const active = document.querySelector('.flashcard.active');
+                    if (!active || !active.contains(e.target)) return;
+                    toggleActiveFlip();
+                }, { passive: true });
+            }
+
             // Unlock on first user interaction anywhere on the page.
             const firstGesture = () => unlockAudio();
             document.addEventListener('pointerdown', firstGesture, { once: true, passive: true });
             document.addEventListener('keydown', firstGesture, { once: true });
+
+            // Page navigation links: play swoosh before leaving.
+            const navLinks = document.querySelectorAll('a.back-button, .navigation-controls a.nav-button');
+            navLinks.forEach((a) => {
+                a.addEventListener('click', (e) => {
+                    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                    const href = a.getAttribute('href');
+                    if (!href) return;
+                    e.preventDefault();
+                    playSFX('nav');
+                    setTimeout(() => { window.location.href = href; }, 90);
+                });
+            });
         });
     </script>
 </body>

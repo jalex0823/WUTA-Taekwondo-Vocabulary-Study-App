@@ -28,39 +28,80 @@
     <title>WUTA Taekwondo Vocabulary Trainer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="theme-arcade theme-screenshot page-home">
     <div class="container">
         <header class="app-header">
-            <h1>🥋 WUTA Taekwondo</h1>
-            <p class="subtitle">Vocabulary Trainer</p>
+            <div class="brand-hero" aria-label="App branding">
+                <picture class="brand-logo">
+                    <img
+                        src="{{ url_for('static', filename='images/TVTA_Logo.png') }}"
+                        alt="Taekwondo Vocabulary Training App"
+                        loading="eager"
+                        onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/branding/logo.png') }}'; this.onerror=function(){this.onerror=null; this.src='{{ url_for('static', filename='images/branding/logo.svg') }}';};"
+                    >
+                </picture>
+            </div>
+
+            <div class="music-controls" aria-label="Background music controls">
+                <div class="music-controls__row">
+                    <span class="music-controls__label" id="bgmLabel">🎵 Music</span>
+                    <button class="music-toggle" id="bgmToggle" type="button" aria-pressed="true">Music: ON</button>
+                </div>
+                <div class="music-controls__row">
+                    <label class="music-controls__vol" for="bgmVolume">Volume</label>
+                    <input id="bgmVolume" class="music-volume" type="range" min="0" max="100" step="1" value="22" />
+                </div>
+            </div>
         </header>
 
-        <div class="belt-grid">
-            {% set korean_numbers = {'white': '일', 'yellow': '이', 'orange': '삼', 'green': '사', 'blue': '오', 'purple': '육', 'brown': '칠', 'red': '팔', 'black': '구'} %}
-            {% for b in belts %}
-            <a href="/belts/{{ b.belt_id }}" class="belt-card" style="--belt-color: {{ b.belt_color }}{% if b.tip_color %}; --tip-color: {{ b.tip_color }}{% endif %}" data-belt-id="{{ b.belt_id }}" data-total-terms="{{ b.terms|length }}">
-                {% if b.belt_id in korean_numbers %}
-                <div class="korean-number">{{ korean_numbers[b.belt_id] }}</div>
-                {% endif %}
-                <div class="belt-icon">
-                    <div class="belt-visual {% if b.tip_color %}with-tip{% endif %}" style="background: {{ b.belt_color }}"></div>
-                    {% if '_black_tip' in b.belt_id %}
-                        {% set belt_image = b.belt_id.replace('_black_tip', '_tip') %}
-                    {% else %}
-                        {% set belt_image = b.belt_id %}
-                    {% endif %}
-                    <img src="/static/images/belts/{{ belt_image }}.svg" alt="{{ b.belt_name }} meaning" class="belt-meaning-image" loading="lazy">
-                </div>
-                <div class="belt-info">
-                    <h2 class="belt-title">{{ b.belt_name }}</h2>
-                    <p class="term-count">
-                        {{ b.terms|length }} terms
-                        <span class="belt-progress" data-belt="{{ b.belt_id }}">0%</span>
-                    </p>
-                </div>
-                <div class="arrow">→</div>
-            </a>
-            {% endfor %}
+        {# Match the screenshot title Hangul (top line) #}
+        {% set title_korean = {'white': '임', 'yellow': '어', 'orange': '삼', 'green': '사', 'blue': '오', 'red': '육', 'purple': '칠', 'brown': '팔', 'black': '구'} %}
+        {% set badge_korean = {'white': '일', 'yellow': '이', 'orange': '삼', 'green': '사', 'blue': '오', 'red': '육', 'purple': '칠', 'brown': '팔', 'black': '구'} %}
+
+        <div class="tkd-screen">
+            <div class="tkd-list">
+                {% for b in belts %}
+                <a href="/belts/{{ b.belt_id }}"
+                   class="belt-card belt-{{ b.belt_id }}"
+                   style="--belt-color: {{ b.belt_color }}{% if b.tip_color %}; --tip-color: {{ b.tip_color }}{% endif %}"
+                   data-belt-id="{{ b.belt_id }}"
+                   data-total-terms="{{ b.terms|length }}">
+
+                    <div class="belt-left" aria-hidden="true">
+                        <div class="belt-badge">
+                            {% if b.belt_id in badge_korean %}{{ badge_korean[b.belt_id] }}{% else %}★{% endif %}
+                        </div>
+                    </div>
+
+                    <div class="belt-body">
+                        <div class="belt-title">
+                            <span class="hangul">
+                                {% if b.belt_id in title_korean %}{{ title_korean[b.belt_id] }}{% endif %}
+                            </span>
+                            <span class="meta-sep">·</span>
+                            {{ b.belt_name }}
+                        </div>
+
+                        <div class="belt-meta">
+                            <div class="meta-row">
+                                <span class="meta-icon meta-icon--steps" aria-hidden="true"></span>
+                                <span><span class="belt-steps">{{ b.terms|length }}</span> 단계</span>
+                            </div>
+                            <div class="meta-row">
+                                <span class="meta-icon meta-icon--infty meta-dot--muted" aria-hidden="true"></span>
+                                <span><span class="belt-learned">0</span></span>
+                                <span class="meta-sep">·</span>
+                                <span class="belt-percent">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="belt-right" aria-hidden="true">
+                        <span class="belt-action">공부하기</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
         </div>
 
         <footer class="app-footer">
@@ -68,18 +109,73 @@
         </footer>
     </div>
     
+    <script src="{{ url_for('static', filename='wuta_audio.js') }}"></script>
     <script>
         // Pre-load sound effects
         const clickSound = new Audio('{{ url_for("static", filename="audio/sfx/button_click.mp3") }}');
         clickSound.volume = 0.3;
         clickSound.preload = 'auto';
+
+        const navSound = new Audio('{{ url_for("static", filename="audio/sfx/nav_swoosh.mp3") }}');
+        navSound.volume = 0.25;
+        navSound.preload = 'auto';
+
+        const hoverSound = new Audio('{{ url_for("static", filename="audio/sfx/fast-punch-2047.wav") }}');
+        hoverSound.volume = 0.22;
+        hoverSound.preload = 'auto';
         
         // Add click sound to all belt cards
         document.addEventListener('DOMContentLoaded', () => {
+            // Background music (Polar Serenade) - starts on first user gesture if enabled.
+            try {
+                if (window.WutaAudio && typeof window.WutaAudio.initBgm === 'function') {
+                    window.WutaAudio.initBgm({
+                        src: '{{ url_for("static", filename="audio/sfx/Polar_Serenade.mp3") }}',
+                        enabledDefault: true,
+                        volumeDefault: 0.22,
+                        toggleId: 'bgmToggle',
+                        volumeId: 'bgmVolume',
+                        labelId: 'bgmLabel'
+                    });
+                }
+            } catch (e) {}
+
+            const canHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+            let lastHoverAt = 0;
+
             document.querySelectorAll('.belt-card').forEach(card => {
+                if (canHover) {
+                    card.addEventListener('mouseenter', () => {
+                        const now = Date.now();
+                        if (now - lastHoverAt < 120) return;
+                        lastHoverAt = now;
+                        hoverSound.currentTime = 0;
+                        hoverSound.play().catch(() => {});
+                    });
+                }
+
                 card.addEventListener('click', (e) => {
+                    // Allow opening in new tab/window normally.
+                    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+                    e.preventDefault();
+
                     clickSound.currentTime = 0;
-                    clickSound.play().catch(err => console.log('Audio play prevented'));
+                    clickSound.play().catch(() => {});
+
+                    navSound.currentTime = 0;
+                    navSound.play().catch(() => {});
+
+                    // Remember where the student was last training.
+                    try {
+                        localStorage.setItem('wuta_last_belt', card.dataset.beltId);
+                    } catch (e2) {}
+
+                    // Give the swoosh a moment to start before navigating.
+                    const href = card.getAttribute('href');
+                    setTimeout(() => {
+                        if (href) window.location.href = href;
+                    }, 90);
                 });
             });
         });
@@ -91,7 +187,8 @@
             document.querySelectorAll('.belt-card').forEach(card => {
                 const beltId = card.dataset.beltId;
                 const totalTerms = parseInt(card.dataset.totalTerms);
-                const progressSpan = card.querySelector('.belt-progress');
+                const learnedSpan = card.querySelector('.belt-learned');
+                const percentSpan = card.querySelector('.belt-percent');
                 
                 // Combine viewed terms from main belt and tip belt
                 let viewedTermIds = new Set();
@@ -116,14 +213,16 @@
                 
                 const viewedCount = viewedTermIds.size;
                 const percentage = totalTerms > 0 ? Math.round((viewedCount / totalTerms) * 100) : 0;
-                progressSpan.textContent = percentage + '%';
-                
-                // Add styling based on progress
-                progressSpan.className = 'belt-progress';
+
+                if (learnedSpan) learnedSpan.textContent = String(viewedCount);
+                if (percentSpan) percentSpan.textContent = percentage + '%';
+
+                // Add styling hooks based on progress
+                card.classList.remove('is-complete', 'is-halfway');
                 if (percentage === 100) {
-                    progressSpan.classList.add('complete');
+                    card.classList.add('is-complete');
                 } else if (percentage >= 50) {
-                    progressSpan.classList.add('halfway');
+                    card.classList.add('is-halfway');
                 }
             });
         }
@@ -131,109 +230,7 @@
         // Load progress when page loads
         window.addEventListener('DOMContentLoaded', loadBeltProgress);
 
-        // 🎵 EPIC TAEKWONDO INTRO THEME SONG
-        let introPlayed = sessionStorage.getItem('introPlayed');
-        
-        function playIntroTheme() {
-            if (introPlayed) return; // Only play once per session
-            
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const masterGain = audioContext.createGain();
-            masterGain.connect(audioContext.destination);
-            masterGain.gain.value = 0.3; // Keep it moderate volume
-            
-            function playNote(freq, startTime, duration, vol = 0.3) {
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-                
-                osc.connect(gain);
-                gain.connect(masterGain);
-                
-                osc.frequency.value = freq;
-                osc.type = 'square'; // Powerful square wave
-                
-                gain.gain.setValueAtTime(0, startTime);
-                gain.gain.linearRampToValueAtTime(vol, startTime + 0.02);
-                gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
-                
-                osc.start(startTime);
-                osc.stop(startTime + duration);
-            }
-            
-            function playKick(time) {
-                // Kick drum sound (low frequency punch)
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-                
-                osc.connect(gain);
-                gain.connect(masterGain);
-                
-                osc.frequency.setValueAtTime(150, time);
-                osc.frequency.exponentialRampToValueAtTime(0.01, time + 0.3);
-                
-                gain.gain.setValueAtTime(0.5, time);
-                gain.gain.exponentialRampToValueAtTime(0.01, time + 0.3);
-                
-                osc.start(time);
-                osc.stop(time + 0.3);
-            }
-            
-            const now = audioContext.currentTime;
-            const tempo = 0.15; // Fast, energetic tempo
-            
-            // Epic martial arts theme - powerful and dramatic
-            // Pattern: Rising power progression with kick sounds
-            
-            // Opening power chord - BAM!
-            playKick(now);
-            playNote(130.81, now, 0.4, 0.4); // C3
-            playNote(196.00, now, 0.4, 0.3); // G3
-            playNote(261.63, now, 0.4, 0.3); // C4
-            
-            // Kick sound effects
-            playKick(now + tempo * 2);
-            playKick(now + tempo * 4);
-            
-            // Rising melody - building energy
-            playNote(261.63, now + tempo * 4, 0.2); // C4
-            playNote(293.66, now + tempo * 5, 0.2); // D4
-            playNote(329.63, now + tempo * 6, 0.2); // E4
-            playNote(392.00, now + tempo * 7, 0.3); // G4
-            
-            // Power kicks
-            playKick(now + tempo * 8);
-            
-            // Climax - STRONG FINISH!
-            playNote(523.25, now + tempo * 8, 0.5, 0.4); // C5 - HIGH!
-            playNote(392.00, now + tempo * 8, 0.5, 0.35); // G4
-            playNote(261.63, now + tempo * 8, 0.5, 0.3); // C4
-            
-            playKick(now + tempo * 10);
-            playKick(now + tempo * 11);
-            
-            // Final strike - HYAH!
-            playNote(523.25, now + tempo * 12, 0.6, 0.45); // C5
-            playNote(659.25, now + tempo * 12, 0.6, 0.4);  // E5
-            playKick(now + tempo * 12);
-            
-            sessionStorage.setItem('introPlayed', 'true');
-        }
-        
-        // Play theme with user interaction (click anywhere)
-        document.addEventListener('click', () => {
-            if (!introPlayed) {
-                playIntroTheme();
-                introPlayed = true;
-            }
-        }, { once: true });
-        
-        // Add visual pulse on load
-        window.addEventListener('DOMContentLoaded', () => {
-            const header = document.querySelector('.app-header h1');
-            if (header) {
-                header.style.animation = 'pulse 0.5s ease-in-out 3';
-            }
-        });
+        // Keep any remaining animations, but remove auto-playing one-off intro music.
     </script>
 </body>
 </html>
