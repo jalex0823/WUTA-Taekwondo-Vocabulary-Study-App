@@ -941,6 +941,174 @@ body {
     }
 }
 
+/* ============ TAEKWONDO EFFECTS ============ */
+
+/* Flying Kick Effect on Belt Card Hover */
+.belt-card::after {
+    content: '🥋';
+    position: absolute;
+    right: -50px;
+    top: 50%;
+    transform: translateY(-50%) scale(0);
+    font-size: 2rem;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.belt-card:hover::after {
+    right: 10px;
+    transform: translateY(-50%) scale(1) rotate(360deg);
+    opacity: 1;
+    animation: kick-trail 0.5s ease-out;
+}
+
+@keyframes kick-trail {
+    0%, 100% {
+        filter: drop-shadow(0 0 5px rgba(255, 107, 107, 0.8));
+    }
+    50% {
+        filter: drop-shadow(0 0 20px rgba(255, 107, 107, 1));
+    }
+}
+
+/* Energy Burst Effect for Belt Meaning on Hover */
+.belt-meaning-image {
+    animation: energy-pulse 2s infinite;
+}
+
+@keyframes energy-pulse {
+    0%, 100% {
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+    }
+    50% {
+        filter: drop-shadow(0 10px 30px rgba(255, 215, 0, 0.6)) brightness(1.1);
+    }
+}
+
+/* Martial Arts Strike Effect on Active Cards */
+.belt-card:active::before {
+    animation: strike-flash 0.3s ease-out;
+}
+
+@keyframes strike-flash {
+    0% {
+        background: var(--belt-color);
+        width: 5px;
+    }
+    50% {
+        background: #FFD700;
+        width: 100%;
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+    }
+    100% {
+        background: var(--belt-color);
+        width: 5px;
+    }
+}
+
+/* Spinning Kick Animation for Flashcards */
+@keyframes spinning-kick {
+    0% {
+        transform: perspective(1000px) rotateY(0deg);
+    }
+    50% {
+        transform: perspective(1000px) rotateY(180deg) scale(1.1);
+        filter: drop-shadow(0 20px 40px rgba(255, 107, 107, 0.5));
+    }
+    100% {
+        transform: perspective(1000px) rotateY(360deg);
+    }
+}
+
+/* Ki Energy Glow for Audio Visualizer */
+.audio-visualizer::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
+    border-radius: 50%;
+    animation: ki-energy 1.5s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes ki-energy {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 1;
+    }
+}
+
+/* Power-Up Effect for Mode Buttons */
+.mode-btn.active {
+    animation: power-up 0.5s ease-out;
+}
+
+@keyframes power-up {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 10px 30px rgba(255, 215, 0, 0.8);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+}
+
+/* Belt Progress Glow */
+.belt-progress {
+    transition: all 0.3s ease;
+}
+
+.belt-card:hover .belt-progress {
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    animation: glow-pulse 1s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+    0%, 100% {
+        text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+        text-shadow: 0 0 15px rgba(255, 215, 0, 1);
+    }
+}
+
+/* Dojo Mat Texture Effect */
+.container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 50px,
+            rgba(255, 255, 255, 0.03) 50px,
+            rgba(255, 255, 255, 0.03) 51px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 50px,
+            rgba(255, 255, 255, 0.03) 50px,
+            rgba(255, 255, 255, 0.03) 51px
+        );
+    pointer-events: none;
+    z-index: -1;
+}
+
 /* ============ RESPONSIVE DESIGN ============ */
 
 @media (max-width: 480px) {
