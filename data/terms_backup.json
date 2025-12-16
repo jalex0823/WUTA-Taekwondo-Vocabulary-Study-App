@@ -74,46 +74,6 @@
           "romanization": "gamsahamnida",
           "english": "Thank You",
           "category": "Courtesy"
-        },
-        {
-          "id": "ap_kubi",
-          "hangul": "앞굽이",
-          "romanization": "ap kubi",
-          "english": "Front Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "juchum_seogi",
-          "hangul": "주춤서기",
-          "romanization": "juchum seogi",
-          "english": "Walking Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "arae_makgi",
-          "hangul": "아래막기",
-          "romanization": "arae makgi",
-          "english": "Low Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
-        },
-        {
-          "id": "momtong_makgi",
-          "hangul": "몸통막기",
-          "romanization": "momtong makgi",
-          "english": "Middle Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
-        },
-        {
-          "id": "ap_chagi",
-          "hangul": "앞차기",
-          "romanization": "ap chagi",
-          "english": "Front Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
         }
       ]
     },
@@ -199,38 +159,6 @@
           "romanization": "aniyo",
           "english": "No",
           "category": "Response"
-        },
-        {
-          "id": "momtong_jireugi",
-          "hangul": "몸통지르기",
-          "romanization": "momtong jireugi",
-          "english": "Middle Punch",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "eolgul_makgi",
-          "hangul": "얼굴막기",
-          "romanization": "eolgul makgi",
-          "english": "High Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
-        },
-        {
-          "id": "pyojeok_jireugi",
-          "hangul": "표적지르기",
-          "romanization": "pyojeok jireugi",
-          "english": "Target Punch",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "juchum_ap_chagi",
-          "hangul": "주춤앞차기",
-          "romanization": "juchum ap chagi",
-          "english": "Walking Stance Front Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
         }
       ]
     },
@@ -244,40 +172,35 @@
           "hangul": "앞차기",
           "romanization": "ap chagi",
           "english": "Front Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "dollyeo_chagi",
           "hangul": "돌려차기",
           "romanization": "dollyeo chagi",
           "english": "Roundhouse Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "arae_makgi",
           "hangul": "아래막기",
           "romanization": "arae makgi",
           "english": "Low Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "category": "Block"
         },
         {
           "id": "momtong_makgi",
           "hangul": "몸통막기",
           "romanization": "momtong makgi",
           "english": "Middle Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "category": "Block"
         },
         {
           "id": "olgul_makgi",
           "hangul": "얼굴막기",
           "romanization": "olgul makgi",
           "english": "High Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "category": "Block"
         },
         {
           "id": "jireugi",
@@ -291,16 +214,14 @@
           "hangul": "앞서기",
           "romanization": "ap seogi",
           "english": "Front Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
+          "category": "Stance"
         },
         {
           "id": "gawi_makgi",
           "hangul": "가위막기",
           "romanization": "gawi makgi",
           "english": "Scissors Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "category": "Block"
         },
         {
           "id": "chigi",
@@ -329,46 +250,6 @@
           "romanization": "bal",
           "english": "Foot",
           "category": "Body Part"
-        },
-        {
-          "id": "yeop_seogi",
-          "hangul": "옆서기",
-          "romanization": "yeop seogi",
-          "english": "Side Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "sonnal_mokchigi",
-          "hangul": "손날목치기",
-          "romanization": "sonnal mokchigi",
-          "english": "Knife Hand Strike",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "yeop_chagi",
-          "hangul": "옆차기",
-          "romanization": "yeop chagi",
-          "english": "Side Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "batangson_makgi",
-          "hangul": "바탕손막기",
-          "romanization": "batangson makgi",
-          "english": "Palm Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
-        },
-        {
-          "id": "taeguk_1_jang",
-          "hangul": "태극1장",
-          "romanization": "Taegeuk 1 Jang",
-          "english": "Taegeuk Form 1",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
         }
       ]
     },
@@ -454,38 +335,6 @@
           "romanization": "dwit bal",
           "english": "Back Foot",
           "category": "Body Part"
-        },
-        {
-          "id": "dwi_kubi",
-          "hangul": "뒤굽이",
-          "romanization": "dwi kubi",
-          "english": "Back Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "sonnal_makgi",
-          "hangul": "손날막기",
-          "romanization": "sonnal makgi",
-          "english": "Knife Hand Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
-        },
-        {
-          "id": "dolgae_chagi",
-          "hangul": "돌개차기",
-          "romanization": "dolgae chagi",
-          "english": "Roundhouse Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "dubeon_jireugi",
-          "hangul": "두번지르기",
-          "romanization": "dubeon jireugi",
-          "english": "Double Punch",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
         }
       ]
     },
@@ -499,16 +348,14 @@
           "hangul": "옆차기",
           "romanization": "yeop chagi",
           "english": "Side Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "dwi_chagi",
           "hangul": "뒤차기",
           "romanization": "dwi chagi",
           "english": "Back Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "poomsae",
@@ -522,16 +369,14 @@
           "hangul": "뒷서기",
           "romanization": "dwit seogi",
           "english": "Back Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
+          "category": "Stance"
         },
         {
           "id": "sonnal_makgi",
           "hangul": "손날막기",
           "romanization": "sonnal makgi",
           "english": "Knifehand Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "category": "Block"
         },
         {
           "id": "sonnal_chigi",
@@ -581,46 +426,6 @@
           "romanization": "dollyo",
           "english": "Turn/Turning",
           "category": "Movement"
-        },
-        {
-          "id": "beom_seogi",
-          "hangul": "범서기",
-          "romanization": "beom seogi",
-          "english": "Tiger Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "biteureo_makgi",
-          "hangul": "비틀어막기",
-          "romanization": "biteureo makgi",
-          "english": "Twisting Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
-        },
-        {
-          "id": "naeryo_chagi",
-          "hangul": "내려차기",
-          "romanization": "naeryo chagi",
-          "english": "Axe Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "jipge_sonkkeut",
-          "hangul": "집게손끝",
-          "romanization": "jipge sonkkeut",
-          "english": "Spear Hand",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "taeguk_2_jang",
-          "hangul": "태극2장",
-          "romanization": "Taegeuk 2 Jang",
-          "english": "Taegeuk Form 2",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
         }
       ]
     },
@@ -635,32 +440,28 @@
           "hangul": "주춤서기",
           "romanization": "juchum seogi",
           "english": "Horseback Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
+          "category": "Stance"
         },
         {
           "id": "naeryeo_chagi",
           "hangul": "내려차기",
           "romanization": "naeryeo chagi",
           "english": "Axe Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "palmok_makgi",
           "hangul": "팔목막기",
           "romanization": "palmok makgi",
           "english": "Forearm Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "category": "Block"
         },
         {
           "id": "batangson_makgi",
           "hangul": "바탕손막기",
           "romanization": "batangson makgi",
           "english": "Palm Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "category": "Block"
         },
         {
           "id": "batangson_chigi",
@@ -674,24 +475,21 @@
           "hangul": "팔굽치기",
           "romanization": "palkup chigi",
           "english": "Elbow Strike",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
+          "category": "Strike"
         },
         {
           "id": "mureup_chigi",
           "hangul": "무릎치기",
           "romanization": "mureup chigi",
           "english": "Knee Strike",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
+          "category": "Strike"
         },
         {
           "id": "baegiljagi",
           "hangul": "백일자기",
           "romanization": "baegiljagi",
           "english": "White Belt Form",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "ilbo_daeryeon",
@@ -713,38 +511,6 @@
           "romanization": "jayu daeryeon",
           "english": "Free Sparring",
           "category": "Training"
-        },
-        {
-          "id": "hakdari_seogi",
-          "hangul": "학다리서기",
-          "romanization": "hakdari seogi",
-          "english": "Crane Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "palkup_chigi",
-          "hangul": "팔굽치기",
-          "romanization": "palkup chigi",
-          "english": "Elbow Strike",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "dwi_chagi",
-          "hangul": "뒤차기",
-          "romanization": "dwi chagi",
-          "english": "Back Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "geodeur_makgi",
-          "hangul": "걷어막기",
-          "romanization": "geodeur makgi",
-          "english": "Scooping Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
         }
       ]
     },
@@ -758,8 +524,7 @@
           "hangul": "비틀어차기",
           "romanization": "biteureo chagi",
           "english": "Twist Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "gyeorugi",
@@ -780,32 +545,28 @@
           "hangul": "반달차기",
           "romanization": "bandal chagi",
           "english": "Crescent Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "ap_hurigi",
           "hangul": "앞후리기",
           "romanization": "ap hurigi",
           "english": "Front Snap Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "godung_makgi",
           "hangul": "고등막기",
           "romanization": "godung makgi",
           "english": "High Section Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "category": "Block"
         },
         {
           "id": "eotgeoreo_makgi",
           "hangul": "엇걸어막기",
           "romanization": "eotgeoreo makgi",
           "english": "X-Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "category": "Block"
         },
         {
           "id": "doo_jumok_jireugi",
@@ -819,72 +580,28 @@
           "hangul": "태극1장",
           "romanization": "taeguk il jang",
           "english": "Taeguk Form 1",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "taeguk_ee_jang",
           "hangul": "태극2장",
           "romanization": "taeguk ee jang",
           "english": "Taeguk Form 2",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "hugul_jaseh",
           "hangul": "후굴자세",
           "romanization": "hugul jaseh",
           "english": "Cat Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
+          "category": "Stance"
         },
         {
           "id": "beom_seogi",
           "hangul": "범서기",
           "romanization": "beom seogi",
           "english": "Tiger Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "juchumbal_seogi",
-          "hangul": "주춤발서기",
-          "romanization": "juchumbal seogi",
-          "english": "Diagonal Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "godeureo_chagi",
-          "hangul": "고들어차기",
-          "romanization": "godeureo chagi",
-          "english": "Hook Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "deung_jumeok",
-          "hangul": "등주먹",
-          "romanization": "deung jumeok",
-          "english": "Backfist Strike",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "hecheo_makgi",
-          "hangul": "헤쳐막기",
-          "romanization": "hecheo makgi",
-          "english": "Wedge Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
-        },
-        {
-          "id": "taeguk_3_jang",
-          "hangul": "태극3장",
-          "romanization": "Taegeuk 3 Jang",
-          "english": "Taegeuk Form 3",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Stance"
         }
       ]
     },
@@ -899,56 +616,49 @@
           "hangul": "회전차기",
           "romanization": "hoejeon chagi",
           "english": "Spinning Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "twio_ap_chagi",
           "hangul": "뛰어앞차기",
           "romanization": "twio ap chagi",
           "english": "Jumping Front Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "twio_dollyeo_chagi",
           "hangul": "뛰어돌려차기",
           "romanization": "twio dollyeo chagi",
           "english": "Jumping Roundhouse",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "pyojeok_chagi",
           "hangul": "표적차기",
           "romanization": "pyojeok chagi",
           "english": "Target Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "doo_bal_dangsang_chagi",
           "hangul": "두발당상차기",
           "romanization": "doo bal dangsang chagi",
           "english": "Two Foot Jump Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "taeguk_sam_jang",
           "hangul": "태극3장",
           "romanization": "taeguk sam jang",
           "english": "Taeguk Form 3",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "taeguk_sa_jang",
           "hangul": "태극4장",
           "romanization": "taeguk sa jang",
           "english": "Taeguk Form 4",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "kyeokpa",
@@ -977,38 +687,6 @@
           "romanization": "mejiumeok",
           "english": "Hammer Fist",
           "category": "Hand Strike"
-        },
-        {
-          "id": "mal_seogi",
-          "hangul": "말서기",
-          "romanization": "mal seogi",
-          "english": "Horse Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "momdollyo_chagi",
-          "hangul": "몸돌려차기",
-          "romanization": "momdollyo chagi",
-          "english": "Spinning Hook Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "sudo_mokchigi",
-          "hangul": "수도목치기",
-          "romanization": "sudo mokchigi",
-          "english": "Knife Hand Strike to Neck",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "sonbadak_makgi",
-          "hangul": "손바닥막기",
-          "romanization": "sonbadak makgi",
-          "english": "Palm Heel Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
         }
       ]
     },
@@ -1022,8 +700,7 @@
           "hangul": "뛰어차기",
           "romanization": "twio chagi",
           "english": "Jumping Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "dobok",
@@ -1065,24 +742,21 @@
           "hangul": "태극5장",
           "romanization": "taeguk oh jang",
           "english": "Taeguk Form 5",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "dwi_dollyeo_chagi",
           "hangul": "뒤돌려차기",
           "romanization": "dwi dollyeo chagi",
           "english": "Back Roundhouse",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "mondollyeo_chagi",
           "hangul": "몬돌려차기",
           "romanization": "mondollyeo chagi",
           "english": "Reverse Roundhouse",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "yeop_jireugi",
@@ -1103,48 +777,7 @@
           "hangul": "앞차올리기",
           "romanization": "ap cha olligi",
           "english": "Front Snap Rising",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "goa_seogi",
-          "hangul": "꼬아서기",
-          "romanization": "goa seogi",
-          "english": "Cross Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "meori_wiro_chagi",
-          "hangul": "머리위로차기",
-          "romanization": "meori wiro chagi",
-          "english": "Jumping Front Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "pyonsonkeut_tzireugi",
-          "hangul": "편손끝찌르기",
-          "romanization": "pyonsonkeut tzireugi",
-          "english": "Flat Finger Thrust",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "dung_jumeok_chigi",
-          "hangul": "등주먹치기",
-          "romanization": "dung jumeok chigi",
-          "english": "Backfist Strike",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "taeguk_4_jang",
-          "hangul": "태극4장",
-          "romanization": "Taegeuk 4 Jang",
-          "english": "Taegeuk Form 4",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Kick"
         }
       ]
     },
@@ -1159,48 +792,42 @@
           "hangul": "태극6장",
           "romanization": "taeguk yuk jang",
           "english": "Taeguk Form 6",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "double_kick",
           "hangul": "이중차기",
           "romanization": "ijung chagi",
           "english": "Double Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "triple_kick",
           "hangul": "삼중차기",
           "romanization": "samjung chagi",
           "english": "Triple Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "hoejeon_dwi_chagi",
           "hangul": "회전뒤차기",
           "romanization": "hoejeon dwi chagi",
           "english": "Spinning Back Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "twimyo_yeop_chagi",
           "hangul": "뛰며옆차기",
           "romanization": "twimyo yeop chagi",
           "english": "Flying Side Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "twimyo_dwi_chagi",
           "hangul": "뛰며뒤차기",
           "romanization": "twimyo dwi chagi",
           "english": "Flying Back Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "naeryo_jireugi",
@@ -1214,8 +841,7 @@
           "hangul": "돌림옆차기",
           "romanization": "dollimyo chagi",
           "english": "Turning Side Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "pyejirugi",
@@ -1229,8 +855,7 @@
           "hangul": "차부시기",
           "romanization": "cha busigi",
           "english": "Stomp Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "balnal",
@@ -1238,38 +863,6 @@
           "romanization": "balnal",
           "english": "Footsword/Blade of Foot",
           "category": "Body Part"
-        },
-        {
-          "id": "bam_seogi",
-          "hangul": "밤서기",
-          "romanization": "bam seogi",
-          "english": "Cat Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "momdollyo_yeop_chagi",
-          "hangul": "몸돌려옆차기",
-          "romanization": "momdollyo yeop chagi",
-          "english": "Spinning Side Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "mejumeok_chigi",
-          "hangul": "메주먹치기",
-          "romanization": "mejumeok chigi",
-          "english": "Hammer Fist",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "batangson_yeop_makgi",
-          "hangul": "바탕손옆막기",
-          "romanization": "batangson yeop makgi",
-          "english": "Palm Heel Side Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
         }
       ]
     },
@@ -1283,8 +876,7 @@
           "hangul": "태극7장",
           "romanization": "taeguk chil jang",
           "english": "Taeguk Form 7",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "kihap",
@@ -1298,56 +890,49 @@
           "hangul": "큰돌려차기",
           "romanization": "keun dollyeo chagi",
           "english": "Big Roundhouse",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "cha_milgi",
           "hangul": "차밀기",
           "romanization": "cha milgi",
           "english": "Pushing Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "narae_chagi",
           "hangul": "나래차기",
           "romanization": "narae chagi",
           "english": "Butterfly Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "yop_hurigi",
           "hangul": "옆후리기",
           "romanization": "yop hurigi",
           "english": "Side Snap Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "dwi_hurigi",
           "hangul": "뒤후리기",
           "romanization": "dwi hurigi",
           "english": "Back Snap Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "godeuro_chagi",
           "hangul": "고드르차기",
           "romanization": "godeuro chagi",
           "english": "Hook Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "bituro_chagi",
           "hangul": "비트르차기",
           "romanization": "bituro chagi",
           "english": "Twist Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "combo_tech",
@@ -1369,46 +954,6 @@
           "romanization": "dollyo jireugi",
           "english": "Roundhouse Punch",
           "category": "Hand Strike"
-        },
-        {
-          "id": "ap_seogi",
-          "hangul": "앞서기",
-          "romanization": "ap seogi",
-          "english": "Forward Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "twieo_yeop_chagi",
-          "hangul": "뛰어옆차기",
-          "romanization": "twieo yeop chagi",
-          "english": "Jumping Side Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "sonnal_deung_chigi",
-          "hangul": "손날등치기",
-          "romanization": "sonnal deung chigi",
-          "english": "Reverse Knife Hand Strike",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "oe_santeul_makgi",
-          "hangul": "외산틀막기",
-          "romanization": "oe santeul makgi",
-          "english": "Outside Forearm Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
-        },
-        {
-          "id": "taeguk_5_jang",
-          "hangul": "태극5장",
-          "romanization": "Taegeuk 5 Jang",
-          "english": "Taegeuk Form 5",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
         }
       ]
     },
@@ -1423,8 +968,7 @@
           "hangul": "태극8장",
           "romanization": "taeguk pal jang",
           "english": "Taeguk Form 8",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "taeguk",
@@ -1438,32 +982,28 @@
           "hangul": "360차기",
           "romanization": "360 chagi",
           "english": "360 Degree Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "540_chagi",
           "hangul": "540차기",
           "romanization": "540 chagi",
           "english": "540 Degree Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "tornado_kick",
           "hangul": "토네이도차기",
           "romanization": "tornado chagi",
           "english": "Tornado Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "720_chagi",
           "hangul": "720차기",
           "romanization": "720 chagi",
           "english": "720 Degree Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "gogeup_poomsae",
@@ -1484,56 +1024,21 @@
           "hangul": "헤쳐막기",
           "romanization": "hecheo makgi",
           "english": "Wedging Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "category": "Block"
         },
         {
           "id": "montong_an_makgi",
           "hangul": "몸통안막기",
           "romanization": "montong an makgi",
           "english": "Middle Inside Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "category": "Block"
         },
         {
           "id": "biteureo_makgi",
           "hangul": "비틀어막기",
           "romanization": "biteureo makgi",
           "english": "Twisting Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
-        },
-        {
-          "id": "moa_seogi",
-          "hangul": "모아서기",
-          "romanization": "moa seogi",
-          "english": "Closed Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "momdollyo_naeryo_chagi",
-          "hangul": "몸돌려내려차기",
-          "romanization": "momdollyo naeryo chagi",
-          "english": "Spinning Axe Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "palkup_dollyo_chigi",
-          "hangul": "팔굽돌려치기",
-          "romanization": "palkup dollyo chigi",
-          "english": "Spinning Elbow Strike",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "gawi_makgi",
-          "hangul": "가위막기",
-          "romanization": "gawi makgi",
-          "english": "Scissors Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "category": "Block"
         }
       ]
     },
@@ -1547,8 +1052,7 @@
           "hangul": "고려",
           "romanization": "koryo",
           "english": "Koryo Form",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "danjon",
@@ -1583,48 +1087,42 @@
           "hangul": "몸돌려차기",
           "romanization": "momdollyo chagi",
           "english": "Turning Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "dolge_chagi",
           "hangul": "돌게차기",
           "romanization": "dolge chagi",
           "english": "Spinning Crescent",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "bandae_dollyeo",
           "hangul": "반대돌려차기",
           "romanization": "bandae dollyeo chagi",
           "english": "Reverse Turning Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "twio_biteureo",
           "hangul": "뛰어비틀어차기",
           "romanization": "twio biteureo chagi",
           "english": "Jump Twist Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "nomo_chagi",
           "hangul": "넘어차기",
           "romanization": "nomo chagi",
           "english": "Jump Over Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "dangsang_chagi",
           "hangul": "당상차기",
           "romanization": "dangsang chagi",
           "english": "Flying High Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "yonsok_gongkyeok",
@@ -1632,46 +1130,6 @@
           "romanization": "yonsok gongkyeok",
           "english": "Continuous Attack",
           "category": "Technique"
-        },
-        {
-          "id": "ogeum_seogi",
-          "hangul": "오금서기",
-          "romanization": "ogeum seogi",
-          "english": "Crouching Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "twieo_momdollyo_chagi",
-          "hangul": "뛰어몸돌려차기",
-          "romanization": "twieo momdollyo chagi",
-          "english": "Jumping Spinning Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "agwison_jireugi",
-          "hangul": "아귀손지르기",
-          "romanization": "agwison jireugi",
-          "english": "Arc Hand Strike",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "doo_palmok_makgi",
-          "hangul": "두팔목막기",
-          "romanization": "doo palmok makgi",
-          "english": "Double Forearm Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
-        },
-        {
-          "id": "taeguk_6_jang",
-          "hangul": "태극6장",
-          "romanization": "Taegeuk 6 Jang",
-          "english": "Taegeuk Form 6",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
         }
       ]
     },
@@ -1693,16 +1151,14 @@
           "hangul": "금강",
           "romanization": "keumgang",
           "english": "Diamond/Keumgang Form",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "jaego_chagi",
           "hangul": "재거차기",
           "romanization": "jaego chagi",
           "english": "Snap Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "japgi",
@@ -1730,16 +1186,14 @@
           "hangul": "눌러막기",
           "romanization": "nulleo makgi",
           "english": "Pressing Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "category": "Block"
         },
         {
           "id": "eopeo_chigi",
           "hangul": "엎어치기",
           "romanization": "eopeo chigi",
           "english": "Upset Strike",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
+          "category": "Strike"
         },
         {
           "id": "philosophy",
@@ -1761,38 +1215,6 @@
           "romanization": "jongyeong",
           "english": "Respect",
           "category": "Tenet"
-        },
-        {
-          "id": "naranhi_seogi",
-          "hangul": "나란히서기",
-          "romanization": "naranhi seogi",
-          "english": "Parallel Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "ieo_chagi",
-          "hangul": "이어차기",
-          "romanization": "ieo chagi",
-          "english": "Double Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "mejumeok_naeryo_chigi",
-          "hangul": "메주먹내려치기",
-          "romanization": "mejumeok naeryo chigi",
-          "english": "Downward Hammer Fist",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "noollo_makgi",
-          "hangul": "눌러막기",
-          "romanization": "noollo makgi",
-          "english": "Pressing Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
         }
       ]
     },
@@ -1806,32 +1228,28 @@
           "hangul": "태백",
           "romanization": "taebaek",
           "english": "Taebaek Form",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "pyongwon",
           "hangul": "평원",
           "romanization": "pyongwon",
           "english": "Pyongwon Form",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "shipjin",
           "hangul": "십진",
           "romanization": "shipjin",
           "english": "Shipjin Form",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "twimyo_nomo_chagi",
           "hangul": "뛰며넘어차기",
           "romanization": "twimyo nomo chagi",
           "english": "Flying Jump Over Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "category": "Kick"
         },
         {
           "id": "mooreup_kkeoegi",
@@ -1888,54 +1306,6 @@
           "romanization": "sabeum poomsae",
           "english": "Master Form",
           "category": "Training"
-        },
-        {
-          "id": "gyotdari_seogi",
-          "hangul": "겹다리서기",
-          "romanization": "gyotdari seogi",
-          "english": "Cross-Leg Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "540_dolyo_chagi",
-          "hangul": "540돌려차기",
-          "romanization": "540 dolyo chagi",
-          "english": "540 Degree Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "pyon_jumeok_jireugi",
-          "hangul": "편주먹지르기",
-          "romanization": "pyon jumeok jireugi",
-          "english": "Flat Fist Punch",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "danggyeo_makgi",
-          "hangul": "당겨막기",
-          "romanization": "danggyeo makgi",
-          "english": "Pulling Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
-        },
-        {
-          "id": "taeguk_7_jang",
-          "hangul": "태극7장",
-          "romanization": "Taegeuk 7 Jang",
-          "english": "Taegeuk Form 7",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
-        },
-        {
-          "id": "samjae_chagi",
-          "hangul": "삼재차기",
-          "romanization": "samjae chagi",
-          "english": "Triple Kick Combination",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
         }
       ]
     },
@@ -1950,32 +1320,28 @@
           "hangul": "지태",
           "romanization": "jitae",
           "english": "Jitae Form",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "cheonkwon",
           "hangul": "천권",
           "romanization": "cheonkwon",
           "english": "Cheonkwon Form",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "hansoo",
           "hangul": "한수",
           "romanization": "hansoo",
           "english": "Hansoo Form",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "ilyeo",
           "hangul": "일여",
           "romanization": "ilyeo",
           "english": "Ilyeo Form",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
+          "category": "Form"
         },
         {
           "id": "master_breaking",
@@ -2025,46 +1391,6 @@
           "romanization": "jeongsin suryeon",
           "english": "Mental Training",
           "category": "Philosophy"
-        },
-        {
-          "id": "poom_seogi",
-          "hangul": "품서기",
-          "romanization": "poom seogi",
-          "english": "Attention Stance with Fists",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "twieo_dwi_chagi",
-          "hangul": "뛰어뒤차기",
-          "romanization": "twieo dwi chagi",
-          "english": "Jumping Back Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "mureup_chigi",
-          "hangul": "무릎치기",
-          "romanization": "mureup chigi",
-          "english": "Knee Strike",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": " geodeur_chagi",
-          "hangul": "걷어차기",
-          "romanization": "geodeur chagi",
-          "english": "Crescent Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "taeguk_8_jang",
-          "hangul": "태극8장",
-          "romanization": "Taegeuk 8 Jang",
-          "english": "Taegeuk Form 8",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
         }
       ]
     },
@@ -2170,62 +1496,6 @@
           "romanization": "heukdae ususeong",
           "english": "Black Belt Excellence",
           "category": "Philosophy"
-        },
-        {
-          "id": "jaebi_poom_seogi",
-          "hangul": "제비품서기",
-          "romanization": "jaebi poom seogi",
-          "english": "Swallow Stance",
-          "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
-        },
-        {
-          "id": "twieo_540_chagi",
-          "hangul": "뛰어540차기",
-          "romanization": "twieo 540 chagi",
-          "english": "Jumping 540 Kick",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "batang_jumeok",
-          "hangul": "바탕주먹",
-          "romanization": "batang jumeok",
-          "english": "Bottom Fist",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "hanseonuro_makgi",
-          "hangul": "한선으로막기",
-          "romanization": "hanseonuro makgi",
-          "english": "Single Line Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
-        },
-        {
-          "id": "koryo_poomsae",
-          "hangul": "고려품새",
-          "romanization": "Koryo Poomsae",
-          "english": "Koryo Form",
-          "category": "Form",
-          "image_path": "/static/images/moves/forms/default_form.svg"
-        },
-        {
-          "id": "yeonsu_chagi",
-          "hangul": "연수차기",
-          "romanization": "yeonsu chagi",
-          "english": "Consecutive Kick Drill",
-          "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
-        },
-        {
-          "id": "jabeu_makgi",
-          "hangul": "잡어막기",
-          "romanization": "jabeu makgi",
-          "english": "Grabbing Block",
-          "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
         }
       ]
     }

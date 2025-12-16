@@ -1,8 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- iOS PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="WUTA Taekwondo">
+    
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icon-180.png') }}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='icon-152.png') }}">
+    <link rel="apple-touch-icon" sizes="167x167" href="{{ url_for('static', filename='icon-167.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icon-180.png') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    
+    <meta name="theme-color" content="#667eea">
+    
+    <title>{{ belt.belt_name }} - WUTA Vocabulary</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <!-- Confetti JS -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="terms-header" style="--belt-color: {{ belt.belt_color }}">
+            <a href="/" class="back-button">← Back</a>
+            <h1>{{ belt.belt_name }}</h1>
+            <p class="term-counter">
+                <span id="current-term">1</span> / {{ belt.terms|length }}
+                <span class="completion-badge" id="completionBadge">0%</span>
+            </p>
+        </header>
 
-<h2>{{ belt.belt_name }}</h2>
-<ul>
-{% for t in belt.terms %}
-<li>{{ t.hangul }} ({{ t.romanization }}) — {{ t.english }}</li>
-{% endfor %}
-</ul>
-<a href="/">Back</a>
+        <div class="mode-controls">
+            <div class="mode-toggle">
+                <button class="mode-btn active" id="manualModeBtn" onclick="setMode('manual')">
+                    <span class="mode-icon">👆</span>
+                    Manual
+                </button>
+                <button class="mode-btn" id="autoModeBtn" onclick="setMode('auto')">
+                    <span class="mode-icon">▶️</span>
+                    Auto Guide
+                </button>
+            </div>
+            
+            <div class="auto-controls hidden" id="autoControls">
+                <button class="auto-btn play-btn" id="playPauseBtn" onclick="toggleAutoPlay()">
+                    <span id="playPauseIcon">▶️</span>
+                    <span id="playPauseText">Start</span>
+                </button>
+                <div class="repeat-time-control">
+                    <label>Repeat Time:</label>
+                    <select id="repeatTimeSelect" onchange="updateRepeatTime()">
+                        <option value="3">3 sec</option>
+                        <option value="5" selected>5 sec</option>
+                        <option value="7">7 sec</option>
+                        <option value="10">10 sec</option>
+                    </select>
+                </div>
+                <div class="auto-progress-indicator">
+                    <div class="progress-ring">
+                        <svg width="40" height="40">
+                            <circle class="progress-ring-circle" cx="20" cy="20" r="16" 
+                                    stroke-width="3" fill="transparent" stroke="#e0e0e0"/>
+                            <circle class="progress-ring-circle-active" id="progressCircle" 
+                                    cx="20" cy="20" r="16" stroke-width="3" fill="transparent" 
+                                    stroke="#4ECDC4" stroke-dasharray="100.53 100.53" 
+                                    stroke-dashoffset="100.53" transform="rotate(-90 20 20)"/>
+                        </svg>
+                        <span class="progress-text" id="progressText">5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flashcard-container">
+            {% for t in belt.terms %}
+            <div class="flashcard {% if loop.first %}active{% endif %}" data-term-index="{{ loop.index0 }}">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="hangul-text">{{ t.hangul }}</div>
+                        <div class="category-badge">{{ t.category }}</div>
+                        
+                        <button class="audio-button" onclick="playAudio('{{ t.id }}', this)">
+                            <svg class="speaker-icon" viewBox="0 0 24 24" width="48" height="48">
+                                <path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                            </svg>
+                            <span class="audio-text">Tap to Listen</span>
+                        </button>
+
+                        <div class="audio-visualizer hidden">
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                        </div>
+
+                        <button class="flip-button" onclick="flipCard(this)">
+                            See Translation →
+                        </button>
+                    </div>
+
+                    <div class="card-back">
+                        <div class="romanization">{{ t.romanization }}</div>
+                        <div class="english-text">{{ t.english }}</div>
+                        
+                        {% if t.image_path %}
+                        <div class="move-image-container">
+                            <img src="{{ t.image_path }}" alt="{{ t.english }} demonstration" class="move-image">
+                        </div>
+                        {% endif %}
+                        
+                        <div class="hangul-small">{{ t.hangul }}</div>
+                        
+                        <button class="flip-button" onclick="flipCard(this)">
+                            ← Back to Korean
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="navigation-controls">
+            <button class="nav-button" id="prevBtn" onclick="prevCard()" disabled>
+                ← Previous
+            </button>
+            <button class="nav-button primary" id="nextBtn" onclick="nextCard()">
+                Next →
+            </button>
+        </div>
+
+        <div class="progress-dots">
+            {% for t in belt.terms %}
+            <span class="dot {% if loop.first %}active{% endif %}" onclick="goToCard({{ loop.index0 }})"></span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        let currentCard = 0;
+        const totalCards = {{ belt.terms|length }};
+        let currentAudio = null;
+        let currentMode = 'manual';
+        let isAutoPlaying = false;
+        let repeatTime = 5; // seconds
+        let countdownInterval = null;
+        let progressTimeout = null;
+        
+        const terms = {{ belt.terms | tojson }};
+        
+        // ============ SOUND EFFECTS & HAPTICS ============
+        
+        // Create sound effect using Web Audio API
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSuccessSound() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        }
+        
+        function playTapSound() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 400;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        }
+        
+        function playCompleteSound() {
+            // Play a cheerful melody
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C, E, G, C (octave higher)
+            notes.forEach((freq, index) => {
+                setTimeout(() => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.value = freq;
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                }, index * 100);
+            });
+        }
+        
+        function vibrateDevice(pattern = [100]) {
+            if ('vibrate' in navigator) {
+                navigator.vibrate(pattern);
+            }
+        }
+        
+        function celebrateCompletion() {
+            playCompleteSound();
+            vibrateDevice([200, 100, 200, 100, 200]);
+            
+            // Confetti burst!
+            const count = 200;
+            const defaults = {
+                origin: { y: 0.7 }
+            };
+            
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio)
+                }));
+            }
+            
+            fire(0.25, {
+                spread: 26,
+                startVelocity: 55,
+            });
+            
+            fire(0.2, {
+                spread: 60,
+            });
+            
+            fire(0.35, {
+                spread: 100,
+                decay: 0.91,
+                scalar: 0.8
+            });
+            
+            fire(0.1, {
+                spread: 120,
+                startVelocity: 25,
+                decay: 0.92,
+                scalar: 1.2
+            });
+            
+            fire(0.1, {
+                spread: 120,
+                startVelocity: 45,
+            });
+        }
+        
+        function showStarBurst(element) {
+            const star = document.createElement('div');
+            star.className = 'star-burst';
+            star.innerHTML = '⭐';
+            element.appendChild(star);
+            
+            setTimeout(() => star.remove(), 1000);
+        }
+
+        // ============ COMPLETION TRACKING ============
+        
+        const STORAGE_KEY = 'wuta_completion_';
+        let viewedTerms = new Set();
+        
+        function loadProgress() {
+            const beltId = '{{ belt.belt_id }}';
+            const stored = localStorage.getItem(STORAGE_KEY + beltId);
+            if (stored) {
+                try {
+                    viewedTerms = new Set(JSON.parse(stored));
+                } catch (e) {
+                    viewedTerms = new Set();
+                }
+            }
+            updateCompletionBadge();
+        }
+        
+        function saveProgress() {
+            const beltId = '{{ belt.belt_id }}';
+            localStorage.setItem(STORAGE_KEY + beltId, JSON.stringify([...viewedTerms]));
+        }
+        
+        function markTermViewed(termId) {
+            viewedTerms.add(termId);
+            saveProgress();
+            updateCompletionBadge();
+        }
+        
+        function updateCompletionBadge() {
+            const completionPercentage = Math.round((viewedTerms.size / totalCards) * 100);
+            const badge = document.getElementById('completionBadge');
+            badge.textContent = completionPercentage + '%';
+            
+            // Add color coding
+            badge.className = 'completion-badge';
+            if (completionPercentage === 100) {
+                badge.classList.add('complete');
+            } else if (completionPercentage >= 50) {
+                badge.classList.add('halfway');
+            }
+        }
+        
+        function resetProgress() {
+            if (confirm('Reset progress for this belt level?')) {
+                viewedTerms.clear();
+                saveProgress();
+                updateCompletionBadge();
+            }
+        }
+
+        function showCard(index) {
+            document.querySelectorAll('.flashcard').forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+                // Reset flip when changing cards
+                card.querySelector('.card-inner').classList.remove('flipped');
+            });
+            
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+
+            document.getElementById('current-term').textContent = index + 1;
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === totalCards - 1;
+            
+            // Mark term as viewed
+            const termId = terms[index].id;
+            markTermViewed(termId);
+
+            // Stop any playing audio
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+                document.querySelectorAll('.audio-visualizer').forEach(v => v.classList.add('hidden'));
+            }
+            
+            // Clear any existing countdown
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            if (progressTimeout) {
+                clearTimeout(progressTimeout);
+                progressTimeout = null;
+            }
+            resetProgressRing();
+        }
+
+        function nextCard() {
+            if (currentCard < totalCards - 1) {
+                playTapSound();
+                vibrateDevice([30]);
+                currentCard++;
+                showCard(currentCard);
+                if (isAutoPlaying && currentMode === 'auto') {
+                    playCurrentCardAuto();
+                }
+            } else if (isAutoPlaying && currentMode === 'auto') {
+                // End of list in auto mode
+                stopAutoPlay();
+                celebrateCompletion();
+                setTimeout(() => {
+                    alert('🎉 Amazing work! You completed all terms! 🥋⭐');
+                }, 500);
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 0) {
+                playTapSound();
+                vibrateDevice([30]);
+                currentCard--;
+                showCard(currentCard);
+            }
+        }
+
+        function goToCard(index) {
+            currentCard = index;
+            showCard(currentCard);
+            if (isAutoPlaying && currentMode === 'auto') {
+                playCurrentCardAuto();
+            }
+        }
+
+        function flipCard(button) {
+            playTapSound();
+            vibrateDevice([30]);
+            const cardInner = button.closest('.card-inner');
+            cardInner.classList.toggle('flipped');
+        }
+
+        function playAudio(termId, button) {
+            playTapSound();
+            vibrateDevice([30]);
+            
+            const visualizer = button.nextElementSibling;
+            const audioUrl = `/audio/${termId}`;
+            
+            // Stop previous audio if playing
+            if (currentAudio) {
+                currentAudio.pause();
+                document.querySelectorAll('.audio-visualizer').forEach(v => v.classList.add('hidden'));
+            }
+
+            currentAudio = new Audio(audioUrl);
+            visualizer.classList.remove('hidden');
+            
+            currentAudio.play().catch(err => {
+                console.error('Error playing audio:', err);
+                alert('Could not play audio. Please try again.');
+            });
+
+            currentAudio.onended = () => {
+                visualizer.classList.add('hidden');
+                currentAudio = null;
+            };
+        }
+
+        // ============ MODE SWITCHING ============
+        
+        function setMode(mode) {
+            playTapSound();
+            vibrateDevice([50]);
+            
+            currentMode = mode;
+            const manualBtn = document.getElementById('manualModeBtn');
+            const autoBtn = document.getElementById('autoModeBtn');
+            const autoControls = document.getElementById('autoControls');
+            
+            if (mode === 'manual') {
+                manualBtn.classList.add('active');
+                autoBtn.classList.remove('active');
+                autoControls.classList.add('hidden');
+                stopAutoPlay();
+            } else {
+                autoBtn.classList.add('active');
+                manualBtn.classList.remove('active');
+                autoControls.classList.remove('hidden');
+            }
+        }
+
+        function updateRepeatTime() {
+            playTapSound();
+            vibrateDevice([30]);
+            repeatTime = parseInt(document.getElementById('repeatTimeSelect').value);
+        }
+
+        // ============ AUTO-PROGRESSION ============
+        
+        function toggleAutoPlay() {
+            playTapSound();
+            vibrateDevice([50]);
+            
+            if (isAutoPlaying) {
+                stopAutoPlay();
+            } else {
+                startAutoPlay();
+            }
+        }
+
+        function startAutoPlay() {
+            isAutoPlaying = true;
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const playPauseIcon = document.getElementById('playPauseIcon');
+            const playPauseText = document.getElementById('playPauseText');
+            
+            playPauseBtn.classList.add('playing');
+            playPauseIcon.textContent = '⏸️';
+            playPauseText.textContent = 'Pause';
+            
+            playCurrentCardAuto();
+        }
+
+        function stopAutoPlay() {
+            isAutoPlaying = false;
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const playPauseIcon = document.getElementById('playPauseIcon');
+            const playPauseText = document.getElementById('playPauseText');
+            
+            playPauseBtn.classList.remove('playing');
+            playPauseIcon.textContent = '▶️';
+            playPauseText.textContent = 'Start';
+            
+            // Clear timers
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            if (progressTimeout) {
+                clearTimeout(progressTimeout);
+                progressTimeout = null;
+            }
+            
+            // Stop audio
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+                document.querySelectorAll('.audio-visualizer').forEach(v => v.classList.add('hidden'));
+            }
+            
+            resetProgressRing();
+            
+            // Celebrate if we reached the end
+            if (currentCard === totalCards - 1) {
+                celebrateCompletion();
+            }
+        }
+
+        function playCurrentCardAuto() {
+            if (!isAutoPlaying) return;
+            
+            const term = terms[currentCard];
+            const audioUrl = `/audio/${term.id}`;
+            
+            // Stop previous audio
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+            
+            // Play audio
+            currentAudio = new Audio(audioUrl);
+            const activeCard = document.querySelector('.flashcard.active');
+            const visualizer = activeCard.querySelector('.audio-visualizer');
+            
+            visualizer.classList.remove('hidden');
+            
+            currentAudio.play().catch(err => {
+                console.error('Error playing audio:', err);
+            });
+
+            currentAudio.onended = () => {
+                visualizer.classList.add('hidden');
+                
+                // Start countdown for repeat time
+                if (isAutoPlaying) {
+                    startCountdown();
+                }
+            };
+        }
+
+        function startCountdown() {
+            let timeLeft = repeatTime;
+            const progressText = document.getElementById('progressText');
+            const progressCircle = document.getElementById('progressCircle');
+            const circumference = 2 * Math.PI * 16; // radius = 16
+            
+            progressText.textContent = timeLeft;
+            
+            // Update every 100ms for smooth animation
+            let elapsed = 0;
+            const intervalTime = 100;
+            const totalTime = repeatTime * 1000;
+            
+            countdownInterval = setInterval(() => {
+                elapsed += intervalTime;
+                const progress = elapsed / totalTime;
+                const offset = circumference * (1 - progress);
+                progressCircle.style.strokeDashoffset = offset;
+                
+                const newTimeLeft = Math.ceil((totalTime - elapsed) / 1000);
+                if (newTimeLeft !== parseInt(progressText.textContent)) {
+                    progressText.textContent = newTimeLeft;
+                }
+                
+                if (elapsed >= totalTime) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                    resetProgressRing();
+                    
+                    // Move to next card
+                    if (isAutoPlaying) {
+                        nextCard();
+                    }
+                }
+            }, intervalTime);
+        }
+
+        function resetProgressRing() {
+            const progressText = document.getElementById('progressText');
+            const progressCircle = document.getElementById('progressCircle');
+            const circumference = 2 * Math.PI * 16;
+            
+            progressText.textContent = repeatTime;
+            progressCircle.style.strokeDashoffset = circumference;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (currentMode === 'manual') {
+                if (e.key === 'ArrowRight') nextCard();
+                if (e.key === 'ArrowLeft') prevCard();
+            }
+            // Space to toggle auto play in auto mode
+            if (e.key === ' ' && currentMode === 'auto') {
+                e.preventDefault();
+                toggleAutoPlay();
+            }
+        });
+
+        // Touch swipe support (manual mode only)
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (currentMode === 'manual') {
+                handleSwipe();
+            }
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextCard();
+            if (touchEndX > touchStartX + 50) prevCard();
+        }
+        
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProgress();
+            showCard(0);
+        });
+    </script>
+</body>
+</html>

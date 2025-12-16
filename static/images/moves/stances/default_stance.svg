@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400">
+  <!-- Background -->
+  <rect width="300" height="400" fill="#f8f9fa"/>
+  <rect width="300" height="40" fill="#667eea" opacity="0.2"/>
+  
+  <!-- Title -->
+  <text x="150" y="25" font-family="Arial" font-size="18" font-weight="bold" fill="#667eea" text-anchor="middle">Stance</text>
+  
+  <!-- Grid lines for reference -->
+  <line x1="150" y1="60" x2="150" y2="380" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,5"/>
+  <line x1="20" y1="220" x2="280" y2="220" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,5"/>
+  
+  <!-- Stick figure in stance position -->
+  <g id="figure">
+    <!-- Head -->
+    <circle cx="150" cy="100" r="20" fill="none" stroke="#2c3e50" stroke-width="3"/>
+    
+    <!-- Body -->
+    <line x1="150" y1="120" x2="150" y2="220" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
+    
+    <!-- Stance-specific leg positions will be added per stance -->
+  </g>
+  
+  <!-- Footprint markers -->
+  <ellipse cx="120" cy="360" rx="25" ry="35" fill="#667eea" opacity="0.3" transform="rotate(-20 120 360)"/>
+  <ellipse cx="180" cy="360" rx="25" ry="35" fill="#667eea" opacity="0.3" transform="rotate(20 180 360)"/>
+  
+  <!-- Label -->
+  <rect x="50" y="370" width="200" height="25" fill="white" stroke="#667eea" stroke-width="2" rx="5"/>
+  <text x="150" y="388" font-family="Arial" font-size="14" fill="#667eea" text-anchor="middle">Stance</text>
+</svg>

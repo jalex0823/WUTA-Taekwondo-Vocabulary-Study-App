@@ -1,7 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- iOS PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="WUTA Taekwondo">
+    
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icon-180.png') }}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='icon-152.png') }}">
+    <link rel="apple-touch-icon" sizes="167x167" href="{{ url_for('static', filename='icon-167.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icon-180.png') }}">
+    
+    <!-- General Meta -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="WUTA Taekwondo Vocabulary Training App for Kids">
+    
+    <title>WUTA Taekwondo Vocabulary Trainer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <h1>🥋 WUTA Taekwondo</h1>
+            <p class="subtitle">Vocabulary Trainer</p>
+        </header>
 
-<h1>WUTA Taekwondo Vocabulary Trainer</h1>
-<ul>
-{% for b in belts %}
-<li><a href="/belts/{{ b.belt_id }}">{{ b.belt_name }}</a></li>
-{% endfor %}
-</ul>
+        <div class="belt-grid">
+            {% for b in belts %}
+            <a href="/belts/{{ b.belt_id }}" class="belt-card" style="--belt-color: {{ b.belt_color }}{% if b.tip_color %}; --tip-color: {{ b.tip_color }}{% endif %}" data-belt-id="{{ b.belt_id }}" data-total-terms="{{ b.terms|length }}">
+                <div class="belt-icon">
+                    <div class="belt-visual {% if b.tip_color %}with-tip{% endif %}" style="background: {{ b.belt_color }}"></div>
+                    {% if '_black_tip' in b.belt_id %}
+                        {% set belt_image = b.belt_id.replace('_black_tip', '_tip') %}
+                    {% else %}
+                        {% set belt_image = b.belt_id %}
+                    {% endif %}
+                    <img src="/static/images/belts/{{ belt_image }}.svg" alt="{{ b.belt_name }} meaning" class="belt-meaning-image" loading="lazy">
+                </div>
+                <div class="belt-info">
+                    <h2 class="belt-title">{{ b.belt_name }}</h2>
+                    <p class="term-count">
+                        {{ b.terms|length }} terms
+                        <span class="belt-progress" data-belt="{{ b.belt_id }}">0%</span>
+                    </p>
+                </div>
+                <div class="arrow">→</div>
+            </a>
+            {% endfor %}
+        </div>
+
+        <footer class="app-footer">
+            <p>🌟 Practice makes perfect! 🌟</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Load and display progress for each belt
+        const STORAGE_KEY = 'wuta_completion_';
+        
+        function loadBeltProgress() {
+            document.querySelectorAll('.belt-card').forEach(card => {
+                const beltId = card.dataset.beltId;
+                const totalTerms = parseInt(card.dataset.totalTerms);
+                const progressSpan = card.querySelector('.belt-progress');
+                
+                // Load viewed terms from localStorage
+                const stored = localStorage.getItem(STORAGE_KEY + beltId);
+                let viewedCount = 0;
+                
+                if (stored) {
+                    try {
+                        const viewedTerms = JSON.parse(stored);
+                        viewedCount = viewedTerms.length;
+                    } catch (e) {
+                        viewedCount = 0;
+                    }
+                }
+                
+                const percentage = totalTerms > 0 ? Math.round((viewedCount / totalTerms) * 100) : 0;
+                progressSpan.textContent = percentage + '%';
+                
+                // Add styling based on progress
+                progressSpan.className = 'belt-progress';
+                if (percentage === 100) {
+                    progressSpan.classList.add('complete');
+                } else if (percentage >= 50) {
+                    progressSpan.classList.add('halfway');
+                }
+            });
+        }
+        
+        // Load progress when page loads
+        window.addEventListener('DOMContentLoaded', loadBeltProgress);
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="beltGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFD700;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" rx="115" fill="url(#bgGradient)"/>
+  
+  <!-- Taekwondo uniform (dobok) -->
+  <path d="M 256 140 L 200 180 L 200 380 L 256 420 L 312 380 L 312 180 Z" fill="white" opacity="0.95"/>
+  
+  <!-- Belt -->
+  <rect x="180" y="250" width="152" height="35" rx="5" fill="url(#beltGradient)"/>
+  <rect x="180" y="250" width="152" height="12" rx="3" fill="#000" opacity="0.3"/>
+  
+  <!-- Belt knot -->
+  <circle cx="256" cy="267" r="25" fill="#FFD700"/>
+  <circle cx="256" cy="267" r="20" fill="#FFF"/>
+  <rect x="251" y="262" width="10" height="10" fill="#FFD700"/>
+  
+  <!-- Korean character 태 (Tae) -->
+  <text x="256" y="220" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#667eea" text-anchor="middle">태</text>
+  
+  <!-- Decorative stars -->
+  <text x="140" y="140" font-size="40" fill="#FFD700" opacity="0.8">⭐</text>
+  <text x="360" y="140" font-size="40" fill="#FFD700" opacity="0.8">⭐</text>
+  <text x="140" y="420" font-size="35" fill="#FFD700" opacity="0.6">✨</text>
+  <text x="360" y="420" font-size="35" fill="#FFD700" opacity="0.6">✨</text>
+  
+  <!-- App name text -->
+  <text x="256" y="460" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="white" text-anchor="middle">WUTA</text>
+</svg>

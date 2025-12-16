@@ -1,0 +1,663 @@
+{
+  "belts": [
+    {
+      "belt_id": "white",
+      "belt_name": "White Belt",
+      "belt_color": "#FFFFFF",
+      "terms": [
+        {
+          "id": "taekwondo",
+          "hangul": "태권도",
+          "romanization": "taekwondo",
+          "english": "The Way of Hand and Foot",
+          "category": "Philosophy"
+        },
+        {
+          "id": "charyeot",
+          "hangul": "차렷",
+          "romanization": "charyeot",
+          "english": "Attention",
+          "category": "Command"
+        },
+        {
+          "id": "junbi",
+          "hangul": "준비",
+          "romanization": "junbi",
+          "english": "Ready",
+          "category": "Command"
+        },
+        {
+          "id": "gyeongnye",
+          "hangul": "경례",
+          "romanization": "gyeongnye",
+          "english": "Bow",
+          "category": "Command"
+        },
+        {
+          "id": "sijak",
+          "hangul": "시작",
+          "romanization": "sijak",
+          "english": "Begin",
+          "category": "Command"
+        },
+        {
+          "id": "baro",
+          "hangul": "바로",
+          "romanization": "baro",
+          "english": "Return",
+          "category": "Command"
+        }
+      ]
+    },
+    {
+      "belt_id": "white_black_tip",
+      "belt_name": "White Belt – Black Tip",
+      "belt_color": "#FFFFFF",
+      "tip_color": "#000000",
+      "terms": [
+        {
+          "id": "geuman",
+          "hangul": "그만",
+          "romanization": "geuman",
+          "english": "Stop/Finish",
+          "category": "Command"
+        },
+        {
+          "id": "hana",
+          "hangul": "하나",
+          "romanization": "hana",
+          "english": "One",
+          "category": "Number"
+        },
+        {
+          "id": "dul",
+          "hangul": "둘",
+          "romanization": "dul",
+          "english": "Two",
+          "category": "Number"
+        },
+        {
+          "id": "set",
+          "hangul": "셋",
+          "romanization": "set",
+          "english": "Three",
+          "category": "Number"
+        }
+      ]
+    },
+    {
+      "belt_id": "yellow",
+      "belt_name": "Yellow Belt",
+      "belt_color": "#FFD700",
+      "terms": [
+        {
+          "id": "ap_chagi",
+          "hangul": "앞차기",
+          "romanization": "ap chagi",
+          "english": "Front Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "dollyeo_chagi",
+          "hangul": "돌려차기",
+          "romanization": "dollyeo chagi",
+          "english": "Roundhouse Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "arae_makgi",
+          "hangul": "아래막기",
+          "romanization": "arae makgi",
+          "english": "Low Block",
+          "category": "Block"
+        },
+        {
+          "id": "momtong_makgi",
+          "hangul": "몸통막기",
+          "romanization": "momtong makgi",
+          "english": "Middle Block",
+          "category": "Block"
+        },
+        {
+          "id": "olgul_makgi",
+          "hangul": "얼굴막기",
+          "romanization": "olgul makgi",
+          "english": "High Block",
+          "category": "Block"
+        }
+      ]
+    },
+    {
+      "belt_id": "yellow_black_tip",
+      "belt_name": "Yellow Belt – Black Tip",
+      "belt_color": "#FFD700",
+      "tip_color": "#000000",
+      "terms": [
+        {
+          "id": "net",
+          "hangul": "넷",
+          "romanization": "net",
+          "english": "Four",
+          "category": "Number"
+        },
+        {
+          "id": "daseot",
+          "hangul": "다섯",
+          "romanization": "daseot",
+          "english": "Five",
+          "category": "Number"
+        },
+        {
+          "id": "jireugi",
+          "hangul": "지르기",
+          "romanization": "jireugi",
+          "english": "Punch",
+          "category": "Hand Strike"
+        },
+        {
+          "id": "makgi",
+          "hangul": "막기",
+          "romanization": "makgi",
+          "english": "Block",
+          "category": "Defense"
+        }
+      ]
+    },
+    {
+      "belt_id": "orange",
+      "belt_name": "Orange Belt",
+      "belt_color": "#FF8C00",
+      "terms": [
+        {
+          "id": "yeop_chagi",
+          "hangul": "옆차기",
+          "romanization": "yeop chagi",
+          "english": "Side Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "dwi_chagi",
+          "hangul": "뒤차기",
+          "romanization": "dwi chagi",
+          "english": "Back Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "poomsae",
+          "hangul": "품새",
+          "romanization": "poomsae",
+          "english": "Forms",
+          "category": "Training"
+        },
+        {
+          "id": "ap_seogi",
+          "hangul": "앞서기",
+          "romanization": "ap seogi",
+          "english": "Front Stance",
+          "category": "Stance"
+        }
+      ]
+    },
+    {
+      "belt_id": "orange_black_tip",
+      "belt_name": "Orange Belt – Black Tip",
+      "belt_color": "#FF8C00",
+      "tip_color": "#000000",
+      "terms": [
+        {
+          "id": "yeoseot",
+          "hangul": "여섯",
+          "romanization": "yeoseot",
+          "english": "Six",
+          "category": "Number"
+        },
+        {
+          "id": "ilgop",
+          "hangul": "일곱",
+          "romanization": "ilgop",
+          "english": "Seven",
+          "category": "Number"
+        },
+        {
+          "id": "dwit_seogi",
+          "hangul": "뒷서기",
+          "romanization": "dwit seogi",
+          "english": "Back Stance",
+          "category": "Stance"
+        },
+        {
+          "id": "juchum_seogi",
+          "hangul": "주춤서기",
+          "romanization": "juchum seogi",
+          "english": "Horseback Stance",
+          "category": "Stance"
+        }
+      ]
+    },
+    {
+      "belt_id": "green",
+      "belt_name": "Green Belt",
+      "belt_color": "#228B22",
+      "terms": [
+        {
+          "id": "naeryeo_chagi",
+          "hangul": "내려차기",
+          "romanization": "naeryeo chagi",
+          "english": "Axe Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "biteureo_chagi",
+          "hangul": "비틀어차기",
+          "romanization": "biteureo chagi",
+          "english": "Twist Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "gyeorugi",
+          "hangul": "겨루기",
+          "romanization": "gyeorugi",
+          "english": "Sparring",
+          "category": "Training"
+        },
+        {
+          "id": "hosinsul",
+          "hangul": "호신술",
+          "romanization": "hosinsul",
+          "english": "Self Defense",
+          "category": "Training"
+        }
+      ]
+    },
+    {
+      "belt_id": "green_black_tip",
+      "belt_name": "Green Belt – Black Tip",
+      "belt_color": "#228B22",
+      "tip_color": "#000000",
+      "terms": [
+        {
+          "id": "yeodeol",
+          "hangul": "여덟",
+          "romanization": "yeodeol",
+          "english": "Eight",
+          "category": "Number"
+        },
+        {
+          "id": "ahop",
+          "hangul": "아홉",
+          "romanization": "ahop",
+          "english": "Nine",
+          "category": "Number"
+        },
+        {
+          "id": "yeol",
+          "hangul": "열",
+          "romanization": "yeol",
+          "english": "Ten",
+          "category": "Number"
+        },
+        {
+          "id": "sonnal_makgi",
+          "hangul": "손날막기",
+          "romanization": "sonnal makgi",
+          "english": "Knifehand Block",
+          "category": "Block"
+        }
+      ]
+    },
+    {
+      "belt_id": "blue",
+      "belt_name": "Blue Belt",
+      "belt_color": "#1E90FF",
+      "terms": [
+        {
+          "id": "hoejeon_chagi",
+          "hangul": "회전차기",
+          "romanization": "hoejeon chagi",
+          "english": "Spinning Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "twio_chagi",
+          "hangul": "뛰어차기",
+          "romanization": "twio chagi",
+          "english": "Jumping Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "kyeokpa",
+          "hangul": "격파",
+          "romanization": "kyeokpa",
+          "english": "Breaking",
+          "category": "Training"
+        },
+        {
+          "id": "dobok",
+          "hangul": "도복",
+          "romanization": "dobok",
+          "english": "Uniform",
+          "category": "Equipment"
+        }
+      ]
+    },
+    {
+      "belt_id": "blue_black_tip",
+      "belt_name": "Blue Belt – Black Tip",
+      "belt_color": "#1E90FF",
+      "tip_color": "#000000",
+      "terms": [
+        {
+          "id": "dojang",
+          "hangul": "도장",
+          "romanization": "dojang",
+          "english": "Training Hall",
+          "category": "Place"
+        },
+        {
+          "id": "sabeum",
+          "hangul": "사범",
+          "romanization": "sabeum",
+          "english": "Instructor/Master",
+          "category": "Title"
+        },
+        {
+          "id": "hugul_jaseh",
+          "hangul": "후굴자세",
+          "romanization": "hugul jaseh",
+          "english": "Cat Stance",
+          "category": "Stance"
+        },
+        {
+          "id": "pyojeok_chagi",
+          "hangul": "표적차기",
+          "romanization": "pyojeok chagi",
+          "english": "Target Kick",
+          "category": "Kick"
+        }
+      ]
+    },
+    {
+      "belt_id": "purple",
+      "belt_name": "Purple Belt",
+      "belt_color": "#8B008B",
+      "terms": [
+        {
+          "id": "bandal_chagi",
+          "hangul": "반달차기",
+          "romanization": "bandal chagi",
+          "english": "Crescent Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "ap_hurigi",
+          "hangul": "앞후리기",
+          "romanization": "ap hurigi",
+          "english": "Front Snap",
+          "category": "Technique"
+        },
+        {
+          "id": "double_kick",
+          "hangul": "이중차기",
+          "romanization": "ijung chagi",
+          "english": "Double Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "palmok_makgi",
+          "hangul": "팔목막기",
+          "romanization": "palmok makgi",
+          "english": "Forearm Block",
+          "category": "Block"
+        }
+      ]
+    },
+    {
+      "belt_id": "purple_black_tip",
+      "belt_name": "Purple Belt – Black Tip",
+      "belt_color": "#8B008B",
+      "tip_color": "#000000",
+      "terms": [
+        {
+          "id": "kihap",
+          "hangul": "기합",
+          "romanization": "kihap",
+          "english": "Yell/Spirit Shout",
+          "category": "Spirit"
+        },
+        {
+          "id": "taeguk",
+          "hangul": "태극",
+          "romanization": "taeguk",
+          "english": "Supreme Ultimate",
+          "category": "Philosophy"
+        },
+        {
+          "id": "keun_dollyeo",
+          "hangul": "큰돌려차기",
+          "romanization": "keun dollyeo chagi",
+          "english": "Big Roundhouse",
+          "category": "Kick"
+        },
+        {
+          "id": "godung_makgi",
+          "hangul": "고등막기",
+          "romanization": "godung makgi",
+          "english": "High Section Block",
+          "category": "Block"
+        }
+      ]
+    },
+    {
+      "belt_id": "brown",
+      "belt_name": "Brown Belt",
+      "belt_color": "#8B4513",
+      "terms": [
+        {
+          "id": "yop_hurigi",
+          "hangul": "옆후리기",
+          "romanization": "yop hurigi",
+          "english": "Side Snap",
+          "category": "Technique"
+        },
+        {
+          "id": "dwi_hurigi",
+          "hangul": "뒤후리기",
+          "romanization": "dwi hurigi",
+          "english": "Back Snap",
+          "category": "Technique"
+        },
+        {
+          "id": "combo_tech",
+          "hangul": "연속기술",
+          "romanization": "yeonsok gisul",
+          "english": "Combination Technique",
+          "category": "Technique"
+        },
+        {
+          "id": "mureup_chagi",
+          "hangul": "무릎차기",
+          "romanization": "mureup chagi",
+          "english": "Knee Strike",
+          "category": "Strike"
+        }
+      ]
+    },
+    {
+      "belt_id": "brown_black_tip",
+      "belt_name": "Brown Belt – Black Tip",
+      "belt_color": "#8B4513",
+      "tip_color": "#000000",
+      "terms": [
+        {
+          "id": "danjon",
+          "hangul": "단전",
+          "romanization": "danjon",
+          "english": "Energy Center",
+          "category": "Philosophy"
+        },
+        {
+          "id": "naeryo_jireugi",
+          "hangul": "내려지르기",
+          "romanization": "naeryo jireugi",
+          "english": "Downward Strike",
+          "category": "Hand Strike"
+        },
+        {
+          "id": "palkup_chigi",
+          "hangul": "팔굽치기",
+          "romanization": "palkup chigi",
+          "english": "Elbow Strike",
+          "category": "Strike"
+        },
+        {
+          "id": "advanced_poom",
+          "hangul": "고급품새",
+          "romanization": "gogeup poomsae",
+          "english": "Advanced Forms",
+          "category": "Training"
+        }
+      ]
+    },
+    {
+      "belt_id": "red",
+      "belt_name": "Red Belt",
+      "belt_color": "#DC143C",
+      "terms": [
+        {
+          "id": "mondollyeo_chagi",
+          "hangul": "몬돌려차기",
+          "romanization": "mondollyeo chagi",
+          "english": "Reverse Roundhouse",
+          "category": "Kick"
+        },
+        {
+          "id": "twimyo_chagi",
+          "hangul": "뛰며차기",
+          "romanization": "twimyo chagi",
+          "english": "Flying Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "540_kick",
+          "hangul": "540차기",
+          "romanization": "540 chagi",
+          "english": "540 Degree Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "tornado_kick",
+          "hangul": "토네이도차기",
+          "romanization": "tornado chagi",
+          "english": "Tornado Kick",
+          "category": "Kick"
+        }
+      ]
+    },
+    {
+      "belt_id": "red_black_tip",
+      "belt_name": "Red Belt – Black Tip",
+      "belt_color": "#DC143C",
+      "tip_color": "#000000",
+      "terms": [
+        {
+          "id": "dan_prep",
+          "hangul": "단준비",
+          "romanization": "dan junbi",
+          "english": "Black Belt Preparation",
+          "category": "Rank"
+        },
+        {
+          "id": "master_form",
+          "hangul": "사범품새",
+          "romanization": "sabeum poomsae",
+          "english": "Master Form",
+          "category": "Training"
+        },
+        {
+          "id": "philosophy",
+          "hangul": "철학",
+          "romanization": "cheolhak",
+          "english": "Philosophy",
+          "category": "Philosophy"
+        },
+        {
+          "id": "discipline",
+          "hangul": "규율",
+          "romanization": "gyuyul",
+          "english": "Discipline",
+          "category": "Tenet"
+        }
+      ]
+    },
+    {
+      "belt_id": "black",
+      "belt_name": "Black Belt – 1st Dan",
+      "belt_color": "#000000",
+      "terms": [
+        {
+          "id": "dan",
+          "hangul": "단",
+          "romanization": "dan",
+          "english": "Degree/Level",
+          "category": "Rank"
+        },
+        {
+          "id": "poom",
+          "hangul": "품",
+          "romanization": "poom",
+          "english": "Junior Black Belt",
+          "category": "Rank"
+        },
+        {
+          "id": "shim",
+          "hangul": "심",
+          "romanization": "shim",
+          "english": "Mind/Spirit",
+          "category": "Philosophy"
+        },
+        {
+          "id": "mushin",
+          "hangul": "무신",
+          "romanization": "mushin",
+          "english": "No Mind",
+          "category": "Philosophy"
+        },
+        {
+          "id": "indomitable_spirit",
+          "hangul": "백절불굴",
+          "romanization": "baekjul bulgul",
+          "english": "Indomitable Spirit",
+          "category": "Tenet"
+        },
+        {
+          "id": "courtesy",
+          "hangul": "예의",
+          "romanization": "yeui",
+          "english": "Courtesy",
+          "category": "Tenet"
+        },
+        {
+          "id": "integrity",
+          "hangul": "염치",
+          "romanization": "yeomchi",
+          "english": "Integrity",
+          "category": "Tenet"
+        },
+        {
+          "id": "perseverance",
+          "hangul": "인내",
+          "romanization": "innae",
+          "english": "Perseverance",
+          "category": "Tenet"
+        },
+        {
+          "id": "self_control",
+          "hangul": "극기",
+          "romanization": "geukgi",
+          "english": "Self Control",
+          "category": "Tenet"
+        }
+      ]
+    }
+  ]
+}
