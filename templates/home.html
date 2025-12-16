@@ -30,8 +30,12 @@
         </header>
 
         <div class="belt-grid">
+            {% set korean_numbers = {'white': '일', 'yellow': '이', 'orange': '삼', 'green': '사', 'blue': '오', 'purple': '육', 'brown': '칠', 'red': '팔', 'black': '구'} %}
             {% for b in belts %}
             <a href="/belts/{{ b.belt_id }}" class="belt-card" style="--belt-color: {{ b.belt_color }}{% if b.tip_color %}; --tip-color: {{ b.tip_color }}{% endif %}" data-belt-id="{{ b.belt_id }}" data-total-terms="{{ b.terms|length }}">
+                {% if b.belt_id in korean_numbers %}
+                <div class="korean-number">{{ korean_numbers[b.belt_id] }}</div>
+                {% endif %}
                 <div class="belt-icon">
                     <div class="belt-visual {% if b.tip_color %}with-tip{% endif %}" style="background: {{ b.belt_color }}"></div>
                     {% if '_black_tip' in b.belt_id %}
