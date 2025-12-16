@@ -496,6 +496,19 @@
             
             currentAudio.play().catch(err => {
                 console.error('Error playing audio:', err);
+                visualizer.classList.add('hidden');
+                // Browser blocked autoplay - user needs to click the speaker button first
+                // Show a helpful message only once
+                if (!window.audioPermissionShown) {
+                    window.audioPermissionShown = true;
+                    const speakerBtn = activeCard.querySelector('.audio-button');
+                    if (speakerBtn) {
+                        speakerBtn.style.animation = 'pulse 1s ease-in-out 3';
+                        setTimeout(() => {
+                            speakerBtn.style.animation = '';
+                        }, 3000);
+                    }
+                }
             });
 
             currentAudio.onended = () => {
