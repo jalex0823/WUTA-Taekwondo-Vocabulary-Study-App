@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
-    <!-- iOS PWA Meta Tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- PWA / Mobile Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="WUTA Taekwondo">
     
@@ -17,19 +17,21 @@
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <!-- PWA Manifest (Android/Chrome + modern iOS support) -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
     
     <meta name="theme-color" content="#667eea">
     
     <title>{{ belt.belt_name }} - WUTA Vocabulary</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     
-    <!-- Confetti JS -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Confetti is implemented locally (see inline script) to avoid third-party tracking/storage warnings. -->
 </head>
 <body>
     <div class="container">
         <header class="terms-header" style="--belt-color: {{ belt.belt_color }}">
-            <a href="/" class="back-button">← Back</a>
+            <a href="/" class="back-button">← Back to Main Menu</a>
             <h1>{{ belt.belt_name }}</h1>
             <p class="term-counter">
                 <span id="current-term">1</span> / {{ belt.terms|length }}
@@ -97,11 +99,11 @@
                         <div class="hangul-text">{{ t.hangul }}</div>
                         <div class="category-badge">{{ t.category }}</div>
                         
-                        <button class="audio-button" onclick="playAudio('{{ t.id }}', this)" title="Click to hear Korean + English pronunciation">
+                        <button class="audio-button" onclick="playAudio('{{ t.id }}', this)" title="Read this card (Korean + English)">
                             <svg class="speaker-icon" viewBox="0 0 24 24" width="48" height="48">
                                 <path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                             </svg>
-                            <span class="audio-text">🔊 Korean + English</span>
+                            <span class="audio-text">🔊 Read Card</span>
                         </button>
 
                         <div class="audio-visualizer hidden">
@@ -145,6 +147,7 @@
             <button class="nav-button primary" id="nextBtn" onclick="nextCard()">
                 Next →
             </button>
+            <a class="nav-button" href="/" title="Back to Main Menu">🏠 Main Menu</a>
         </div>
 
         <div class="progress-dots">
@@ -155,6 +158,124 @@
     </div>
 
     <script>
+        // ============ TINY LOCAL CONFETTI (NO EXTERNAL CDN) ============
+        // Minimal confetti implementation to avoid third-party script warnings.
+        // API-compatible enough for the calls in celebrateCompletion().
+        (function () {
+            if (window.confetti) return;
+
+            function rand(min, max) { return Math.random() * (max - min) + min; }
+
+            const COLORS = ['#ff6b6b', '#4ecdc4', '#ffd93d', '#667eea', '#764ba2', '#4caf50', '#ff8800'];
+            let canvas;
+            let ctx;
+            let particles = [];
+            let rafId = null;
+
+            function ensureCanvas() {
+                if (canvas && ctx) return;
+                canvas = document.createElement('canvas');
+                canvas.style.position = 'fixed';
+                canvas.style.left = '0';
+                canvas.style.top = '0';
+                canvas.style.width = '100%';
+                canvas.style.height = '100%';
+                canvas.style.pointerEvents = 'none';
+                canvas.style.zIndex = '9999';
+                document.body.appendChild(canvas);
+                ctx = canvas.getContext('2d');
+
+                const resize = () => {
+                    const dpr = window.devicePixelRatio || 1;
+                    canvas.width = Math.floor(window.innerWidth * dpr);
+                    canvas.height = Math.floor(window.innerHeight * dpr);
+                    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                };
+                resize();
+                window.addEventListener('resize', resize);
+            }
+
+            function tick() {
+                if (!ctx) return;
+                ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+                const gravity = 900; // px/s^2
+                const now = performance.now();
+
+                particles = particles.filter(p => now < p.end);
+                for (const p of particles) {
+                    const dt = (now - p.last) / 1000;
+                    p.last = now;
+
+                    p.vy += gravity * dt;
+                    p.vx *= p.decay;
+                    p.vy *= p.decay;
+
+                    p.x += p.vx * dt;
+                    p.y += p.vy * dt;
+                    p.rot += p.vr * dt;
+
+                    const life = (p.end - now) / (p.end - p.start);
+                    const alpha = Math.max(0, Math.min(1, life));
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rot);
+                    ctx.globalAlpha = alpha;
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    ctx.restore();
+                }
+
+                if (particles.length > 0) {
+                    rafId = requestAnimationFrame(tick);
+                } else {
+                    if (rafId) cancelAnimationFrame(rafId);
+                    rafId = null;
+                    // Remove canvas after we finish to keep DOM clean.
+                    try { canvas.remove(); } catch (e) {}
+                    canvas = null;
+                    ctx = null;
+                }
+            }
+
+            window.confetti = function (opts = {}) {
+                ensureCanvas();
+
+                const particleCount = Math.max(0, Math.min(400, opts.particleCount || 80));
+                const origin = opts.origin || { y: 0.7, x: 0.5 };
+                const spread = (opts.spread ?? 60) * (Math.PI / 180);
+                const startVelocity = opts.startVelocity ?? 45;
+                const decay = opts.decay ?? 0.92;
+                const scalar = opts.scalar ?? 1;
+
+                const startX = (origin.x ?? 0.5) * window.innerWidth;
+                const startY = (origin.y ?? 0.7) * window.innerHeight;
+                const now = performance.now();
+
+                for (let i = 0; i < particleCount; i++) {
+                    const angle = rand(-spread / 2, spread / 2) + (-Math.PI / 2);
+                    const speed = rand(startVelocity * 0.5, startVelocity * 1.1);
+                    particles.push({
+                        x: startX,
+                        y: startY,
+                        vx: Math.cos(angle) * speed * rand(0.8, 1.2),
+                        vy: Math.sin(angle) * speed * rand(0.8, 1.2),
+                        w: rand(6, 10) * scalar,
+                        h: rand(10, 16) * scalar,
+                        rot: rand(0, Math.PI * 2),
+                        vr: rand(-8, 8),
+                        color: COLORS[Math.floor(rand(0, COLORS.length))],
+                        decay,
+                        start: now,
+                        end: now + rand(900, 1400),
+                        last: now,
+                    });
+                }
+
+                if (!rafId) rafId = requestAnimationFrame(tick);
+            };
+        })();
+
         let currentCard = 0;
         const totalCards = {{ belt.terms|length }};
         let currentAudio = null;
@@ -394,6 +515,22 @@
                     viewedTerms = new Set();
                 }
             }
+
+            // Migrate legacy term IDs (if terms.json was updated).
+            // If a term has legacy_id and the user had previously viewed legacy_id,
+            // we count it as viewed for the new id.
+            try {
+                let changed = false;
+                for (const term of terms) {
+                    if (term.legacy_id && viewedTerms.has(term.legacy_id) && !viewedTerms.has(term.id)) {
+                        viewedTerms.add(term.id);
+                        changed = true;
+                    }
+                }
+                if (changed) saveProgress();
+            } catch (e) {
+                // Non-fatal: ignore migration errors.
+            }
             updateCompletionBadge();
         }
         
@@ -455,6 +592,13 @@
                 currentAudio = null;
                 document.querySelectorAll('.audio-visualizer').forEach(v => v.classList.add('hidden'));
             }
+
+            // Stop any speech (Web Speech API)
+            try {
+                if (window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                }
+            } catch (e) {}
             
             // Clear any existing countdown
             if (countdownInterval) {
@@ -526,6 +670,61 @@
             cardInner.classList.toggle('flipped');
         }
 
+        function _speakCardText(term, cardEl, visualizer) {
+            if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+                return false;
+            }
+
+            const inner = cardEl?.querySelector('.card-inner');
+            const isFlipped = inner?.classList.contains('flipped');
+
+            const sequence = [];
+            const hangul = (term?.hangul || '').trim();
+            const romanization = (term?.romanization || '').trim();
+            const english = (term?.english || '').trim();
+
+            // "Read the card": read what's relevant to the side the user is viewing.
+            if (!isFlipped) {
+                if (hangul) sequence.push({ text: hangul, lang: 'ko-KR', rate: 0.85 });
+                if (english) sequence.push({ text: english, lang: 'en-US', rate: 0.95 });
+            } else {
+                if (romanization) sequence.push({ text: romanization, lang: 'en-US', rate: 0.95 });
+                if (english) sequence.push({ text: english, lang: 'en-US', rate: 0.95 });
+            }
+
+            if (sequence.length === 0) return false;
+
+            try {
+                // Cancel anything currently speaking.
+                window.speechSynthesis.cancel();
+
+                if (visualizer) visualizer.classList.remove('hidden');
+
+                const speakNext = (idx) => {
+                    if (idx >= sequence.length) {
+                        if (visualizer) visualizer.classList.add('hidden');
+                        return;
+                    }
+                    const item = sequence[idx];
+                    const utter = new SpeechSynthesisUtterance(item.text);
+                    utter.lang = item.lang;
+                    utter.rate = item.rate ?? 1;
+                    utter.onend = () => speakNext(idx + 1);
+                    utter.onerror = () => {
+                        // Hide visualizer and stop the chain on any error.
+                        if (visualizer) visualizer.classList.add('hidden');
+                    };
+                    window.speechSynthesis.speak(utter);
+                };
+
+                speakNext(0);
+                return true;
+            } catch (e) {
+                try { if (visualizer) visualizer.classList.add('hidden'); } catch (e2) {}
+                return false;
+            }
+        }
+
         function playAudio(termId, button) {
             playTapSound();
             vibrateDevice([30]);
@@ -540,6 +739,27 @@
             if (currentAudio) {
                 currentAudio.pause();
                 document.querySelectorAll('.audio-visualizer').forEach(v => v.classList.add('hidden'));
+            }
+
+            // Stop any speech currently playing.
+            try {
+                if (window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                }
+            } catch (e) {}
+
+            // Prefer "read the card" (device TTS) so it always matches what's displayed.
+            // If not supported or it fails, fall back to the server-generated MP3.
+            try {
+                const term = terms.find(t => t.id === termId) || terms.find(t => t.legacy_id === termId);
+                const cardEl = button.closest('.flashcard');
+                const spoke = _speakCardText(term, cardEl, visualizer);
+                if (spoke) {
+                    currentAudio = null;
+                    return;
+                }
+            } catch (e) {
+                // Ignore and fall back to MP3.
             }
 
             currentAudio = new Audio(audioUrl);
@@ -569,6 +789,18 @@
 
             const activeCard = document.querySelector('.flashcard.active');
             const visualizer = activeCard.querySelector('.audio-visualizer');
+
+            // Prefer device TTS when possible (still counts as a user gesture when Next/Prev was clicked).
+            try {
+                const speakerBtn = activeCard.querySelector('.audio-button');
+                const spoke = _speakCardText(term, activeCard, visualizer);
+                if (spoke) {
+                    currentAudio = null;
+                    return;
+                }
+            } catch (e) {
+                // Ignore and fall back to MP3.
+            }
             
             currentAudio = new Audio(audioUrl);
             visualizer.classList.remove('hidden');

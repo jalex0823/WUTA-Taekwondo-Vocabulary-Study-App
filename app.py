@@ -4,12 +4,93 @@ import json
 from pathlib import Path
 from gtts import gTTS
 import os
+import time
 
 APP_ROOT = Path(__file__).parent
 DATA_PATH = APP_ROOT / "data" / "terms.json"
 AUDIO_DIR = APP_ROOT / "static" / "audio"
 
 app = Flask(__name__)
+
+
+def _find_term_by_id(data, term_id):
+    for belt in data.get("belts", []):
+        for term in belt.get("terms", []):
+            if term.get("id") == term_id:
+                return term
+            # Backward compatibility: allow requesting audio using a previous id.
+            if term.get("legacy_id") == term_id:
+                return term
+    return None
+
+
+def _load_audio_meta(meta_path: Path):
+    try:
+        if not meta_path.exists():
+            return None
+        return json.loads(meta_path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def _write_audio_meta(meta_path: Path, payload: dict):
+    meta_path.parent.mkdir(parents=True, exist_ok=True)
+    meta_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def _should_upgrade_audio(audio_path: Path, meta: dict | None):
+    """Return True if we should attempt to regenerate bilingual audio.
+
+    We use a sidecar meta file to avoid repeatedly regenerating.
+    For legacy files without meta, we use a conservative size heuristic.
+    """
+    if not audio_path.exists():
+        return True
+
+    if meta and meta.get("schema_version") == 1 and meta.get("mode") == "bilingual":
+        return False
+
+    # Legacy cache: if we don't know, only upgrade obviously-small files.
+    if not meta:
+        try:
+            # Korean-only files were typically a few KB. Bilingual is usually much larger.
+            # Heuristic: upgrade if < 7KB.
+            return audio_path.stat().st_size < 7000
+        except Exception:
+            return False
+
+    # Known non-bilingual or unknown schema => try upgrading.
+    return True
+
+
+def _generate_bilingual_mp3(term: dict, out_path: Path):
+    """Generate Korean + pause + English MP3 to out_path."""
+    from pydub import AudioSegment
+    import io
+
+    korean_tts = gTTS(text=term["hangul"], lang="ko", slow=True)
+    korean_audio_bytes = io.BytesIO()
+    korean_tts.write_to_fp(korean_audio_bytes)
+    korean_audio_bytes.seek(0)
+
+    english_tts = gTTS(text=term["english"], lang="en", slow=True)
+    english_audio_bytes = io.BytesIO()
+    english_tts.write_to_fp(english_audio_bytes)
+    english_audio_bytes.seek(0)
+
+    korean_audio = AudioSegment.from_mp3(korean_audio_bytes)
+    english_audio = AudioSegment.from_mp3(english_audio_bytes)
+    pause = AudioSegment.silent(duration=500)
+    combined = korean_audio + pause + english_audio
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    combined.export(str(out_path), format="mp3")
+
+
+def _generate_korean_only_mp3(term: dict, out_path: Path):
+    tts = gTTS(text=term["hangul"], lang="ko", slow=True)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    tts.save(str(out_path))
 
 def load_data():
     with open(DATA_PATH, "r", encoding="utf-8") as f:
@@ -68,56 +149,78 @@ def belt_terms(belt_id):
 @app.route("/audio/<term_id>")
 def get_audio(term_id):
     """Generate or serve Korean pronunciation audio"""
+    # Ensure directory exists even under gunicorn (where __main__ doesn't run).
+    AUDIO_DIR.mkdir(parents=True, exist_ok=True)
+
     audio_file = AUDIO_DIR / f"{term_id}.mp3"
-    
-    # If audio doesn't exist, generate it
-    if not audio_file.exists():
-        data = load_data()
-        term = None
-        for belt in data["belts"]:
-            for t in belt["terms"]:
-                if t["id"] == term_id:
-                    term = t
-                    break
-            if term:
-                break
-        
-        if not term:
-            abort(404)
-        
-        # Generate bilingual TTS: Korean first, then English translation
+    audio_meta = AUDIO_DIR / f"{term_id}.meta.json"
+
+    data = load_data()
+    term = _find_term_by_id(data, term_id)
+    if not term:
+        abort(404)
+
+    meta = _load_audio_meta(audio_meta)
+    needs_upgrade = _should_upgrade_audio(audio_file, meta)
+
+    if needs_upgrade:
+        tmp_file = AUDIO_DIR / f"{term_id}.tmp.mp3"
         try:
-            from pydub import AudioSegment
-            import io
-            
-            # Create Korean audio (slow)
-            korean_tts = gTTS(text=term["hangul"], lang='ko', slow=True)
-            korean_audio_bytes = io.BytesIO()
-            korean_tts.write_to_fp(korean_audio_bytes)
-            korean_audio_bytes.seek(0)
-            
-            # Create English audio (slow)
-            english_tts = gTTS(text=term["english"], lang='en', slow=True)
-            english_audio_bytes = io.BytesIO()
-            english_tts.write_to_fp(english_audio_bytes)
-            english_audio_bytes.seek(0)
-            
-            # Combine: Korean + pause + English
-            korean_audio = AudioSegment.from_mp3(korean_audio_bytes)
-            english_audio = AudioSegment.from_mp3(english_audio_bytes)
-            pause = AudioSegment.silent(duration=500)  # 500ms pause
-            
-            combined = korean_audio + pause + english_audio
-            combined.export(str(audio_file), format="mp3")
-            
+            _generate_bilingual_mp3(term, tmp_file)
+
+            # Atomic-ish replace: write temp then replace.
+            tmp_file.replace(audio_file)
+            _write_audio_meta(
+                audio_meta,
+                {
+                    "schema_version": 1,
+                    "mode": "bilingual",
+                    "term_id": term_id,
+                    "generated_at": int(time.time()),
+                },
+            )
         except Exception as e:
-            print(f"Error generating audio: {e}")
-            # Fallback to Korean only if pydub not available
+            # Don't clobber an existing file if bilingual generation fails mid-session.
             try:
-                tts = gTTS(text=term["hangul"], lang='ko', slow=True)
-                tts.save(str(audio_file))
-            except:
-                abort(500)
+                if tmp_file.exists():
+                    tmp_file.unlink()
+            except Exception:
+                pass
+
+            print(f"Error generating bilingual audio for {term_id}: {e}")
+
+            # If we have no audio at all yet, fall back to Korean-only so the app still works.
+            if not audio_file.exists():
+                try:
+                    _generate_korean_only_mp3(term, audio_file)
+                    _write_audio_meta(
+                        audio_meta,
+                        {
+                            "schema_version": 1,
+                            "mode": "korean_only",
+                            "term_id": term_id,
+                            "generated_at": int(time.time()),
+                            "error": str(e),
+                        },
+                    )
+                except Exception:
+                    abort(500)
+            else:
+                # Keep existing audio, but record that we couldn't upgrade right now.
+                try:
+                    _write_audio_meta(
+                        audio_meta,
+                        {
+                            "schema_version": 1,
+                            "mode": meta.get("mode") if meta else "unknown",
+                            "term_id": term_id,
+                            "generated_at": int(time.time()),
+                            "upgrade_failed": True,
+                            "error": str(e),
+                        },
+                    )
+                except Exception:
+                    pass
     
     return send_file(audio_file, mimetype="audio/mpeg")
 

@@ -240,7 +240,8 @@
       "belt_color": "#FFD700",
       "terms": [
         {
-          "id": "ap_chagi",
+          "id": "ap_chagi__yellow",
+          "legacy_id": "ap_chagi",
           "hangul": "앞차기",
           "romanization": "ap chagi",
           "english": "Front Kick",
@@ -256,7 +257,8 @@
           "image_path": "/static/images/moves/kicks/default_kick.svg"
         },
         {
-          "id": "arae_makgi",
+          "id": "arae_makgi__yellow",
+          "legacy_id": "arae_makgi",
           "hangul": "아래막기",
           "romanization": "arae makgi",
           "english": "Low Block",
@@ -264,7 +266,8 @@
           "image_path": "/static/images/moves/blocks/arae_makgi.svg"
         },
         {
-          "id": "momtong_makgi",
+          "id": "momtong_makgi__yellow",
+          "legacy_id": "momtong_makgi",
           "hangul": "몸통막기",
           "romanization": "momtong makgi",
           "english": "Middle Block",
@@ -495,7 +498,8 @@
       "belt_color": "#FF8C00",
       "terms": [
         {
-          "id": "yeop_chagi",
+          "id": "yeop_chagi__orange",
+          "legacy_id": "yeop_chagi",
           "hangul": "옆차기",
           "romanization": "yeop chagi",
           "english": "Side Kick",
@@ -526,7 +530,8 @@
           "image_path": "/static/images/moves/stances/default_stance.svg"
         },
         {
-          "id": "sonnal_makgi",
+          "id": "sonnal_makgi__orange",
+          "legacy_id": "sonnal_makgi",
           "hangul": "손날막기",
           "romanization": "sonnal makgi",
           "english": "Knifehand Block",
@@ -555,7 +560,8 @@
           "category": "Body Part"
         },
         {
-          "id": "eo깨",
+          "id": "eokkae",
+          "legacy_id": "eo깨",
           "hangul": "어깨",
           "romanization": "eokkae",
           "english": "Shoulder",
@@ -583,7 +589,8 @@
           "category": "Movement"
         },
         {
-          "id": "beom_seogi",
+          "id": "beom_seogi__green",
+          "legacy_id": "beom_seogi",
           "hangul": "범서기",
           "romanization": "beom seogi",
           "english": "Tiger Stance",
@@ -631,7 +638,8 @@
       "tip_color": "#000000",
       "terms": [
         {
-          "id": "juchum_seogi",
+          "id": "juchum_seogi__orange_black_tip",
+          "legacy_id": "juchum_seogi",
           "hangul": "주춤서기",
           "romanization": "juchum seogi",
           "english": "Horseback Stance",
@@ -655,7 +663,8 @@
           "image_path": "/static/images/moves/blocks/default_block.svg"
         },
         {
-          "id": "batangson_makgi",
+          "id": "batangson_makgi__orange_black_tip",
+          "legacy_id": "batangson_makgi",
           "hangul": "바탕손막기",
           "romanization": "batangson makgi",
           "english": "Palm Block",
@@ -678,7 +687,8 @@
           "image_path": "/static/images/moves/strikes/default_strike.svg"
         },
         {
-          "id": "mureup_chigi",
+          "id": "mureup_chigi__red_black_tip",
+          "legacy_id": "mureup_chigi",
           "hangul": "무릎치기",
           "romanization": "mureup chigi",
           "english": "Knee Strike",
@@ -723,15 +733,8 @@
           "image_path": "/static/images/moves/stances/default_stance.svg"
         },
         {
-          "id": "palkup_chigi",
-          "hangul": "팔굽치기",
-          "romanization": "palkup chigi",
-          "english": "Elbow Strike",
-          "category": "Strike",
-          "image_path": "/static/images/moves/strikes/default_strike.svg"
-        },
-        {
-          "id": "dwi_chagi",
+          "id": "dwi_chagi__orange_black_tip",
+          "legacy_id": "dwi_chagi",
           "hangul": "뒤차기",
           "romanization": "dwi chagi",
           "english": "Back Kick",
@@ -1099,7 +1102,8 @@
           "category": "Hand Strike"
         },
         {
-          "id": "ap_cha olligi",
+          "id": "ap_cha_olligi",
+          "legacy_id": "ap_cha olligi",
           "hangul": "앞차올리기",
           "romanization": "ap cha olligi",
           "english": "Front Snap Rising",
@@ -1371,7 +1375,8 @@
           "category": "Hand Strike"
         },
         {
-          "id": "ap_seogi",
+          "id": "ap_seogi__purple",
+          "legacy_id": "ap_seogi",
           "hangul": "앞서기",
           "romanization": "ap seogi",
           "english": "Forward Stance",
@@ -1480,7 +1485,8 @@
           "category": "Hand Strike"
         },
         {
-          "id": "hecheo_makgi",
+          "id": "hecheo_makgi__purple_black_tip",
+          "legacy_id": "hecheo_makgi",
           "hangul": "헤쳐막기",
           "romanization": "hecheo makgi",
           "english": "Wedging Block",
@@ -1496,7 +1502,8 @@
           "image_path": "/static/images/moves/blocks/default_block.svg"
         },
         {
-          "id": "biteureo_makgi",
+          "id": "biteureo_makgi__purple_black_tip",
+          "legacy_id": "biteureo_makgi",
           "hangul": "비틀어막기",
           "romanization": "biteureo makgi",
           "english": "Twisting Block",
@@ -1528,7 +1535,8 @@
           "image_path": "/static/images/moves/strikes/default_strike.svg"
         },
         {
-          "id": "gawi_makgi",
+          "id": "gawi_makgi__purple_black_tip",
+          "legacy_id": "gawi_makgi",
           "hangul": "가위막기",
           "romanization": "gawi makgi",
           "english": "Scissors Block",
@@ -1579,7 +1587,8 @@
           "category": "Testing"
         },
         {
-          "id": "momdollyo_chagi",
+          "id": "momdollyo_chagi__brown",
+          "legacy_id": "momdollyo_chagi",
           "hangul": "몸돌려차기",
           "romanization": "momdollyo chagi",
           "english": "Turning Kick",
@@ -2051,7 +2060,8 @@
           "image_path": "/static/images/moves/strikes/default_strike.svg"
         },
         {
-          "id": " geodeur_chagi",
+          "id": "geodeur_chagi",
+          "legacy_id": " geodeur_chagi",
           "hangul": "걷어차기",
           "romanization": "geodeur chagi",
           "english": "Crescent Kick",

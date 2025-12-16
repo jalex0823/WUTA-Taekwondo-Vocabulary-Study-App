@@ -479,7 +479,7 @@ body {
 
 .flashcard-container {
     position: relative;
-    height: 500px;
+    height: min(500px, 65vh);
     margin-bottom: 20px;
     perspective: 1000px;
 }
@@ -1175,6 +1175,29 @@ body {
 /* ============ RESPONSIVE DESIGN ============ */
 
 @media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .terms-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .terms-header h1 {
+        text-align: center;
+    }
+
+    .back-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .term-counter {
+        justify-content: center;
+    }
+
     .app-header h1 {
         font-size: 2rem;
     }
@@ -1193,7 +1216,7 @@ body {
     }
     
     .flashcard-container {
-        height: 450px;
+        height: min(450px, 62vh);
     }
     
     .audio-button {
@@ -1222,6 +1245,10 @@ body {
     
     .repeat-time-control {
         justify-content: space-between;
+    }
+
+    .navigation-controls {
+        flex-direction: column;
     }
     
     .auto-progress-indicator {

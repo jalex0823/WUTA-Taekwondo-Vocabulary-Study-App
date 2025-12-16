@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Generated audio cache (term audio)
+/static/audio/*.mp3
+/static/audio/*.meta.json
+/static/audio/*.tmp
+/static/audio/*.part
+
+# Sound effects
+/static/audio/sfx/*.mp3
+/static/audio/sfx/*.wav
+
+# Keep the app-used sound effects tracked
+!/static/audio/sfx/button_click.mp3
+!/static/audio/sfx/card_flip.mp3
+!/static/audio/sfx/mode_toggle.mp3
+!/static/audio/sfx/nav_swoosh.mp3
+!/static/audio/sfx/success.mp3
+
+# Optional: ignore design/source assets
+/static/images/**/*.psd
+
+# Local misc assets
+/static/images/Misc/
+/static/images/TVTA_Logo.*
