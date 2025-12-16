@@ -35,7 +35,7 @@
   <text x="200" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2c3e50" text-anchor="middle">White Belt</text>
   
   <!-- Meaning text -->
-  <text x="200" y="250" font-family="Arial, sans-serif" font-size="14" fill="#495057" text-anchor="middle" font-style="italic">"Purity, a new beginning, no prior knowledge"</text>
+  <text x="200" y="250" font-family="Arial, sans-serif" font-size="14" fill="#495057" text-anchor="middle" font-weight="bold">Beginner: Purity and Lack of Knowledge</text>
   
   <!-- Decorative elements -->
   <circle cx="30" cy="30" r="3" fill="#667eea" opacity="0.3"/>
