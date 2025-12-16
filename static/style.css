@@ -510,6 +510,17 @@ body {
     color: white;
 }
 
+/* English preview on front of card */
+.english-preview {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #667eea;
+    text-align: center;
+    margin-bottom: 15px;
+    text-transform: capitalize;
+    opacity: 0.9;
+}
+
 .hangul-text {
     font-size: 4rem;
     font-weight: bold;
@@ -935,6 +946,11 @@ body {
 @media (max-width: 480px) {
     .app-header h1 {
         font-size: 2rem;
+    }
+    
+    .english-preview {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
     }
     
     .hangul-text {

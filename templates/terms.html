@@ -84,6 +84,7 @@
             <div class="flashcard {% if loop.first %}active{% endif %}" data-term-index="{{ loop.index0 }}">
                 <div class="card-inner">
                     <div class="card-front">
+                        <div class="english-preview">{{ t.english }}</div>
                         <div class="hangul-text">{{ t.hangul }}</div>
                         <div class="category-badge">{{ t.category }}</div>
                         
@@ -103,7 +104,7 @@
                         </div>
 
                         <button class="flip-button" onclick="flipCard(this)">
-                            See Translation →
+                            See Details →
                         </button>
                     </div>
 

@@ -51,9 +51,9 @@ def get_audio(term_id):
         if not term:
             abort(404)
         
-        # Generate Korean TTS
+        # Generate Korean TTS with slow pronunciation
         try:
-            tts = gTTS(text=term["hangul"], lang='ko')
+            tts = gTTS(text=term["hangul"], lang='ko', slow=True)
             tts.save(str(audio_file))
         except Exception as e:
             print(f"Error generating audio: {e}")
