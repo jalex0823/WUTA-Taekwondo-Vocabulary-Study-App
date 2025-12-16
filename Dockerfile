@@ -7,6 +7,7 @@ WORKDIR /app
 # Install system dependencies for audio processing
 RUN apt-get update && apt-get install -y \
     gcc \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching

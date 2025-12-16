@@ -51,13 +51,39 @@ def get_audio(term_id):
         if not term:
             abort(404)
         
-        # Generate Korean TTS with slow pronunciation
+        # Generate bilingual TTS: Korean first, then English translation
         try:
-            tts = gTTS(text=term["hangul"], lang='ko', slow=True)
-            tts.save(str(audio_file))
+            from pydub import AudioSegment
+            import io
+            
+            # Create Korean audio (slow)
+            korean_tts = gTTS(text=term["hangul"], lang='ko', slow=True)
+            korean_audio_bytes = io.BytesIO()
+            korean_tts.write_to_fp(korean_audio_bytes)
+            korean_audio_bytes.seek(0)
+            
+            # Create English audio (slow)
+            english_tts = gTTS(text=term["english"], lang='en', slow=True)
+            english_audio_bytes = io.BytesIO()
+            english_tts.write_to_fp(english_audio_bytes)
+            english_audio_bytes.seek(0)
+            
+            # Combine: Korean + pause + English
+            korean_audio = AudioSegment.from_mp3(korean_audio_bytes)
+            english_audio = AudioSegment.from_mp3(english_audio_bytes)
+            pause = AudioSegment.silent(duration=500)  # 500ms pause
+            
+            combined = korean_audio + pause + english_audio
+            combined.export(str(audio_file), format="mp3")
+            
         except Exception as e:
             print(f"Error generating audio: {e}")
-            abort(500)
+            # Fallback to Korean only if pydub not available
+            try:
+                tts = gTTS(text=term["hangul"], lang='ko', slow=True)
+                tts.save(str(audio_file))
+            except:
+                abort(500)
     
     return send_file(audio_file, mimetype="audio/mpeg")
 
