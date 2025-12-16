@@ -159,10 +159,34 @@
         
         // ============ SOUND EFFECTS & HAPTICS ============
         
-        // Create sound effect using Web Audio API
+        // Pre-load sound effects
+        const soundEffects = {
+            click: new Audio('{{ url_for("static", filename="audio/sfx/button_click.mp3") }}'),
+            nav: new Audio('{{ url_for("static", filename="audio/sfx/nav_swoosh.mp3") }}'),
+            mode: new Audio('{{ url_for("static", filename="audio/sfx/mode_toggle.mp3") }}'),
+            flip: new Audio('{{ url_for("static", filename="audio/sfx/card_flip.mp3") }}'),
+            success: new Audio('{{ url_for("static", filename="audio/sfx/success.mp3") }}')
+        };
+        
+        // Set volume for all sound effects
+        Object.values(soundEffects).forEach(sound => {
+            sound.volume = 0.3;
+            sound.preload = 'auto';
+        });
+        
+        // Play sound effect helper
+        function playSFX(soundName) {
+            if (soundEffects[soundName]) {
+                soundEffects[soundName].currentTime = 0; // Reset to start
+                soundEffects[soundName].play().catch(e => console.log('Audio play prevented:', e));
+            }
+        }
+        
+        // Create sound effect using Web Audio API (fallback)
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         
         function playSuccessSound() {
+            playSFX('success');
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
             
@@ -369,6 +393,7 @@
 
         function nextCard() {
             if (currentCard < totalCards - 1) {
+                playSFX('nav');
                 playTapSound();
                 vibrateDevice([30]);
                 currentCard++;
@@ -391,6 +416,7 @@
 
         function prevCard() {
             if (currentCard > 0) {
+                playSFX('nav');
                 playTapSound();
                 vibrateDevice([30]);
                 currentCard--;
@@ -411,6 +437,7 @@
         }
 
         function flipCard(button) {
+            playSFX('flip');
             playTapSound();
             vibrateDevice([30]);
             const cardInner = button.closest('.card-inner');
@@ -473,6 +500,7 @@
         // ============ MODE SWITCHING ============
         
         function setMode(mode) {
+            playSFX('mode');
             playTapSound();
             vibrateDevice([50]);
             
@@ -502,6 +530,7 @@
         // ============ AUTO-PROGRESSION ============
         
         function toggleAutoPlay() {
+            playSFX('click');
             playTapSound();
             vibrateDevice([50]);
             

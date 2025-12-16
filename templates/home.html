@@ -63,6 +63,21 @@
     </div>
     
     <script>
+        // Pre-load sound effects
+        const clickSound = new Audio('{{ url_for("static", filename="audio/sfx/button_click.mp3") }}');
+        clickSound.volume = 0.3;
+        clickSound.preload = 'auto';
+        
+        // Add click sound to all belt cards
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.belt-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    clickSound.currentTime = 0;
+                    clickSound.play().catch(err => console.log('Audio play prevented'));
+                });
+            });
+        });
+        
         // Load and display progress for each belt
         const STORAGE_KEY = 'wuta_completion_';
         
