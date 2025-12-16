@@ -1,0 +1,121 @@
+{
+  "belts": [
+    {
+      "belt_id": "orange",
+      "belt_name": "Orange Belt (WUTA)",
+      "terms": [
+        {
+          "id": "charyeot",
+          "hangul": "차렷",
+          "romanization": "charyeot",
+          "english": "Attention",
+          "category": "Command"
+        },
+        {
+          "id": "junbi",
+          "hangul": "준비",
+          "romanization": "junbi",
+          "english": "Ready",
+          "category": "Command"
+        },
+        {
+          "id": "gyeongnye",
+          "hangul": "경례",
+          "romanization": "gyeongnye",
+          "english": "Bow",
+          "category": "Command"
+        },
+        {
+          "id": "sijak",
+          "hangul": "시작",
+          "romanization": "sijak",
+          "english": "Begin",
+          "category": "Command"
+        },
+        {
+          "id": "geuman",
+          "hangul": "그만",
+          "romanization": "geuman",
+          "english": "Stop",
+          "category": "Command"
+        },
+        {
+          "id": "baro",
+          "hangul": "바로",
+          "romanization": "baro",
+          "english": "Return",
+          "category": "Command"
+        },
+        {
+          "id": "ap_chagi",
+          "hangul": "앞차기",
+          "romanization": "ap chagi",
+          "english": "Front Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "dollyeo_chagi",
+          "hangul": "돌려차기",
+          "romanization": "dollyeo chagi",
+          "english": "Roundhouse Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "yeop_chagi",
+          "hangul": "옆차기",
+          "romanization": "yeop chagi",
+          "english": "Side Kick",
+          "category": "Kick"
+        }
+      ]
+    },
+    {
+      "belt_id": "orange_black_tip",
+      "belt_name": "Orange Belt – Black Tip (WUTA)",
+      "terms": [
+        {
+          "id": "dwi_chagi",
+          "hangul": "뒤차기",
+          "romanization": "dwi chagi",
+          "english": "Back Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "naeryeo_chagi",
+          "hangul": "내려차기",
+          "romanization": "naeryeo chagi",
+          "english": "Axe Kick",
+          "category": "Kick"
+        },
+        {
+          "id": "hoejeon_dollyeo",
+          "hangul": "회전돌려차기",
+          "romanization": "hoejeon dollyeo chagi",
+          "english": "Spinning Roundhouse",
+          "category": "Kick"
+        },
+        {
+          "id": "poomsae",
+          "hangul": "품새",
+          "romanization": "poomsae",
+          "english": "Forms",
+          "category": "Training"
+        },
+        {
+          "id": "gyeorugi",
+          "hangul": "겨루기",
+          "romanization": "gyeorugi",
+          "english": "Sparring",
+          "category": "Training"
+        },
+        {
+          "id": "hosinsul",
+          "hangul": "호신술",
+          "romanization": "hosinsul",
+          "english": "Self Defense",
+          "category": "Training"
+        }
+      ]
+    }
+  ]
+}

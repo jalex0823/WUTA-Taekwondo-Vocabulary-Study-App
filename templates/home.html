@@ -1,0 +1,7 @@
+
+<h1>WUTA Taekwondo Vocabulary Trainer</h1>
+<ul>
+{% for b in belts %}
+<li><a href="/belts/{{ b.belt_id }}">{{ b.belt_name }}</a></li>
+{% endfor %}
+</ul>

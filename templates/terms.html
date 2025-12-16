@@ -1,0 +1,8 @@
+
+<h2>{{ belt.belt_name }}</h2>
+<ul>
+{% for t in belt.terms %}
+<li>{{ t.hangul }} ({{ t.romanization }}) — {{ t.english }}</li>
+{% endfor %}
+</ul>
+<a href="/">Back</a>
