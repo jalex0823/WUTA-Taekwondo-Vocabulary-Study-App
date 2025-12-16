@@ -404,11 +404,13 @@
                 vibrateDevice([30]);
                 currentCard++;
                 showCard(currentCard);
-                // Auto-play audio only in auto mode when actively playing
+                // Auto-play audio in both modes
                 if (currentMode === 'auto' && isAutoPlaying) {
                     playCurrentCardAuto();
+                } else if (currentMode === 'manual') {
+                    // Play audio automatically when clicking Next
+                    playAudioForCurrentCard();
                 }
-                // Removed autoplay in manual mode - user must click play button
             } else if (isAutoPlaying && currentMode === 'auto') {
                 // End of list in auto mode
                 stopAutoPlay();
@@ -426,7 +428,10 @@
                 vibrateDevice([30]);
                 currentCard--;
                 showCard(currentCard);
-                // Removed autoplay - respects browser autoplay policy
+                // Play audio automatically when clicking Previous in manual mode
+                if (currentMode === 'manual') {
+                    playAudioForCurrentCard();
+                }
             }
         }
 
