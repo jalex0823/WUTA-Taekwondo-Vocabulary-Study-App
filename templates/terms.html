@@ -50,9 +50,12 @@
             </div>
             
             <div class="auto-controls hidden" id="autoControls">
+                <div style="background: #4ECDC4; color: white; padding: 8px; border-radius: 8px; margin-bottom: 10px; text-align: center; font-size: 14px;">
+                    🎵 <strong>Auto Mode:</strong> Plays Korean + English for each word automatically
+                </div>
                 <button class="auto-btn play-btn" id="playPauseBtn" onclick="toggleAutoPlay()">
                     <span id="playPauseIcon">▶️</span>
-                    <span id="playPauseText">Start</span>
+                    <span id="playPauseText">Start Auto Play</span>
                 </button>
                 <div class="repeat-time-control">
                     <label>Repeat Time:</label>
@@ -545,7 +548,7 @@
             
             playPauseBtn.classList.add('playing');
             playPauseIcon.textContent = '⏸️';
-            playPauseText.textContent = 'Pause';
+            playPauseText.textContent = 'Pause Auto Play';
             
             playCurrentCardAuto();
         }
@@ -558,7 +561,7 @@
             
             playPauseBtn.classList.remove('playing');
             playPauseIcon.textContent = '▶️';
-            playPauseText.textContent = 'Start';
+            playPauseText.textContent = 'Start Auto Play';
             
             // Clear timers
             if (countdownInterval) {
@@ -596,15 +599,21 @@
                 currentAudio.pause();
             }
             
-            // Play audio
+            // Play audio - bilingual: Korean + pause + English
             currentAudio = new Audio(audioUrl);
             const activeCard = document.querySelector('.flashcard.active');
             const visualizer = activeCard.querySelector('.audio-visualizer');
             
             visualizer.classList.remove('hidden');
             
+            // Auto mode has user interaction from Start button, so audio will play
             currentAudio.play().catch(err => {
-                console.error('Error playing audio:', err);
+                console.error('Error playing audio in auto mode:', err);
+                // If first card fails, show alert to help user
+                if (currentCard === 0) {
+                    alert('🎵 Please click START again to enable audio. Browser requires user interaction for autoplay.');
+                    stopAutoPlay();
+                }
             });
 
             currentAudio.onended = () => {
