@@ -18,10 +18,44 @@ def load_data():
 def get_belt(data, belt_id):
     return next((b for b in data["belts"] if b["belt_id"] == belt_id), None)
 
+def combine_belts_with_tips(belts):
+    """Combine main belt colors with their tips into single entries"""
+    combined = []
+    main_colors = ['white', 'yellow', 'orange', 'green', 'blue', 'purple', 'brown', 'red', 'black']
+    
+    for color in main_colors:
+        # Find main belt
+        main_belt = next((b for b in belts if b["belt_id"] == color), None)
+        if not main_belt:
+            continue
+            
+        # Find tip belt
+        tip_belt = next((b for b in belts if b["belt_id"] == f"{color}_tip"), None)
+        
+        # Combine terms
+        combined_terms = main_belt["terms"].copy()
+        if tip_belt:
+            combined_terms.extend(tip_belt["terms"])
+        
+        # Create combined belt entry
+        combined_belt = {
+            "belt_id": color,
+            "belt_name": main_belt["belt_name"],
+            "belt_color": main_belt["belt_color"],
+            "terms": combined_terms
+        }
+        if "tip_color" in main_belt:
+            combined_belt["tip_color"] = main_belt["tip_color"]
+            
+        combined.append(combined_belt)
+    
+    return combined
+
 @app.route("/")
 def home():
     data = load_data()
-    return render_template("home.html", belts=data["belts"])
+    combined_belts = combine_belts_with_tips(data["belts"])
+    return render_template("home.html", belts=combined_belts)
 
 @app.route("/belts/<belt_id>")
 def belt_terms(belt_id):

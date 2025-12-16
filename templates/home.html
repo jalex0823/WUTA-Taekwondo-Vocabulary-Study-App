@@ -72,19 +72,28 @@
                 const totalTerms = parseInt(card.dataset.totalTerms);
                 const progressSpan = card.querySelector('.belt-progress');
                 
-                // Load viewed terms from localStorage
-                const stored = localStorage.getItem(STORAGE_KEY + beltId);
-                let viewedCount = 0;
+                // Combine viewed terms from main belt and tip belt
+                let viewedTermIds = new Set();
                 
-                if (stored) {
+                // Load main belt progress
+                const mainStored = localStorage.getItem(STORAGE_KEY + beltId);
+                if (mainStored) {
                     try {
-                        const viewedTerms = JSON.parse(stored);
-                        viewedCount = viewedTerms.length;
-                    } catch (e) {
-                        viewedCount = 0;
-                    }
+                        const mainViewed = JSON.parse(mainStored);
+                        mainViewed.forEach(id => viewedTermIds.add(id));
+                    } catch (e) {}
                 }
                 
+                // Load tip belt progress
+                const tipStored = localStorage.getItem(STORAGE_KEY + beltId + '_tip');
+                if (tipStored) {
+                    try {
+                        const tipViewed = JSON.parse(tipStored);
+                        tipViewed.forEach(id => viewedTermIds.add(id));
+                    } catch (e) {}
+                }
+                
+                const viewedCount = viewedTermIds.size;
                 const percentage = totalTerms > 0 ? Math.round((viewedCount / totalTerms) * 100) : 0;
                 progressSpan.textContent = percentage + '%';
                 
