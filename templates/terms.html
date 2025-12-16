@@ -51,16 +51,12 @@
             
             <div class="auto-controls hidden" id="autoControls">
                 <div style="background: #4ECDC4; color: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; text-align: center; font-size: 14px;">
-                    🎵 <strong>Auto Play Active:</strong> Korean → English → Next Word<br>
-                    <small style="opacity: 0.9;">Playing through all {{ total_terms }} terms automatically</small>
+                    🎵 <strong>Auto Play:</strong> Korean → English → Next Word<br>
+                    <small style="opacity: 0.9;">Will play through all {{ total_terms }} terms automatically</small>
                 </div>
-                <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
-                    <button class="auto-btn play-btn" id="playPauseBtn" onclick="toggleAutoPlay()" style="flex: 1;">
-                        <span id="playPauseIcon">⏸️</span>
-                        <span id="playPauseText">Pause</span>
-                    </button>
+                <div style="display: flex; gap: 10px; align-items: center; justify-content: center; margin-bottom: 10px;">
                     <div class="repeat-time-control" style="flex: 1;">
-                        <label>Pause Between:</label>
+                        <label>Pause Between Words:</label>
                         <select id="repeatTimeSelect" onchange="updateRepeatTime()">
                             <option value="2">2 sec</option>
                             <option value="3">3 sec</option>
@@ -69,6 +65,10 @@
                         </select>
                     </div>
                 </div>
+                <button class="auto-btn play-btn" id="playPauseBtn" onclick="toggleAutoPlay()" style="width: 100%; padding: 15px; font-size: 18px;">
+                    <span id="playPauseIcon">▶️</span>
+                    <span id="playPauseText">🎵 Start Auto Play - Korean + English</span>
+                </button>
                 <div class="auto-progress-indicator">
                     <div class="progress-ring">
                         <svg width="40" height="40">
@@ -520,8 +520,7 @@
                 autoBtn.classList.add('active');
                 manualBtn.classList.remove('active');
                 autoControls.classList.remove('hidden');
-                // Automatically start playing when switching to auto mode
-                startAutoPlay();
+                // Show ready state - user must click Start button for browser autoplay policy
             }
         }
 
@@ -552,8 +551,10 @@
             const playPauseText = document.getElementById('playPauseText');
             
             playPauseBtn.classList.add('playing');
+            playPauseBtn.style.padding = '12px';
+            playPauseBtn.style.fontSize = '16px';
             playPauseIcon.textContent = '⏸️';
-            playPauseText.textContent = 'Pause';
+            playPauseText.textContent = 'Pause Auto Play';
             
             playCurrentCardAuto();
         }
@@ -565,8 +566,10 @@
             const playPauseText = document.getElementById('playPauseText');
             
             playPauseBtn.classList.remove('playing');
+            playPauseBtn.style.padding = '15px';
+            playPauseBtn.style.fontSize = '18px';
             playPauseIcon.textContent = '▶️';
-            playPauseText.textContent = 'Resume';
+            playPauseText.textContent = '🎵 Resume Auto Play - Korean + English';
             
             // Clear timers
             if (countdownInterval) {
