@@ -50,21 +50,24 @@
             </div>
             
             <div class="auto-controls hidden" id="autoControls">
-                <div style="background: #4ECDC4; color: white; padding: 8px; border-radius: 8px; margin-bottom: 10px; text-align: center; font-size: 14px;">
-                    🎵 <strong>Auto Mode:</strong> Plays Korean + English for each word automatically
+                <div style="background: #4ECDC4; color: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; text-align: center; font-size: 14px;">
+                    🎵 <strong>Auto Play Active:</strong> Korean → English → Next Word<br>
+                    <small style="opacity: 0.9;">Playing through all {{ total_terms }} terms automatically</small>
                 </div>
-                <button class="auto-btn play-btn" id="playPauseBtn" onclick="toggleAutoPlay()">
-                    <span id="playPauseIcon">▶️</span>
-                    <span id="playPauseText">Start Auto Play</span>
-                </button>
-                <div class="repeat-time-control">
-                    <label>Repeat Time:</label>
-                    <select id="repeatTimeSelect" onchange="updateRepeatTime()">
-                        <option value="3">3 sec</option>
-                        <option value="5" selected>5 sec</option>
-                        <option value="7">7 sec</option>
-                        <option value="10">10 sec</option>
-                    </select>
+                <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
+                    <button class="auto-btn play-btn" id="playPauseBtn" onclick="toggleAutoPlay()" style="flex: 1;">
+                        <span id="playPauseIcon">⏸️</span>
+                        <span id="playPauseText">Pause</span>
+                    </button>
+                    <div class="repeat-time-control" style="flex: 1;">
+                        <label>Pause Between:</label>
+                        <select id="repeatTimeSelect" onchange="updateRepeatTime()">
+                            <option value="2">2 sec</option>
+                            <option value="3">3 sec</option>
+                            <option value="5" selected>5 sec</option>
+                            <option value="7">7 sec</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="auto-progress-indicator">
                     <div class="progress-ring">
@@ -517,6 +520,8 @@
                 autoBtn.classList.add('active');
                 manualBtn.classList.remove('active');
                 autoControls.classList.remove('hidden');
+                // Automatically start playing when switching to auto mode
+                startAutoPlay();
             }
         }
 
@@ -548,7 +553,7 @@
             
             playPauseBtn.classList.add('playing');
             playPauseIcon.textContent = '⏸️';
-            playPauseText.textContent = 'Pause Auto Play';
+            playPauseText.textContent = 'Pause';
             
             playCurrentCardAuto();
         }
@@ -561,7 +566,7 @@
             
             playPauseBtn.classList.remove('playing');
             playPauseIcon.textContent = '▶️';
-            playPauseText.textContent = 'Start Auto Play';
+            playPauseText.textContent = 'Resume';
             
             // Clear timers
             if (countdownInterval) {
