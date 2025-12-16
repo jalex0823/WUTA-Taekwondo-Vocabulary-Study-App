@@ -88,11 +88,11 @@
                         <div class="hangul-text">{{ t.hangul }}</div>
                         <div class="category-badge">{{ t.category }}</div>
                         
-                        <button class="audio-button" onclick="playAudio('{{ t.id }}', this)">
+                        <button class="audio-button" onclick="playAudio('{{ t.id }}', this)" title="Click to hear Korean + English pronunciation">
                             <svg class="speaker-icon" viewBox="0 0 24 24" width="48" height="48">
                                 <path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                             </svg>
-                            <span class="audio-text">Tap to Listen</span>
+                            <span class="audio-text">🔊 Korean + English</span>
                         </button>
 
                         <div class="audio-visualizer hidden">
@@ -398,12 +398,11 @@
                 vibrateDevice([30]);
                 currentCard++;
                 showCard(currentCard);
-                // Auto-play audio when moving to next card
+                // Auto-play audio only in auto mode when actively playing
                 if (currentMode === 'auto' && isAutoPlaying) {
                     playCurrentCardAuto();
-                } else if (currentMode === 'manual') {
-                    playAudioForCurrentCard();
                 }
+                // Removed autoplay in manual mode - user must click play button
             } else if (isAutoPlaying && currentMode === 'auto') {
                 // End of list in auto mode
                 stopAutoPlay();
@@ -421,10 +420,7 @@
                 vibrateDevice([30]);
                 currentCard--;
                 showCard(currentCard);
-                // Auto-play audio when moving to previous card
-                if (currentMode === 'manual') {
-                    playAudioForCurrentCard();
-                }
+                // Removed autoplay - respects browser autoplay policy
             }
         }
 
