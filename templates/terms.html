@@ -52,7 +52,10 @@
             <div class="auto-controls hidden" id="autoControls">
                 <div style="background: #4ECDC4; color: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; text-align: center; font-size: 14px;">
                     🎵 <strong>Auto Play:</strong> Korean → English → Next Word<br>
-                    <small style="opacity: 0.9;">Will play through all {{ total_terms }} terms automatically</small>
+                    <small style="opacity: 0.9;">Will play through all {{ total_terms }} terms automatically</small><br>
+                    <small style="opacity: 0.8; font-size: 11px; margin-top: 5px; display: block;">
+                        ℹ️ If hearing only Korean: clear browser cache or contact admin to clear server audio files
+                    </small>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center; justify-content: center; margin-bottom: 10px;">
                     <div class="repeat-time-control" style="flex: 1;">
@@ -635,10 +638,18 @@
             // Auto mode has user interaction from Start button, so audio will play
             currentAudio.play().catch(err => {
                 console.error('Error playing audio in auto mode:', err);
-                // If first card fails, show alert to help user
-                if (currentCard === 0) {
-                    alert('🎵 Please click START again to enable audio. Browser requires user interaction for autoplay.');
-                    stopAutoPlay();
+                visualizer.classList.add('hidden');
+                
+                // IMPORTANT: Still advance even if audio fails
+                // This ensures auto-mode continues even with old cached audio or network issues
+                if (isAutoPlaying) {
+                    // If first card fails, show alert once
+                    if (currentCard === 0 && !window.audioAutoplayWarned) {
+                        window.audioAutoplayWarned = true;
+                        alert('🎵 Audio blocked by browser. Continuing without audio.\n\nTo fix: Clear audio cache and refresh page.');
+                    }
+                    // Start countdown anyway so we still auto-advance
+                    startCountdown();
                 }
             });
 
