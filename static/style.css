@@ -653,13 +653,28 @@ body {
 .move-image-container {
     margin: 20px 0;
     padding: 15px;
-    background: rgba(255, 255, 255, 0.9);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.95) 100%);
     border-radius: 15px;
     backdrop-filter: blur(10px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 
+                0 0 20px rgba(102, 126, 234, 0.1);
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    overflow: hidden;
+    animation: containerPulse 3s ease-in-out infinite;
+}
+
+.move-image-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
+    animation: rotateGlow 8s linear infinite;
 }
 
 .move-image {
@@ -670,11 +685,34 @@ body {
     border-radius: 10px;
     display: block;
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
-    transition: transform 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
 }
 
 .move-image:hover {
-    transform: scale(1.05);
+    transform: scale(1.08) translateY(-5px);
+    filter: drop-shadow(0 8px 20px rgba(102, 126, 234, 0.3))
+            drop-shadow(0 0 30px rgba(78, 205, 196, 0.2));
+    animation: subtleFloat 2s ease-in-out infinite;
+}
+
+/* Subtle floating animation */
+@keyframes subtleFloat {
+    0%, 100% { transform: scale(1.08) translateY(-5px); }
+    50% { transform: scale(1.08) translateY(-8px); }
+}
+
+/* Container pulse animation */
+@keyframes containerPulse {
+    0%, 100% { box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 0 20px rgba(102, 126, 234, 0.1); }
+    50% { box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15), 0 0 30px rgba(102, 126, 234, 0.2); }
+}
+
+/* Rotating glow effect */
+@keyframes rotateGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Responsive adjustments for move images */

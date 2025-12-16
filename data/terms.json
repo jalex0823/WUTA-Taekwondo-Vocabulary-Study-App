@@ -97,7 +97,7 @@
           "romanization": "arae makgi",
           "english": "Low Block",
           "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "image_path": "/static/images/moves/blocks/arae_makgi.svg"
         },
         {
           "id": "momtong_makgi",
@@ -113,7 +113,7 @@
           "romanization": "ap chagi",
           "english": "Front Kick",
           "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "image_path": "/static/images/moves/kicks/ap_chagi.svg"
         }
       ]
     },
@@ -245,7 +245,7 @@
           "romanization": "ap chagi",
           "english": "Front Kick",
           "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "image_path": "/static/images/moves/kicks/ap_chagi.svg"
         },
         {
           "id": "dollyeo_chagi",
@@ -261,7 +261,7 @@
           "romanization": "arae makgi",
           "english": "Low Block",
           "category": "Block",
-          "image_path": "/static/images/moves/blocks/default_block.svg"
+          "image_path": "/static/images/moves/blocks/arae_makgi.svg"
         },
         {
           "id": "momtong_makgi",
@@ -292,7 +292,7 @@
           "romanization": "ap seogi",
           "english": "Front Stance",
           "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
+          "image_path": "/static/images/moves/stances/ap_seogi.svg"
         },
         {
           "id": "gawi_makgi",
@@ -352,7 +352,7 @@
           "romanization": "yeop chagi",
           "english": "Side Kick",
           "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "image_path": "/static/images/moves/kicks/yeop_chagi.svg"
         },
         {
           "id": "batangson_makgi",
@@ -500,7 +500,7 @@
           "romanization": "yeop chagi",
           "english": "Side Kick",
           "category": "Kick",
-          "image_path": "/static/images/moves/kicks/default_kick.svg"
+          "image_path": "/static/images/moves/kicks/yeop_chagi.svg"
         },
         {
           "id": "dwi_chagi",
@@ -1376,7 +1376,7 @@
           "romanization": "ap seogi",
           "english": "Forward Stance",
           "category": "Stance",
-          "image_path": "/static/images/moves/stances/default_stance.svg"
+          "image_path": "/static/images/moves/stances/ap_seogi.svg"
         },
         {
           "id": "twieo_yeop_chagi",
