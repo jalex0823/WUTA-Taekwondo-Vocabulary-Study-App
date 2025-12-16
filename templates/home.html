@@ -124,6 +124,110 @@
         
         // Load progress when page loads
         window.addEventListener('DOMContentLoaded', loadBeltProgress);
+
+        // 🎵 EPIC TAEKWONDO INTRO THEME SONG
+        let introPlayed = sessionStorage.getItem('introPlayed');
+        
+        function playIntroTheme() {
+            if (introPlayed) return; // Only play once per session
+            
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const masterGain = audioContext.createGain();
+            masterGain.connect(audioContext.destination);
+            masterGain.gain.value = 0.3; // Keep it moderate volume
+            
+            function playNote(freq, startTime, duration, vol = 0.3) {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                osc.connect(gain);
+                gain.connect(masterGain);
+                
+                osc.frequency.value = freq;
+                osc.type = 'square'; // Powerful square wave
+                
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(vol, startTime + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+                
+                osc.start(startTime);
+                osc.stop(startTime + duration);
+            }
+            
+            function playKick(time) {
+                // Kick drum sound (low frequency punch)
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                osc.connect(gain);
+                gain.connect(masterGain);
+                
+                osc.frequency.setValueAtTime(150, time);
+                osc.frequency.exponentialRampToValueAtTime(0.01, time + 0.3);
+                
+                gain.gain.setValueAtTime(0.5, time);
+                gain.gain.exponentialRampToValueAtTime(0.01, time + 0.3);
+                
+                osc.start(time);
+                osc.stop(time + 0.3);
+            }
+            
+            const now = audioContext.currentTime;
+            const tempo = 0.15; // Fast, energetic tempo
+            
+            // Epic martial arts theme - powerful and dramatic
+            // Pattern: Rising power progression with kick sounds
+            
+            // Opening power chord - BAM!
+            playKick(now);
+            playNote(130.81, now, 0.4, 0.4); // C3
+            playNote(196.00, now, 0.4, 0.3); // G3
+            playNote(261.63, now, 0.4, 0.3); // C4
+            
+            // Kick sound effects
+            playKick(now + tempo * 2);
+            playKick(now + tempo * 4);
+            
+            // Rising melody - building energy
+            playNote(261.63, now + tempo * 4, 0.2); // C4
+            playNote(293.66, now + tempo * 5, 0.2); // D4
+            playNote(329.63, now + tempo * 6, 0.2); // E4
+            playNote(392.00, now + tempo * 7, 0.3); // G4
+            
+            // Power kicks
+            playKick(now + tempo * 8);
+            
+            // Climax - STRONG FINISH!
+            playNote(523.25, now + tempo * 8, 0.5, 0.4); // C5 - HIGH!
+            playNote(392.00, now + tempo * 8, 0.5, 0.35); // G4
+            playNote(261.63, now + tempo * 8, 0.5, 0.3); // C4
+            
+            playKick(now + tempo * 10);
+            playKick(now + tempo * 11);
+            
+            // Final strike - HYAH!
+            playNote(523.25, now + tempo * 12, 0.6, 0.45); // C5
+            playNote(659.25, now + tempo * 12, 0.6, 0.4);  // E5
+            playKick(now + tempo * 12);
+            
+            sessionStorage.setItem('introPlayed', 'true');
+        }
+        
+        // Play theme with user interaction (click anywhere)
+        document.addEventListener('click', () => {
+            if (!introPlayed) {
+                playIntroTheme();
+                introPlayed = true;
+            }
+        }, { once: true });
+        
+        // Add visual pulse on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('.app-header h1');
+            if (header) {
+                header.style.animation = 'pulse 0.5s ease-in-out 3';
+            }
+        });
     </script>
 </body>
 </html>
