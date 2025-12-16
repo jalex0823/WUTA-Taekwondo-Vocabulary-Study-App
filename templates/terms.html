@@ -360,6 +360,9 @@
         let isAutoPlaying = false;
         let repeatTime = 5; // seconds
         let autoRepeatCount = 1; // times to repeat audio per card in Auto Guide
+
+        // Mirror for any older/other checks that look on window.
+        window.isAutoPlaying = isAutoPlaying;
         let countdownInterval = null;
         let progressTimeout = null;
         
@@ -992,7 +995,7 @@
 
             // Keep Auto Play button label in sync when not currently playing.
             try {
-                if (!window.isAutoPlaying) {
+                if (!isAutoPlaying) {
                     const playPauseText = document.getElementById('playPauseText');
                     if (playPauseText) {
                         // Auto Guide always plays Korean + English.
@@ -1097,6 +1100,7 @@
 
         function startAutoPlay() {
             isAutoPlaying = true;
+            window.isAutoPlaying = true;
             const playPauseBtn = document.getElementById('playPauseBtn');
             const playPauseIcon = document.getElementById('playPauseIcon');
             const playPauseText = document.getElementById('playPauseText');
@@ -1116,6 +1120,7 @@
 
         function stopAutoPlay() {
             isAutoPlaying = false;
+            window.isAutoPlaying = false;
             const playPauseBtn = document.getElementById('playPauseBtn');
             const playPauseIcon = document.getElementById('playPauseIcon');
             const playPauseText = document.getElementById('playPauseText');

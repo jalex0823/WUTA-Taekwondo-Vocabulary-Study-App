@@ -2474,6 +2474,12 @@ body.page-terms.theme-arcade.theme-screenshot .auto-controls {
     border-top: 1px solid rgba(255,255,255,0.16);
 }
 
+/* In screenshot theme, Auto Guide sits inside a dark panel: default text should be light */
+body.page-terms.theme-arcade.theme-screenshot .auto-controls,
+body.page-terms.theme-arcade.theme-screenshot .auto-controls * {
+    color: rgba(255,255,255,0.84);
+}
+
 /* Fix unreadable dark text inside the black Auto Guide panel */
 body.page-terms.theme-arcade.theme-screenshot .auto-guide-banner {
     background: rgba(255,255,255,0.06);
@@ -2488,6 +2494,12 @@ body.page-terms.theme-arcade.theme-screenshot .auto-guide-steps .step {
     background: rgba(255,255,255,0.90);
     border-color: rgba(0,0,0,0.10);
     color: rgba(0,0,0,0.82);
+}
+
+body.page-terms.theme-arcade.theme-screenshot .repeat-time-control select {
+    background: rgba(255,255,255,0.96);
+    color: rgba(0,0,0,0.86);
+    border-color: rgba(0,0,0,0.14);
 }
 
 body.page-terms.theme-arcade.theme-screenshot .auto-guide-steps .arrow {
