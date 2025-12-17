@@ -49,11 +49,16 @@
             const audio = new Audio(cfg.src);
             audio.loop = true;
             audio.preload = 'auto';
+            // iOS Safari can be picky about when media is considered user-initiated.
+            // These hints are harmless elsewhere.
+            try { audio.setAttribute('playsinline', ''); } catch (e) {}
+            try { audio.load(); } catch (e) {}
             api._bgm = {
                 audio,
                 enabled: cfg.enabledDefault,
                 volume: cfg.volumeDefault,
                 startedOnce: false,
+                needsGesture: false,
             };
         } else {
             // Ensure the right track is set for this page.
@@ -79,7 +84,11 @@
             if (toggleEl) {
                 toggleEl.setAttribute('aria-pressed', on ? 'true' : 'false');
                 toggleEl.classList.toggle('is-off', !on);
-                toggleEl.textContent = on ? 'Music: ON' : 'Music: OFF';
+                if (on && api._bgm.needsGesture) {
+                    toggleEl.textContent = 'Music: ON (tap)';
+                } else {
+                    toggleEl.textContent = on ? 'Music: ON' : 'Music: OFF';
+                }
             }
             if (labelEl) {
                 labelEl.textContent = on ? '🎵 Music' : '🔇 Music';
@@ -99,9 +108,13 @@
                 api._bgm.audio.volume = api._bgm.volume;
                 await api._bgm.audio.play();
                 api._bgm.startedOnce = true;
+                api._bgm.needsGesture = false;
+                render();
                 return true;
             } catch (e) {
                 // Ignore; we'll retry on the next gesture.
+                api._bgm.needsGesture = true;
+                render();
                 return false;
             }
         }
@@ -139,10 +152,13 @@
         render();
 
         if (toggleEl) {
-            toggleEl.addEventListener('click', (e) => {
-                // Click is a user gesture - safe place to start playback.
+            const toggleHandler = () => {
+                // Tap/click is a user gesture - safest place to start playback.
                 setEnabled(!api._bgm.enabled);
-            });
+            };
+            toggleEl.addEventListener('click', toggleHandler);
+            // iOS Safari often behaves best when play() is triggered from touchstart.
+            toggleEl.addEventListener('touchstart', toggleHandler, { passive: true });
         }
 
         if (volumeEl) {
@@ -158,7 +174,12 @@
         const startOnGesture = () => {
             tryStart('gesture');
         };
+        // iOS Safari: touch events are the most reliable "gesture" signals.
+        window.addEventListener('touchstart', startOnGesture, { once: true, passive: true });
+        window.addEventListener('touchend', startOnGesture, { once: true, passive: true });
+        // Other browsers
         window.addEventListener('pointerdown', startOnGesture, { once: true, passive: true });
+        window.addEventListener('click', startOnGesture, { once: true, passive: true });
         window.addEventListener('keydown', startOnGesture, { once: true, passive: true });
     }
 
