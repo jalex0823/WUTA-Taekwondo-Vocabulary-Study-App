@@ -51,14 +51,10 @@ def _should_upgrade_audio(audio_path: Path, meta: dict | None):
     if meta and meta.get("schema_version") == 3 and meta.get("mode") == "bilingual":
         return False
 
-    # Legacy cache: if we don't know, only upgrade obviously-small files.
+    # Legacy cache: without meta, we can't trust what was generated.
+    # Regenerate once so we can write the current schema meta and avoid future mismatches.
     if not meta:
-        try:
-            # Korean-only files were typically a few KB. Bilingual is usually much larger.
-            # Heuristic: upgrade if < 7KB.
-            return audio_path.stat().st_size < 7000
-        except Exception:
-            return False
+        return True
 
     # Known non-bilingual or unknown schema => try upgrading.
     return True
