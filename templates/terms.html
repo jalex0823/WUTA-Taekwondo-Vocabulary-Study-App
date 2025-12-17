@@ -30,7 +30,10 @@
 </head>
 <body class="theme-arcade theme-screenshot page-terms">
     <div class="container">
-        <header class="terms-header" style="--belt-color: {{ belt.belt_color }}">
+        <header
+            class="terms-header"
+            data-tone="{{ belt_tone or 'light' }}"
+            style="--belt-color: {{ belt.belt_color }}{% if belt.tip_color %}; --tip-color: {{ belt.tip_color }}{% endif %}">
             <div class="terms-brand" aria-hidden="true">
                 <picture class="terms-brand-mascot">
                     <img
@@ -42,6 +45,9 @@
                 </picture>
             </div>
             <a href="/" class="back-button">← Back to Main Menu</a>
+            {% if belt.belt_id == 'my_words' %}
+            <a href="/my-words" class="back-button" style="margin-left: 10px;">✍️ Manage My Words</a>
+            {% endif %}
             <h1>{{ belt.belt_name }}</h1>
             <p class="term-counter">
                 <span id="current-term">1</span> / {{ belt.terms|length }}
@@ -61,6 +67,17 @@
         </div>
 
         <div class="mode-controls">
+            <div class="mode-toggle">
+                <button class="mode-btn active" id="manualModeBtn" onclick="setMode('manual')">
+                    <span class="mode-icon">👆</span>
+                    Manual
+                </button>
+                <button class="mode-btn" id="autoModeBtn" onclick="setMode('auto')">
+                    <span class="mode-icon">▶️</span>
+                    Auto Guide
+                </button>
+            </div>
+
             <div class="translation-toggle-row">
                 <label class="tkd-switch" for="translationSwitch" aria-label="Toggle English translation">
                     <input id="translationSwitch" class="tkd-switch__input" type="checkbox" onchange="toggleTranslation(this.checked)">
@@ -74,15 +91,13 @@
                 </label>
             </div>
 
-            <div class="mode-toggle">
-                <button class="mode-btn active" id="manualModeBtn" onclick="setMode('manual')">
-                    <span class="mode-icon">👆</span>
-                    Manual
-                </button>
-                <button class="mode-btn" id="autoModeBtn" onclick="setMode('auto')">
-                    <span class="mode-icon">▶️</span>
-                    Auto Guide
-                </button>
+            <div class="pronunciation-toggle-row" aria-label="Pronunciation mode">
+                <label class="pronunciation-label" for="pronunciationMode">Pronunciation:</label>
+                <select id="pronunciationMode" onchange="setPronunciationMode(this.value)">
+                    <option value="bilingual">English + Korean</option>
+                    <option value="korean">Korean only</option>
+                    <option value="english">English only</option>
+                </select>
             </div>
             
             <div class="auto-controls hidden" id="autoControls">
@@ -784,7 +799,21 @@
             // - includeEnglish: { includeEnglish, koreanRate, englishRate, pauseMs }
             const opts = (includeEnglish && typeof includeEnglish === 'object') ? includeEnglish : { includeEnglish };
 
-            const wantEnglish = (opts.includeEnglish === undefined) ? !!window.translationEnabled : !!opts.includeEnglish;
+            // Mode support:
+            // - opts.mode: 'bilingual' | 'korean' | 'english'
+            // - opts.includeEnglish: legacy boolean (maps to bilingual vs korean)
+            let mode = (typeof opts.mode === 'string') ? opts.mode : null;
+            if (!mode) {
+                if (opts.includeEnglish === true) mode = 'bilingual';
+                else if (opts.includeEnglish === false) mode = 'korean';
+                else if (typeof _getPronunciationMode === 'function') mode = _getPronunciationMode();
+            }
+            if (!mode) {
+                mode = window.translationEnabled ? 'bilingual' : 'korean';
+            }
+
+            const wantEnglish = mode !== 'korean';
+            const wantKorean = mode !== 'english';
             const koRate = (typeof opts.koreanRate === 'number') ? opts.koreanRate : 0.68;
             const enRate = (typeof opts.englishRate === 'number') ? opts.englishRate : 0.92;
             const pauseMs = (typeof opts.pauseMs === 'number') ? opts.pauseMs : 420;
@@ -799,9 +828,9 @@
             if (wantEnglish && english) {
                 sequence.push({ text: `${prefix} ${english}`, lang: 'en-US', rate: enRate });
             }
-            if (hangul) {
+            if (wantKorean && hangul) {
                 sequence.push({ text: hangul, lang: 'ko-KR', rate: koRate });
-            } else if (!wantEnglish && romanization) {
+            } else if (!wantEnglish && wantKorean && romanization) {
                 // Only fall back to romanization when we're not already speaking English.
                 sequence.push({ text: romanization, lang: 'en-US', rate: enRate });
             }
@@ -869,7 +898,7 @@
             }
         }
 
-        function playAudio(termId, button, forceBilingual = false) {
+        function playAudio(termId, button) {
             playTapSound();
             vibrateDevice([30]);
 
@@ -879,9 +908,8 @@
             const cardRoot = button?.closest?.('.flashcard') || null;
             const visualizer = (cardRoot && cardRoot.querySelector('.audio-visualizer')) ? cardRoot.querySelector('.audio-visualizer') : button.nextElementSibling;
 
-            // If forceBilingual is true (Read Card), always do English then Korean.
-            const includeEnglish = forceBilingual ? true : !!window.translationEnabled;
-            const audioUrl = includeEnglish ? `/audio/${termId}` : `/audio/${termId}?mode=korean`;
+            const mode = (typeof _getPronunciationMode === 'function') ? _getPronunciationMode() : (window.translationEnabled ? 'bilingual' : 'korean');
+            const audioUrl = (typeof _audioUrlForTerm === 'function') ? _audioUrlForTerm(termId) : (mode === 'korean' ? `/audio/${termId}?mode=korean` : (mode === 'english' ? `/audio/${termId}?mode=english` : `/audio/${termId}`));
             
             // Stop previous audio if playing
             if (currentAudio) {
@@ -901,9 +929,7 @@
             try {
                 const term = terms.find(t => t.id === termId) || terms.find(t => t.legacy_id === termId);
                 const cardEl = button.closest('.flashcard');
-                const ttsOpts = forceBilingual
-                    ? { includeEnglish: true, prefix: 'The word is', koreanRate: 0.56, englishRate: 0.92, pauseMs: 700 }
-                    : includeEnglish;
+                const ttsOpts = { mode, prefix: 'The word is', koreanRate: 0.56, englishRate: 0.92, pauseMs: 700 };
                 const spoke = _speakCardText(term, cardEl, visualizer, ttsOpts);
                 if (spoke) {
                     currentAudio = null;
@@ -930,7 +956,8 @@
 
         function playAudioForCurrentCard() {
             const term = terms[currentCard];
-            const audioUrl = window.translationEnabled ? `/audio/${term.id}` : `/audio/${term.id}?mode=korean`;
+            const mode = (typeof _getPronunciationMode === 'function') ? _getPronunciationMode() : (window.translationEnabled ? 'bilingual' : 'korean');
+            const audioUrl = (typeof _audioUrlForTerm === 'function') ? _audioUrlForTerm(term.id) : (mode === 'korean' ? `/audio/${term.id}?mode=korean` : (mode === 'english' ? `/audio/${term.id}?mode=english` : `/audio/${term.id}`));
             
             // Stop previous audio if playing
             if (currentAudio) {
@@ -944,7 +971,7 @@
             // Prefer device TTS when possible (still counts as a user gesture when Next/Prev was clicked).
             try {
                 const speakerBtn = activeCard.querySelector('.audio-button');
-                const spoke = _speakCardText(term, activeCard, visualizer, !!window.translationEnabled);
+                const spoke = _speakCardText(term, activeCard, visualizer, { mode, prefix: 'The word is', koreanRate: 0.56, englishRate: 0.92, pauseMs: 700 });
                 if (spoke) {
                     currentAudio = null;
                     return;
@@ -982,6 +1009,111 @@
 
         // ============ TRANSLATION TOGGLE ============
         window.translationEnabled = true;
+
+        // ============ PRONUNCIATION MODE ============
+        // Values: 'bilingual' | 'korean' | 'english'
+        window.pronunciationMode = 'bilingual';
+
+        function _normalizePronunciationMode(raw) {
+            const v = String(raw || '').trim().toLowerCase();
+            if (v === 'bilingual' || v === 'english' || v === 'korean') return v;
+            if (v === 'en') return 'english';
+            if (v === 'ko') return 'korean';
+            return null;
+        }
+
+        function _loadPronunciationSetting() {
+            try {
+                const raw = localStorage.getItem('wuta_pronunciation_mode');
+                const v = _normalizePronunciationMode(raw);
+                if (v) return v;
+            } catch (e) {}
+
+            // Default preserves existing behavior:
+            // Translation ON => bilingual, Translation OFF => Korean-only.
+            return window.translationEnabled ? 'bilingual' : 'korean';
+        }
+
+        function _setPronunciationSetting(mode) {
+            const v = _normalizePronunciationMode(mode) || (window.translationEnabled ? 'bilingual' : 'korean');
+            window.pronunciationMode = v;
+            try {
+                localStorage.setItem('wuta_pronunciation_mode', v);
+            } catch (e) {}
+            _renderPronunciationControl();
+            _updateAutoPlayButtonLabel();
+        }
+
+        function _getPronunciationMode() {
+            const v = _normalizePronunciationMode(window.pronunciationMode);
+            if (v) return v;
+            return window.translationEnabled ? 'bilingual' : 'korean';
+        }
+
+        function _audioUrlForTerm(termId) {
+            const mode = _getPronunciationMode();
+            if (mode === 'korean') return `/audio/${termId}?mode=korean`;
+            if (mode === 'english') return `/audio/${termId}?mode=english`;
+            return `/audio/${termId}`;
+        }
+
+        function _pronunciationLabelForUi(mode) {
+            if (mode === 'korean') return 'Korean only';
+            if (mode === 'english') return 'English only';
+            return 'English + Korean';
+        }
+
+        function _updateAutoPlayButtonLabel() {
+            try {
+                if (isAutoPlaying) return;
+                const playPauseText = document.getElementById('playPauseText');
+                if (!playPauseText) return;
+                const label = _pronunciationLabelForUi(_getPronunciationMode());
+                const wantsResume = String(playPauseText.textContent || '').toLowerCase().includes('resume');
+                playPauseText.textContent = wantsResume
+                    ? `🎵 Resume Auto Play - ${label}`
+                    : `🎵 Start Auto Play - ${label}`;
+            } catch (e) {}
+        }
+
+        function _renderPronunciationControl() {
+            try {
+                const sel = document.getElementById('pronunciationMode');
+                if (!sel) return;
+
+                // If Translation is OFF, force Korean-only pronunciation.
+                if (!window.translationEnabled) {
+                    if (window.pronunciationMode !== 'korean') {
+                        window.pronunciationMode = 'korean';
+                        try { localStorage.setItem('wuta_pronunciation_mode', 'korean'); } catch (e2) {}
+                    }
+                    sel.value = 'korean';
+                    sel.disabled = true;
+                    return;
+                }
+
+                sel.disabled = false;
+                sel.value = _getPronunciationMode();
+            } catch (e) {}
+        }
+
+        function setPronunciationMode(mode) {
+            playSFX('mode');
+            playTapSound();
+            vibrateDevice([20]);
+
+            // Stop anything currently speaking/playing so the new mode applies immediately.
+            try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+            try {
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                }
+            } catch (e) {}
+            document.querySelectorAll('.audio-visualizer').forEach(v => v.classList.add('hidden'));
+
+            _setPronunciationSetting(mode);
+        }
 
         function _loadTranslationSetting() {
             try {
@@ -1036,18 +1168,11 @@
                 if (fc) fc.dataset.translation = on ? 'on' : 'off';
             } catch (e) {}
 
+            // Pronunciation mode UI depends on translation state (OFF locks to Korean-only).
+            _renderPronunciationControl();
+
             // Keep Auto Play button label in sync when not currently playing.
-            try {
-                if (!isAutoPlaying) {
-                    const playPauseText = document.getElementById('playPauseText');
-                    if (playPauseText) {
-                        // Auto Guide follows the translation toggle.
-                        playPauseText.textContent = on
-                            ? '🎵 Start Auto Play - English + Korean'
-                            : '🎵 Start Auto Play - Korean only';
-                    }
-                }
-            } catch (e) {}
+            _updateAutoPlayButtonLabel();
         }
 
         function toggleTranslation(forceEnabled) {
@@ -1072,6 +1197,7 @@
         // Initialize translation toggle UI/state.
         window.addEventListener('DOMContentLoaded', () => {
             _setTranslationSetting(_loadTranslationSetting());
+            _setPronunciationSetting(_loadPronunciationSetting());
         });
 
         // Initialize background music (Polar Serenade) on this page.
@@ -1177,10 +1303,7 @@
             playPauseBtn.style.padding = '15px';
             playPauseBtn.style.fontSize = '18px';
             playPauseIcon.textContent = '▶️';
-            // Auto Guide follows the translation toggle.
-            playPauseText.textContent = window.translationEnabled
-                ? '🎵 Resume Auto Play - English + Korean'
-                : '🎵 Resume Auto Play - Korean only';
+            playPauseText.textContent = `🎵 Resume Auto Play - ${_pronunciationLabelForUi(_getPronunciationMode())}`;
             
             // Clear timers
             if (countdownInterval) {
@@ -1219,11 +1342,9 @@
             }
             
             const term = terms[currentCard];
-            // Auto Guide follows Translation toggle:
-            // - ON: bilingual (English THEN Korean)
-            // - OFF: Korean only
-            const includeEnglish = !!window.translationEnabled;
-            const audioUrl = includeEnglish ? `/audio/${term.id}` : `/audio/${term.id}?mode=korean`;
+            const mode = _getPronunciationMode();
+            const hasEnglish = mode !== 'korean';
+            const audioUrl = _audioUrlForTerm(term.id);
             
             // Stop previous audio
             if (currentAudio) {
@@ -1276,7 +1397,7 @@
                     // If this was the last card, end with a short spoken conclusion.
                     if (currentCard === totalCards - 1) {
                         // Only speak English announcements when Translation is ON.
-                        if (includeEnglish && !listConclusionSpoken) {
+                        if (hasEnglish && !listConclusionSpoken) {
                             listConclusionSpoken = true;
                             const spoke = _speakAnnouncement('That concludes this word list.', {
                                 lang: 'en-US',
@@ -1310,8 +1431,8 @@
             };
 
             // Kick it off (announce when the final word is about to be played).
-            // Only speak English announcements when Translation is ON.
-            if (includeEnglish && currentCard === totalCards - 1 && !finalWordIntroSpoken) {
+            // Only speak English announcements when we are in an English-speaking mode.
+            if (hasEnglish && currentCard === totalCards - 1 && !finalWordIntroSpoken) {
                 finalWordIntroSpoken = true;
                 const spoke = _speakAnnouncement('Final word. Listen closely.', {
                     lang: 'en-US',

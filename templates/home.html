@@ -59,7 +59,8 @@
         {% set badge_korean = {'white': '일', 'yellow': '이', 'orange': '삼', 'green': '사', 'blue': '오', 'red': '육', 'purple': '칠', 'brown': '팔', 'black': '구'} %}
 
         <div class="tkd-screen">
-            <div class="tkd-list">
+            <div class="menu-pills-card">
+                <div class="tkd-list">
                 {% for b in belts %}
                 <a href="/belts/{{ b.belt_id }}"
                    class="belt-card belt-{{ b.belt_id }}"
@@ -101,6 +102,36 @@
                     </div>
                 </a>
                 {% endfor %}
+
+                <a href="/my-words" class="belt-card belt-my-words" style="--belt-color: #ff9f1a" data-belt-id="my_words" data-total-terms="{{ my_words_count or 0 }}">
+                    <div class="belt-left" aria-hidden="true">
+                        <div class="belt-badge">★</div>
+                    </div>
+
+                    <div class="belt-body">
+                        <div class="belt-title">
+                            <span class="hangul">나</span>
+                            <span class="meta-sep">·</span>
+                            My Words
+                        </div>
+
+                        <div class="belt-meta">
+                            <div class="meta-row">
+                                <span class="meta-icon meta-icon--steps" aria-hidden="true"></span>
+                                <span><span class="belt-steps">{{ my_words_count or 0 }}</span> 단어</span>
+                            </div>
+                            <div class="meta-row">
+                                <span class="meta-icon meta-icon--infty meta-dot--muted" aria-hidden="true"></span>
+                                <span>Add / Import / Train</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="belt-right" aria-hidden="true">
+                        <span class="belt-action">내 단어</span>
+                    </div>
+                </a>
+                </div>
             </div>
         </div>
 

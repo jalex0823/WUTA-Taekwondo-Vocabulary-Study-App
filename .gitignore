@@ -18,6 +18,10 @@ Thumbs.db
 /static/audio/*.tmp
 /static/audio/*.part
 
+# User-created words (runtime data)
+/data/user_terms.json
+/data/user_terms.tmp
+
 # Sound effects
 /static/audio/sfx/*.mp3
 /static/audio/sfx/*.wav
