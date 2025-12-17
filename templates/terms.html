@@ -81,9 +81,9 @@
             <div class="auto-controls hidden" id="autoControls">
                 <div class="auto-guide-banner" aria-label="How Auto Guide works">
                     <div class="auto-guide-steps" aria-hidden="true">
-                        <span class="step">🇰🇷 Listen</span>
+                        <span class="step">🇺🇸 English</span>
                         <span class="arrow">→</span>
-                        <span class="step">🇺🇸 Repeat</span>
+                        <span class="step">🇰🇷 Korean</span>
                         <span class="arrow">→</span>
                         <span class="step">➡️ Next</span>
                     </div>
@@ -118,7 +118,7 @@
                 </div>
                 <button class="auto-btn play-btn" id="playPauseBtn" onclick="toggleAutoPlay()" style="width: 100%; padding: 15px; font-size: 18px;">
                     <span id="playPauseIcon">▶️</span>
-                    <span id="playPauseText">🎵 Start Auto Play - Korean + English</span>
+                    <span id="playPauseText">🎵 Start Auto Play - English + Korean</span>
                 </button>
                 <div class="auto-progress-indicator">
                     <div class="progress-ring">
@@ -360,6 +360,10 @@
         let isAutoPlaying = false;
         let repeatTime = 5; // seconds
         let autoRepeatCount = 1; // times to repeat audio per card in Auto Guide
+
+        // Auto Guide announcements
+        let finalWordIntroSpoken = false;
+        let listConclusionSpoken = false;
 
         // Mirror for any older/other checks that look on window.
         window.isAutoPlaying = isAutoPlaying;
@@ -777,20 +781,23 @@
             const koRate = (typeof opts.koreanRate === 'number') ? opts.koreanRate : 0.68;
             const enRate = (typeof opts.englishRate === 'number') ? opts.englishRate : 0.92;
             const pauseMs = (typeof opts.pauseMs === 'number') ? opts.pauseMs : 420;
+            const prefix = (typeof opts.prefix === 'string' && opts.prefix.trim()) ? opts.prefix.trim() : 'The word is';
 
             const sequence = [];
             const hangul = (term?.hangul || '').trim();
             const romanization = (term?.romanization || '').trim();
             const english = (term?.english || '').trim();
 
-            // WUTA is a Korean vocabulary study app: always speak Korean first (slowly), then English (optional).
+            // Speak English FIRST (with a short prompt), then Korean.
+            if (wantEnglish && english) {
+                sequence.push({ text: `${prefix} ${english}`, lang: 'en-US', rate: enRate });
+            }
             if (hangul) {
                 sequence.push({ text: hangul, lang: 'ko-KR', rate: koRate });
-            } else if (romanization) {
-                // Fallback only if Hangul is missing.
+            } else if (!wantEnglish && romanization) {
+                // Only fall back to romanization when we're not already speaking English.
                 sequence.push({ text: romanization, lang: 'en-US', rate: enRate });
             }
-            if (wantEnglish && english) sequence.push({ text: english, lang: 'en-US', rate: enRate });
 
             if (sequence.length === 0) return false;
 
@@ -828,6 +835,33 @@
             }
         }
 
+        function _speakAnnouncement(text, opts = {}) {
+            if (!text) return false;
+            if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return false;
+            try {
+                // Stop any MP3 playback so the spoken announcement is clear.
+                if (currentAudio) {
+                    try { currentAudio.pause(); } catch (e) {}
+                }
+                // Stop any prior speech.
+                window.speechSynthesis.cancel();
+
+                const utter = new SpeechSynthesisUtterance(String(text));
+                utter.lang = opts.lang || 'en-US';
+                utter.rate = (typeof opts.rate === 'number') ? opts.rate : 0.95;
+                utter.onend = () => {
+                    try { if (typeof opts.onend === 'function') opts.onend(); } catch (e) {}
+                };
+                utter.onerror = () => {
+                    try { if (typeof opts.onerror === 'function') opts.onerror(); } catch (e) {}
+                };
+                window.speechSynthesis.speak(utter);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
         function playAudio(termId, button, forceBilingual = false) {
             playTapSound();
             vibrateDevice([30]);
@@ -838,7 +872,7 @@
             const cardRoot = button?.closest?.('.flashcard') || null;
             const visualizer = (cardRoot && cardRoot.querySelector('.audio-visualizer')) ? cardRoot.querySelector('.audio-visualizer') : button.nextElementSibling;
 
-            // If forceBilingual is true (Read Card), always do Korean then English.
+            // If forceBilingual is true (Read Card), always do English then Korean.
             const includeEnglish = forceBilingual ? true : !!window.translationEnabled;
             const audioUrl = includeEnglish ? `/audio/${termId}` : `/audio/${termId}?mode=korean`;
             
@@ -861,7 +895,7 @@
                 const term = terms.find(t => t.id === termId) || terms.find(t => t.legacy_id === termId);
                 const cardEl = button.closest('.flashcard');
                 const ttsOpts = forceBilingual
-                    ? { includeEnglish: true, koreanRate: 0.56, englishRate: 0.92, pauseMs: 700 }
+                    ? { includeEnglish: true, prefix: 'The word is', koreanRate: 0.56, englishRate: 0.92, pauseMs: 700 }
                     : includeEnglish;
                 const spoke = _speakCardText(term, cardEl, visualizer, ttsOpts);
                 if (spoke) {
@@ -998,8 +1032,8 @@
                 if (!isAutoPlaying) {
                     const playPauseText = document.getElementById('playPauseText');
                     if (playPauseText) {
-                        // Auto Guide always plays Korean + English.
-                        playPauseText.textContent = '🎵 Start Auto Play - Korean + English';
+                        // Auto Guide always plays English + Korean.
+                        playPauseText.textContent = '🎵 Start Auto Play - English + Korean';
                     }
                 }
             } catch (e) {}
@@ -1101,6 +1135,8 @@
         function startAutoPlay() {
             isAutoPlaying = true;
             window.isAutoPlaying = true;
+            finalWordIntroSpoken = false;
+            listConclusionSpoken = false;
             const playPauseBtn = document.getElementById('playPauseBtn');
             const playPauseIcon = document.getElementById('playPauseIcon');
             const playPauseText = document.getElementById('playPauseText');
@@ -1129,8 +1165,8 @@
             playPauseBtn.style.padding = '15px';
             playPauseBtn.style.fontSize = '18px';
             playPauseIcon.textContent = '▶️';
-            // Auto Guide always plays Korean + English.
-            playPauseText.textContent = '🎵 Resume Auto Play - Korean + English';
+            // Auto Guide always plays English + Korean.
+            playPauseText.textContent = '🎵 Resume Auto Play - English + Korean';
             
             // Clear timers
             if (countdownInterval) {
@@ -1169,7 +1205,7 @@
             }
             
             const term = terms[currentCard];
-            // Auto Guide should always speak Korean THEN English, even if Translation is OFF.
+            // Auto Guide should always play bilingual audio (English THEN Korean), even if Translation is OFF.
             const audioUrl = `/audio/${term.id}`;
             
             // Stop previous audio
@@ -1177,7 +1213,7 @@
                 currentAudio.pause();
             }
             
-            // Play audio - bilingual: Korean + pause + English
+            // Play audio - bilingual: English + pause + Korean
             // Repeat (optional) before starting the between-cards countdown.
             currentAudio = new Audio(audioUrl);
             const activeCard = document.querySelector('.flashcard.active');
@@ -1220,6 +1256,25 @@
 
                 // Start countdown for the between-cards pause
                 if (isAutoPlaying) {
+                    // If this was the last card, end with a short spoken conclusion.
+                    if (currentCard === totalCards - 1) {
+                        if (!listConclusionSpoken) {
+                            listConclusionSpoken = true;
+                            const spoke = _speakAnnouncement('That concludes this word list.', {
+                                lang: 'en-US',
+                                rate: 0.95,
+                                onend: () => stopAutoPlay(),
+                                onerror: () => stopAutoPlay(),
+                            });
+                            if (!spoke) {
+                                stopAutoPlay();
+                            }
+                            return;
+                        }
+                        stopAutoPlay();
+                        return;
+                    }
+
                     startCountdown();
                 }
             };
@@ -1236,7 +1291,21 @@
                 }
             };
 
-            // Kick it off
+            // Kick it off (announce when the final word is about to be played).
+            if (currentCard === totalCards - 1 && !finalWordIntroSpoken) {
+                finalWordIntroSpoken = true;
+                const spoke = _speakAnnouncement('Final word. Listen closely.', {
+                    lang: 'en-US',
+                    rate: 0.95,
+                    onend: () => { if (isAutoPlaying) startPlayback(); },
+                    onerror: () => { if (isAutoPlaying) startPlayback(); },
+                });
+                if (!spoke) {
+                    startPlayback();
+                }
+                return;
+            }
+
             startPlayback();
         }
 

@@ -47,7 +47,8 @@ def _should_upgrade_audio(audio_path: Path, meta: dict | None):
     if not audio_path.exists():
         return True
 
-    if meta and meta.get("schema_version") == 2 and meta.get("mode") == "bilingual":
+    # Schema v3: bilingual audio includes an English intro phrase and speaks English first.
+    if meta and meta.get("schema_version") == 3 and meta.get("mode") == "bilingual":
         return False
 
     # Legacy cache: if we don't know, only upgrade obviously-small files.
@@ -64,25 +65,31 @@ def _should_upgrade_audio(audio_path: Path, meta: dict | None):
 
 
 def _generate_bilingual_mp3(term: dict, out_path: Path):
-    """Generate Korean + pause + English MP3 to out_path."""
+    """Generate bilingual MP3 (English intro + Korean) to out_path."""
     from pydub import AudioSegment
     import io
 
-    korean_tts = gTTS(text=term["hangul"], lang="ko", slow=True)
-    korean_audio_bytes = io.BytesIO()
-    korean_tts.write_to_fp(korean_audio_bytes)
-    korean_audio_bytes.seek(0)
+    english = (term.get("english") or "").strip()
+    hangul = (term.get("hangul") or "").strip()
 
-    # English translation at a normal pace (Korean stays slow for learning).
-    english_tts = gTTS(text=term["english"], lang="en", slow=False)
+    # English first: include a short prompt for clarity.
+    # Example: "The word is Front Kick."
+    english_prompt = f"The word is {english}." if english else ""
+    english_tts = gTTS(text=english_prompt or english or hangul, lang="en", slow=False)
     english_audio_bytes = io.BytesIO()
     english_tts.write_to_fp(english_audio_bytes)
     english_audio_bytes.seek(0)
 
-    korean_audio = AudioSegment.from_mp3(korean_audio_bytes)
+    # Korean stays slow for learning.
+    korean_tts = gTTS(text=hangul or english, lang="ko", slow=True)
+    korean_audio_bytes = io.BytesIO()
+    korean_tts.write_to_fp(korean_audio_bytes)
+    korean_audio_bytes.seek(0)
+
     english_audio = AudioSegment.from_mp3(english_audio_bytes)
+    korean_audio = AudioSegment.from_mp3(korean_audio_bytes)
     pause = AudioSegment.silent(duration=650)
-    combined = korean_audio + pause + english_audio
+    combined = english_audio + pause + korean_audio
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     combined.export(str(out_path), format="mp3")
@@ -207,10 +214,12 @@ def get_audio(term_id):
             _write_audio_meta(
                 audio_meta,
                 {
-                    "schema_version": 2,
+                    "schema_version": 3,
                     "mode": "bilingual",
                     "term_id": term_id,
                     "generated_at": int(time.time()),
+                    "voice_order": "en_then_ko",
+                    "prefix": "the word is",
                 },
             )
         except Exception as e:
