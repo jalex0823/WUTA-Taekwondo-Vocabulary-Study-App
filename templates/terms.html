@@ -62,9 +62,16 @@
 
         <div class="mode-controls">
             <div class="translation-toggle-row">
-                <button class="translation-toggle tkd-translate-toggle" id="translationToggle" type="button" onclick="toggleTranslation()" aria-pressed="true">
-                    Translation: ON
-                </button>
+                <label class="tkd-switch" for="translationSwitch" aria-label="Toggle English translation">
+                    <input id="translationSwitch" class="tkd-switch__input" type="checkbox" onchange="toggleTranslation(this.checked)">
+                    <span class="tkd-switch__track" aria-hidden="true">
+                        <span class="tkd-switch__thumb" aria-hidden="true"></span>
+                    </span>
+                    <span class="tkd-switch__text">
+                        <span class="tkd-switch__title">Translation</span>
+                        <span class="tkd-switch__state" id="translationSwitchState">ON</span>
+                    </span>
+                </label>
             </div>
 
             <div class="mode-toggle">
@@ -1003,13 +1010,15 @@
         }
 
         function _renderTranslationToggle() {
-            const btn = document.getElementById('translationToggle');
-            if (!btn) return;
             const on = !!window.translationEnabled;
-            btn.textContent = on ? 'Translation: ON' : 'Translation: OFF';
-            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-            btn.classList.toggle('is-on', on);
-            btn.classList.toggle('is-off', !on);
+
+            // Switch UI
+            try {
+                const sw = document.getElementById('translationSwitch');
+                if (sw) sw.checked = on;
+                const state = document.getElementById('translationSwitchState');
+                if (state) state.textContent = on ? 'ON' : 'OFF';
+            } catch (e) {}
 
             // Keep the card UI in sync.
             try {
@@ -1041,7 +1050,7 @@
             } catch (e) {}
         }
 
-        function toggleTranslation() {
+        function toggleTranslation(forceEnabled) {
             playSFX('mode');
             playTapSound();
             vibrateDevice([20]);
@@ -1056,7 +1065,8 @@
             } catch (e) {}
             document.querySelectorAll('.audio-visualizer').forEach(v => v.classList.add('hidden'));
 
-            _setTranslationSetting(!window.translationEnabled);
+            const next = (typeof forceEnabled === 'boolean') ? forceEnabled : !window.translationEnabled;
+            _setTranslationSetting(next);
         }
 
         // Initialize translation toggle UI/state.
