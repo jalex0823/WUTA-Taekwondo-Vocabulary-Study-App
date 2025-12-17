@@ -170,7 +170,7 @@
 
                             <div class="ref-definition">Category: {{ t.category }}</div>
 
-                            <button class="ref-read" type="button" onclick="playAudio('{{ t.id }}', this, true)" title="Read Card">
+                            <button class="ref-read" type="button" onclick="playAudio('{{ t.id }}', this)" title="Read Card">
                                 <span class="ref-read__ico" aria-hidden="true">🔊</span>
                                 <span class="ref-read__txt">Read Card</span>
                             </button>
@@ -1032,8 +1032,10 @@
                 if (!isAutoPlaying) {
                     const playPauseText = document.getElementById('playPauseText');
                     if (playPauseText) {
-                        // Auto Guide always plays English + Korean.
-                        playPauseText.textContent = '🎵 Start Auto Play - English + Korean';
+                        // Auto Guide follows the translation toggle.
+                        playPauseText.textContent = on
+                            ? '🎵 Start Auto Play - English + Korean'
+                            : '🎵 Start Auto Play - Korean only';
                     }
                 }
             } catch (e) {}
@@ -1165,8 +1167,10 @@
             playPauseBtn.style.padding = '15px';
             playPauseBtn.style.fontSize = '18px';
             playPauseIcon.textContent = '▶️';
-            // Auto Guide always plays English + Korean.
-            playPauseText.textContent = '🎵 Resume Auto Play - English + Korean';
+            // Auto Guide follows the translation toggle.
+            playPauseText.textContent = window.translationEnabled
+                ? '🎵 Resume Auto Play - English + Korean'
+                : '🎵 Resume Auto Play - Korean only';
             
             // Clear timers
             if (countdownInterval) {
@@ -1205,8 +1209,11 @@
             }
             
             const term = terms[currentCard];
-            // Auto Guide should always play bilingual audio (English THEN Korean), even if Translation is OFF.
-            const audioUrl = `/audio/${term.id}`;
+            // Auto Guide follows Translation toggle:
+            // - ON: bilingual (English THEN Korean)
+            // - OFF: Korean only
+            const includeEnglish = !!window.translationEnabled;
+            const audioUrl = includeEnglish ? `/audio/${term.id}` : `/audio/${term.id}?mode=korean`;
             
             // Stop previous audio
             if (currentAudio) {
@@ -1245,7 +1252,7 @@
                 visualizer.classList.add('hidden');
                 repeatsRemaining -= 1;
 
-                // Repeat the full bilingual audio if requested
+                // Repeat the full card audio if requested
                 if (isAutoPlaying && repeatsRemaining > 0) {
                     setTimeout(() => {
                         if (!isAutoPlaying) return;
@@ -1258,7 +1265,8 @@
                 if (isAutoPlaying) {
                     // If this was the last card, end with a short spoken conclusion.
                     if (currentCard === totalCards - 1) {
-                        if (!listConclusionSpoken) {
+                        // Only speak English announcements when Translation is ON.
+                        if (includeEnglish && !listConclusionSpoken) {
                             listConclusionSpoken = true;
                             const spoke = _speakAnnouncement('That concludes this word list.', {
                                 lang: 'en-US',
@@ -1292,7 +1300,8 @@
             };
 
             // Kick it off (announce when the final word is about to be played).
-            if (currentCard === totalCards - 1 && !finalWordIntroSpoken) {
+            // Only speak English announcements when Translation is ON.
+            if (includeEnglish && currentCard === totalCards - 1 && !finalWordIntroSpoken) {
                 finalWordIntroSpoken = true;
                 const spoke = _speakAnnouncement('Final word. Listen closely.', {
                     lang: 'en-US',

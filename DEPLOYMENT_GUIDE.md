@@ -23,7 +23,8 @@ The app now has **robust auto-advance** that works even when audio fails:
 2. Click **"Start Auto Play"** button
 3. **Cards auto-advance** through all terms:
 
-    - Plays "The word is" + English → pause → Korean
+    - If **Translation is ON**: Plays "The word is" + English → pause → Korean
+    - If **Translation is OFF**: Plays Korean only
     - Waits (2-7 seconds, your choice)
     - Advances to next card automatically
     - Continues even if audio fails!
