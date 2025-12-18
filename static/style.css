@@ -2321,11 +2321,13 @@ body.page-terms.theme-arcade.theme-screenshot .ref-read__ico {
 body.page-terms.theme-arcade.theme-screenshot .ref-nav {
     display: flex;
     gap: 16px;
-    justify-content: space-between;
+    justify-content: center;
+    width: 100%;
 }
 
 body.page-terms.theme-arcade.theme-screenshot .ref-navbtn {
-    flex: 1;
+    flex: 0 1 auto;
+    width: min(190px, 46%);
     border: 0;
     cursor: pointer;
     padding: 14px 16px;
