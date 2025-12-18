@@ -150,10 +150,6 @@
         const navSound = new Audio('{{ url_for("static", filename="audio/sfx/nav_swoosh.mp3") }}');
         navSound.volume = 0.25;
         navSound.preload = 'auto';
-
-        const hoverSound = new Audio('{{ url_for("static", filename="audio/sfx/fast-punch-2047.wav") }}');
-        hoverSound.volume = 0.22;
-        hoverSound.preload = 'auto';
         
         // Add click sound to all belt cards
         document.addEventListener('DOMContentLoaded', () => {
@@ -171,20 +167,7 @@
                 }
             } catch (e) {}
 
-            const canHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-            let lastHoverAt = 0;
-
             document.querySelectorAll('.belt-card').forEach(card => {
-                if (canHover) {
-                    card.addEventListener('mouseenter', () => {
-                        const now = Date.now();
-                        if (now - lastHoverAt < 120) return;
-                        lastHoverAt = now;
-                        hoverSound.currentTime = 0;
-                        hoverSound.play().catch(() => {});
-                    });
-                }
-
                 card.addEventListener('click', (e) => {
                     // Allow opening in new tab/window normally.
                     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
