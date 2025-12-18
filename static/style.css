@@ -255,7 +255,7 @@ body {
     background: white;
     border-radius: var(--border-radius);
     padding: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     box-shadow: var(--card-shadow);
     display: flex;
     align-items: center;
@@ -327,14 +327,14 @@ body {
     background: white;
     border-radius: var(--border-radius);
     padding: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     box-shadow: var(--card-shadow);
 }
 
 .mode-toggle {
     display: flex;
     gap: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .mode-btn {
@@ -1836,7 +1836,7 @@ body.theme-arcade.theme-screenshot .category-badge {
 body.theme-arcade.theme-screenshot .translation-toggle-row {
     display: flex;
     justify-content: center;
-    margin: 10px 0 6px;
+    margin: 16px 0 12px;
 }
 
 /* Terms page: pronunciation selector */
@@ -1845,7 +1845,7 @@ body.theme-arcade.theme-screenshot .pronunciation-toggle-row {
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin: 6px 0 12px;
+    margin: 12px 0 18px;
     flex-wrap: wrap;
 }
 
@@ -2063,6 +2063,7 @@ body.translation-off .english-text {
 .app-header .music-controls,
 .terms-header + .music-controls {
     margin-top: 12px;
+    margin-bottom: 20px;
 }
 
 .music-controls__row {
