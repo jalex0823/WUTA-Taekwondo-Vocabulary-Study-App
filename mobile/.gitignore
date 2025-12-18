@@ -1,0 +1,9 @@
+node_modules/
+www/
+dist/
+.android/
+.ios/
+
+# Capacitor creates native projects; choose whether to commit them.
+android/
+ios/
