@@ -71,6 +71,9 @@ pip3 list | grep -E "gTTS|pydub"
 pip3 install gTTS pydub
 ```
 
+> Note for Python 3.13+:
+> The stdlib module `audioop` was removed. If you run this app on Python 3.13+ you may need the `audioop-lts` package for `pydub` to work.
+
 ### Step 5: Restart App
 
 ```bash

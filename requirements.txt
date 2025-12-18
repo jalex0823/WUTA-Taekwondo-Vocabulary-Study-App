@@ -4,3 +4,7 @@ gTTS==2.5.4
 python-slugify==8.0.4
 pydub==0.25.1
 requests==2.32.3
+
+# Python 3.13+ removed stdlib 'audioop'; pydub expects it.
+# audioop-lts restores it as a wheel (required on Python 3.13+).
+audioop-lts>=0.2.2; python_version>='3.13'
