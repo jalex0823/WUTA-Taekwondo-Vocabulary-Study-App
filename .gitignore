@@ -6,6 +6,7 @@ __pycache__/
 venv/
 .env
 .env.*
+!.env.example
 
 # OS / editor
 .DS_Store
@@ -21,6 +22,10 @@ Thumbs.db
 # User-created words (runtime data)
 /data/user_terms.json
 /data/user_terms.tmp
+
+# Admin-managed custom dictionary (runtime data)
+/data/custom_dictionary.json
+/data/custom_dictionary.tmp
 
 # Sound effects
 /static/audio/sfx/*.mp3

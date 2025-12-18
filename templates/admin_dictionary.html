@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <meta name="theme-color" content="#667eea">
+
+    <title>Admin Dictionary - WUTA Vocabulary</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="theme-arcade theme-screenshot page-my-words">
+    <div class="container">
+        <header class="terms-header" style="--belt-color: #667eea">
+            <div class="terms-brand" aria-hidden="true">
+                <picture class="terms-brand-mascot">
+                    <img
+                        src="{{ url_for('static', filename='images/TVTA_Neal.png') }}"
+                        alt=""
+                        loading="eager"
+                        onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/branding/mascot.svg') }}';"
+                    >
+                </picture>
+            </div>
+
+            <a href="/" class="back-button">← Back to Main Menu</a>
+            <h1>Admin Dictionary</h1>
+            <p class="term-counter">
+                <span>{{ entries|length }}</span> entries
+            </p>
+        </header>
+
+        <div class="my-words-panel">
+            {% if error %}
+            <div class="my-words-alert my-words-alert--error" role="alert">{{ error }}</div>
+            {% endif %}
+            {% if notice %}
+            <div class="my-words-alert my-words-alert--notice" role="status">{{ notice }}</div>
+            {% endif %}
+
+            <div class="my-words-grid">
+                <section class="my-words-card" aria-label="Add or update entry">
+                    <h2 class="my-words-title">Add / Update</h2>
+                    <form method="post" action="/admin/dictionary/save" class="my-words-form">
+                        <input type="hidden" name="token" value="{{ token }}">
+
+                        <label class="my-words-label" for="english">English (key)</label>
+                        <input id="english" name="english" type="text" autocomplete="off" placeholder="Front kick" required>
+
+                        <label class="my-words-label" for="hangul">Korean (Hangul)</label>
+                        <input id="hangul" name="hangul" type="text" autocomplete="off" placeholder="앞차기" required>
+
+                        <div class="my-words-row">
+                            <div class="my-words-field">
+                                <label class="my-words-label" for="romanization">Romanization (optional)</label>
+                                <input id="romanization" name="romanization" type="text" autocomplete="off" placeholder="Ap chagi">
+                            </div>
+                            <div class="my-words-field">
+                                <label class="my-words-label" for="category">Category (optional)</label>
+                                <input id="category" name="category" type="text" autocomplete="off" placeholder="Kicks">
+                            </div>
+                        </div>
+
+                        <button class="nav-button primary" type="submit">💾 Save entry</button>
+                        <p class="my-words-hint">This dictionary is used first for all English→Hangul conversion.</p>
+                    </form>
+                </section>
+
+                <section class="my-words-card" aria-label="Import entries">
+                    <h2 class="my-words-title">Import CSV</h2>
+                    <form method="post" action="/admin/dictionary/import" class="my-words-form" enctype="multipart/form-data">
+                        <input type="hidden" name="token" value="{{ token }}">
+
+                        <label class="my-words-label" for="csvfile">CSV file</label>
+                        <input id="csvfile" name="csvfile" type="file" accept=".csv,text/csv">
+
+                        <p class="my-words-hint">Expected columns: <strong>english,hangul</strong> (optional: romanization,category). Header row recommended.</p>
+
+                        <button class="nav-button" type="submit">📥 Import</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+
+        <div class="my-words-panel">
+            <h2 class="my-words-title">Current entries</h2>
+
+            {% if entries|length == 0 %}
+            <p class="my-words-empty">No dictionary entries yet.</p>
+            {% else %}
+            <div class="my-words-list" role="list">
+                {% for e in entries %}
+                <div class="my-words-item" role="listitem">
+                    <div class="my-words-item__main">
+                        <div class="my-words-item__hangul">{{ e.hangul }}</div>
+                        <div class="my-words-item__english">{{ e.english }}</div>
+                        <div class="my-words-item__meta">
+                            {% if e.romanization %}<span class="chip">{{ e.romanization }}</span>{% endif %}
+                            {% if e.category %}<span class="chip chip--muted">{{ e.category }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <form method="post" action="/admin/dictionary/delete" class="my-words-item__actions" onsubmit="return confirm('Delete this entry?');">
+                        <input type="hidden" name="token" value="{{ token }}">
+                        <input type="hidden" name="english" value="{{ e.english }}">
+                        <button type="submit" class="nav-button nav-button--danger">Delete</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <footer class="app-footer">
+            <p>Admin-only: keep translations consistent and kid-friendly.</p>
+        </footer>
+    </div>
+</body>
+</html>

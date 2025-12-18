@@ -1252,6 +1252,15 @@ body {
         justify-content: space-between;
     }
 
+    /* Keep the top controls compact on small phones */
+    body.theme-arcade.theme-screenshot .translation-toggle-row {
+        margin: 10px 0 8px;
+    }
+
+    body.theme-arcade.theme-screenshot .pronunciation-toggle-row {
+        margin: 8px 0 12px;
+    }
+
     .navigation-controls {
         flex-direction: column;
     }
@@ -2943,6 +2952,8 @@ body.page-my-words .terms-header h1 {
     margin-top: 12px;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .my-words-panel {

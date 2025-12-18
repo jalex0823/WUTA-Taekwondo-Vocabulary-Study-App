@@ -34,6 +34,9 @@
 
             <div class="my-words-header-actions">
                 <a class="nav-button primary" href="/my-words/train">▶️ Train My Words</a>
+                <form method="post" action="/my-words/repair" style="display:inline; margin-left: 8px;">
+                    <button class="nav-button" type="submit" onclick="return confirm('Repair missing/invalid Korean translations using auto-translate?');">🛠️ Repair translations</button>
+                </form>
             </div>
         </header>
 
@@ -63,8 +66,10 @@
                             </div>
                         </div>
 
-                        <label class="my-words-label" for="hangul">Korean (Hangul) (optional — will auto-translate if blank)</label>
+                        <label class="my-words-label" for="hangul">Korean (Hangul) (optional)</label>
                         <input id="hangul" name="hangul" type="text" autocomplete="off" placeholder="앞차기">
+
+                        <p class="my-words-hint">If blank, we’ll try matching the built-in WUTA vocab first (then auto-translate only if enabled). Tip: don’t paste English here.</p>
 
                         <button class="nav-button primary" type="submit">➕ Add</button>
                     </form>

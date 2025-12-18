@@ -152,7 +152,13 @@
         render();
 
         if (toggleEl) {
+            // On many mobile browsers, a single tap fires both touchstart and click.
+            // Without guarding, we'd toggle twice and appear to "not work".
+            let lastToggleAt = 0;
             const toggleHandler = () => {
+                const now = Date.now();
+                if (now - lastToggleAt < 350) return;
+                lastToggleAt = now;
                 // Tap/click is a user gesture - safest place to start playback.
                 setEnabled(!api._bgm.enabled);
             };
