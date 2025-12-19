@@ -413,9 +413,14 @@
         
         // Play sound effect helper
         function playSFX(soundName) {
-            if (soundEffects[soundName]) {
-                soundEffects[soundName].currentTime = 0; // Reset to start
-                soundEffects[soundName].play().catch(e => console.log('Audio play prevented:', e));
+            try {
+                if (soundEffects[soundName]) {
+                    soundEffects[soundName].currentTime = 0; // Reset to start
+                    soundEffects[soundName].play().catch(e => console.log('Audio play prevented:', e));
+                }
+            } catch (e) {
+                // Never let audio failures break UI logic.
+                console.warn('SFX failed:', e);
             }
         }
         
@@ -426,10 +431,19 @@
         let unlockPromptShown = false;
 
         function getAudioContext() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            // Safari may throw if AudioContext is created before a user gesture.
+            // Keep this best-effort so UI features (like translation toggle) never break.
+            try {
+                if (!audioContext) {
+                    const Ctx = window.AudioContext || window.webkitAudioContext;
+                    if (!Ctx) return null;
+                    audioContext = new Ctx();
+                }
+                return audioContext;
+            } catch (e) {
+                console.warn('AudioContext unavailable yet:', e);
+                return null;
             }
-            return audioContext;
         }
 
         function showAudioUnlockPrompt(message = 'Tap anywhere once to enable audio') {
@@ -490,6 +504,7 @@
         function playSuccessSound() {
             playSFX('success');
             const ctx = getAudioContext();
+            if (!ctx) return;
             const oscillator = ctx.createOscillator();
             const gainNode = ctx.createGain();
             
@@ -508,6 +523,7 @@
         
         function playTapSound() {
             const ctx = getAudioContext();
+            if (!ctx) return;
             const oscillator = ctx.createOscillator();
             const gainNode = ctx.createGain();
             
@@ -530,6 +546,7 @@
             notes.forEach((freq, index) => {
                 setTimeout(() => {
                     const ctx = getAudioContext();
+                    if (!ctx) return;
                     const oscillator = ctx.createOscillator();
                     const gainNode = ctx.createGain();
                     
@@ -549,10 +566,16 @@
         }
         
         function vibrateDevice(pattern = [100]) {
-            if ('vibrate' in navigator) {
-                navigator.vibrate(pattern);
-            }
+            try {
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(pattern);
+                }
+            } catch (e) {}
         }
+
+        // Ensure audio is unlocked when the student interacts.
+        window.addEventListener('pointerdown', unlockAudio, { once: true, passive: true });
+        window.addEventListener('touchstart', unlockAudio, { once: true, passive: true });
         
         function celebrateCompletion() {
             playCompleteSound();
