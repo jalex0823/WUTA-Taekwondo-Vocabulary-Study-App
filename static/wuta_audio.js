@@ -33,6 +33,7 @@
                 toggleId: 'bgmToggle',
                 volumeId: 'bgmVolume',
                 labelId: 'bgmLabel',
+                debug: false,
             },
             opts || {}
         );
@@ -52,6 +53,8 @@
             // iOS Safari can be picky about when media is considered user-initiated.
             // These hints are harmless elsewhere.
             try { audio.setAttribute('playsinline', ''); } catch (e) {}
+            try { audio.setAttribute('webkit-playsinline', ''); } catch (e) {}
+            try { audio.muted = false; } catch (e) {}
             try { audio.load(); } catch (e) {}
             api._bgm = {
                 audio,
@@ -59,6 +62,7 @@
                 volume: cfg.volumeDefault,
                 startedOnce: false,
                 needsGesture: false,
+                lastError: null,
             };
         } else {
             // Ensure the right track is set for this page.
@@ -106,7 +110,11 @@
             // Only attempt play after a user gesture in most browsers.
             try {
                 api._bgm.audio.volume = api._bgm.volume;
-                await api._bgm.audio.play();
+                api._bgm.lastError = null;
+                const p = api._bgm.audio.play();
+                if (p && typeof p.then === 'function') {
+                    await p;
+                }
                 api._bgm.startedOnce = true;
                 api._bgm.needsGesture = false;
                 render();
@@ -114,6 +122,10 @@
             } catch (e) {
                 // Ignore; we'll retry on the next gesture.
                 api._bgm.needsGesture = true;
+                api._bgm.lastError = e;
+                if (cfg.debug && window.console && console.warn) {
+                    console.warn('[WutaAudio] BGM play blocked/failed:', reason, e);
+                }
                 render();
                 return false;
             }
@@ -151,10 +163,20 @@
         loadState();
         render();
 
+        // If the file wasn't ready when we tried to start, retry once it's playable.
+        try {
+            api._bgm.audio.addEventListener('canplay', () => {
+                if (api._bgm.enabled && !api._bgm.startedOnce) {
+                    tryStart('canplay');
+                }
+            });
+        } catch (e) {}
+
         if (toggleEl) {
             // On many mobile browsers, a single tap fires both touchstart and click.
             // Without guarding, we'd toggle twice and appear to "not work".
             let lastToggleAt = 0;
+            let ignoreNextClick = false;
             const toggleHandler = () => {
                 const now = Date.now();
                 if (now - lastToggleAt < 350) return;
@@ -162,9 +184,23 @@
                 // Tap/click is a user gesture - safest place to start playback.
                 setEnabled(!api._bgm.enabled);
             };
-            toggleEl.addEventListener('click', toggleHandler);
-            // iOS Safari often behaves best when play() is triggered from touchstart.
-            toggleEl.addEventListener('touchstart', toggleHandler, { passive: true });
+            // Prefer pointer events where available.
+            toggleEl.addEventListener('pointerdown', () => {
+                ignoreNextClick = true;
+                toggleHandler();
+            }, { passive: true });
+            // iOS Safari: touchend is often a reliable gesture hook.
+            toggleEl.addEventListener('touchend', () => {
+                ignoreNextClick = true;
+                toggleHandler();
+            }, { passive: true });
+            toggleEl.addEventListener('click', () => {
+                if (ignoreNextClick) {
+                    ignoreNextClick = false;
+                    return;
+                }
+                toggleHandler();
+            });
         }
 
         if (volumeEl) {
