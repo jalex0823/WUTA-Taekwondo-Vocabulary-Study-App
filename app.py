@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, abort, send_file, jsonify
+from flask import Flask, render_template, request, abort, send_file, jsonify, session, redirect, url_for
 import json
 from pathlib import Path
 from gtts import gTTS
@@ -10,6 +10,8 @@ import re
 import functools
 import csv
 import io
+
+from werkzeug.security import check_password_hash, generate_password_hash
 
 import requests
 
@@ -31,9 +33,146 @@ APP_ROOT = Path(__file__).parent
 DATA_PATH = APP_ROOT / "data" / "terms.json"
 USER_TERMS_PATH = APP_ROOT / "data" / "user_terms.json"
 CUSTOM_DICT_PATH = APP_ROOT / "data" / "custom_dictionary.json"
+USERS_PATH = APP_ROOT / "data" / "users.json"
 AUDIO_DIR = APP_ROOT / "static" / "audio"
 
 app = Flask(__name__)
+
+# Session security: set FLASK_SECRET_KEY in your environment for production.
+# We still provide a dev fallback so the app boots for local usage.
+app.secret_key = (
+    (os.environ.get("FLASK_SECRET_KEY") or "").strip()
+    or (os.environ.get("SECRET_KEY") or "").strip()
+    or "dev-only-change-me"
+)
+
+
+def _load_users_data() -> dict:
+    """Load registered users from disk.
+
+    Schema:
+      {
+        "schema_version": 1,
+        "users": [
+          {"id": str, "username": str, "email": str, "password_hash": str, "created_at": int}
+        ]
+      }
+    """
+    try:
+        if not USERS_PATH.exists():
+            return {"schema_version": 1, "users": []}
+        payload = json.loads(USERS_PATH.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            return {"schema_version": 1, "users": []}
+        if payload.get("schema_version") != 1:
+            # Forward-compatible: keep data but ensure required keys exist.
+            users = payload.get("users", [])
+            return {"schema_version": 1, "users": users if isinstance(users, list) else []}
+        users = payload.get("users")
+        if not isinstance(users, list):
+            payload["users"] = []
+        return payload
+    except Exception:
+        return {"schema_version": 1, "users": []}
+
+
+def _save_users_data(payload: dict) -> None:
+    USERS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    tmp_path = USERS_PATH.with_suffix(".tmp")
+    tmp_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    tmp_path.replace(USERS_PATH)
+
+
+def _normalize_username(username: str) -> str:
+    s = (username or "").strip()
+    # Keep it kid-friendly/simple: letters, numbers, underscore, dash.
+    s = re.sub(r"[^a-zA-Z0-9_-]", "", s)
+    return s
+
+
+def _normalize_email(email: str) -> str:
+    return (email or "").strip().lower()
+
+
+def _find_user_by_id(user_id: str) -> dict | None:
+    if not user_id:
+        return None
+    payload = _load_users_data()
+    for u in payload.get("users", []) or []:
+        if isinstance(u, dict) and u.get("id") == user_id:
+            return u
+    return None
+
+
+def _find_user_by_username(username: str) -> dict | None:
+    uname = _normalize_username(username)
+    if not uname:
+        return None
+    payload = _load_users_data()
+    for u in payload.get("users", []) or []:
+        if not isinstance(u, dict):
+            continue
+        if (u.get("username") or "").lower() == uname.lower():
+            return u
+    return None
+
+
+def _find_user_by_email(email: str) -> dict | None:
+    em = _normalize_email(email)
+    if not em:
+        return None
+    payload = _load_users_data()
+    for u in payload.get("users", []) or []:
+        if not isinstance(u, dict):
+            continue
+        if _normalize_email(u.get("email") or "") == em:
+            return u
+    return None
+
+
+def _create_user(*, username: str, email: str, password: str) -> dict:
+    now = int(time.time())
+    return {
+        "id": f"usr_{uuid.uuid4().hex}",
+        "username": _normalize_username(username),
+        "email": _normalize_email(email),
+        "password_hash": generate_password_hash(password),
+        "created_at": now,
+    }
+
+
+def _get_current_user() -> dict | None:
+    user_id = session.get("user_id")
+    if not isinstance(user_id, str) or not user_id:
+        return None
+    u = _find_user_by_id(user_id)
+    if not u:
+        # Stale session.
+        try:
+            session.pop("user_id", None)
+        except Exception:
+            pass
+        return None
+    return u
+
+
+def login_required(view_func):
+    """Decorator to require a logged-in user.
+
+    Redirects to /login?next=... if not authenticated.
+    """
+    @functools.wraps(view_func)
+    def wrapper(*args, **kwargs):
+        if not _get_current_user():
+            next_url = _safe_next_url(request.path)
+            return redirect(url_for("login", next=next_url))
+        return view_func(*args, **kwargs)
+    return wrapper
+
+
+@app.context_processor
+def _inject_current_user():
+    return {"current_user": _get_current_user()}
 
 
 def _find_term_by_id(data, term_id):
@@ -507,6 +646,193 @@ def combine_belts_with_tips(belts):
         combined.append(combined_belt)
     
     return combined
+
+
+def _safe_next_url(next_url: str) -> str:
+    """Very small open-redirect guard.
+
+    Only allow relative paths like '/my-words'.
+    """
+    s = (next_url or "").strip()
+    if not s:
+        return ""
+    if s.startswith("/") and not s.startswith("//") and "\n" not in s and "\r" not in s:
+        return s
+    return ""
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if _get_current_user():
+        return redirect(url_for("home"))
+
+    if request.method == "GET":
+        return render_template("register.html")
+
+    username_raw = (request.form.get("username") or "").strip()
+    email_raw = (request.form.get("email") or "").strip()
+    password = (request.form.get("password") or "")
+    password2 = (request.form.get("password2") or "")
+
+    username = _normalize_username(username_raw)
+    email = _normalize_email(email_raw)
+    next_url = _safe_next_url(request.args.get("next") or request.form.get("next") or "")
+
+    if len(username) < 3:
+        return render_template(
+            "register.html",
+            error="Username must be at least 3 characters (letters/numbers/_/-).",
+            pref_username=username_raw,
+            pref_email=email_raw,
+            next=next_url,
+        )
+    if "@" not in email or "." not in email:
+        return render_template(
+            "register.html",
+            error="Please enter a valid email address.",
+            pref_username=username_raw,
+            pref_email=email_raw,
+            next=next_url,
+        )
+    if len(password) < 6:
+        return render_template(
+            "register.html",
+            error="Password must be at least 6 characters.",
+            pref_username=username_raw,
+            pref_email=email_raw,
+            next=next_url,
+        )
+    if password != password2:
+        return render_template(
+            "register.html",
+            error="Passwords do not match.",
+            pref_username=username_raw,
+            pref_email=email_raw,
+            next=next_url,
+        )
+
+    if _find_user_by_username(username):
+        return render_template(
+            "register.html",
+            error="That username is already taken.",
+            pref_username=username_raw,
+            pref_email=email_raw,
+            next=next_url,
+        )
+    if _find_user_by_email(email):
+        return render_template(
+            "register.html",
+            error="An account with that email already exists.",
+            pref_username=username_raw,
+            pref_email=email_raw,
+            next=next_url,
+        )
+
+    payload = _load_users_data()
+    users = payload.get("users", [])
+    if not isinstance(users, list):
+        users = []
+
+    new_user = _create_user(username=username, email=email, password=password)
+    users.append(new_user)
+    payload["schema_version"] = 1
+    payload["users"] = users
+    _save_users_data(payload)
+
+    session["user_id"] = new_user["id"]
+    return redirect(next_url or url_for("home"))
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if _get_current_user():
+        return redirect(url_for("home"))
+
+    next_url = _safe_next_url(request.args.get("next") or request.form.get("next") or "")
+
+    if request.method == "GET":
+        return render_template("login.html", next=next_url)
+
+    identifier = (request.form.get("identifier") or "").strip()
+    password = (request.form.get("password") or "")
+
+    user = None
+    if "@" in identifier:
+        user = _find_user_by_email(identifier)
+    if not user:
+        user = _find_user_by_username(identifier)
+
+    if not user:
+        return render_template(
+            "login.html",
+            error="No account found for that username/email.",
+            pref_identifier=identifier,
+            next=next_url,
+        )
+
+    if not check_password_hash((user.get("password_hash") or ""), password):
+        return render_template(
+            "login.html",
+            error="Incorrect password.",
+            pref_identifier=identifier,
+            next=next_url,
+        )
+
+    session["user_id"] = user.get("id")
+    return redirect(next_url or url_for("home"))
+
+
+@app.route("/logout")
+def logout():
+    try:
+        session.pop("user_id", None)
+    except Exception:
+        pass
+    return redirect(url_for("home"))
+
+
+@app.route("/account")
+@login_required
+def account():
+    # current_user is injected via context processor, but we also fetch it here for safety.
+    user = _get_current_user()
+    return render_template("account.html", user=user)
+
+
+@app.route("/account/delete", methods=["POST"])
+@login_required
+def account_delete():
+    user = _get_current_user()
+    if not user:
+        return redirect(url_for("home"))
+
+    password = (request.form.get("password") or "")
+    confirm = (request.form.get("confirm") or "").strip().lower()
+
+    if confirm not in {"yes", "on", "true", "1"}:
+        return render_template("account.html", user=user, error="Please confirm account deletion.")
+
+    if not check_password_hash((user.get("password_hash") or ""), password):
+        return render_template("account.html", user=user, error="Incorrect password.")
+
+    payload = _load_users_data()
+    users = payload.get("users", [])
+    if not isinstance(users, list):
+        users = []
+
+    uid = user.get("id")
+    users = [u for u in users if not (isinstance(u, dict) and u.get("id") == uid)]
+    payload["schema_version"] = 1
+    payload["users"] = users
+    _save_users_data(payload)
+
+    try:
+        session.pop("user_id", None)
+    except Exception:
+        pass
+
+    # Redirect home; the account is now removed.
+    return redirect(url_for("home"))
 
 @app.route("/")
 def home():

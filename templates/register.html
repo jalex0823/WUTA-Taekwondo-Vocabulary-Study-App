@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <meta name="theme-color" content="#667eea">
+
+    <title>Register - WUTA Vocabulary</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="theme-arcade theme-screenshot page-my-words">
+    <div class="container">
+        <header class="terms-header" style="--belt-color: #4ECDC4">
+            <div class="terms-brand" aria-hidden="true">
+                <picture class="terms-brand-mascot">
+                    <img
+                        src="{{ url_for('static', filename='images/TVTA_Neal.png') }}"
+                        alt=""
+                        loading="eager"
+                        onerror="this.onerror=null; this.src='/static/images/branding/mascot.svg';"
+                    >
+                </picture>
+            </div>
+
+            <a href="/" class="back-button">← Back to Main Menu</a>
+            <h1>Register</h1>
+            <p class="term-counter">Create a new account</p>
+        </header>
+
+        <div class="my-words-panel">
+            {% if error %}
+            <div class="my-words-alert my-words-alert--error" role="alert">{{ error }}</div>
+            {% endif %}
+
+            <div class="my-words-grid">
+                <section class="my-words-card" aria-label="Registration form">
+                    <h2 class="my-words-title">Let’s get you started</h2>
+
+                    <form method="post" action="{{ url_for('register', next=next) }}" class="my-words-form">
+                        <input type="hidden" name="next" value="{{ next or '' }}">
+
+                        <label class="my-words-label" for="username">Username</label>
+                        <input id="username" name="username" type="text" autocomplete="username" placeholder="nealkid" value="{{ pref_username or '' }}" required>
+                        <p class="my-words-hint">Allowed: letters, numbers, <strong>_</strong> and <strong>-</strong>.</p>
+
+                        <label class="my-words-label" for="email">Email</label>
+                        <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" value="{{ pref_email or '' }}" required>
+
+                        <label class="my-words-label" for="password">Password</label>
+                        <input id="password" name="password" type="password" autocomplete="new-password" placeholder="At least 6 characters" required>
+
+                        <label class="my-words-label" for="password2">Confirm password</label>
+                        <input id="password2" name="password2" type="password" autocomplete="new-password" placeholder="Type it again" required>
+
+                        <button class="nav-button primary" type="submit">✨ Create account</button>
+
+                        <p class="my-words-hint">
+                            Already have an account?
+                            <a href="{{ url_for('login', next=next) }}">Login</a>
+                        </p>
+                    </form>
+                </section>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <p>Welcome to WUTA — let’s train!</p>
+        </footer>
+    </div>
+</body>
+</html>

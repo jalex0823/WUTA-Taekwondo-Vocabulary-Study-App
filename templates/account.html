@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <meta name="theme-color" content="#667eea">
+
+    <title>Account - WUTA Vocabulary</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="theme-arcade theme-screenshot page-my-words">
+    <div class="container">
+        <header class="terms-header" style="--belt-color: #667eea">
+            <div class="terms-brand" aria-hidden="true">
+                <picture class="terms-brand-mascot">
+                    <img
+                        src="{{ url_for('static', filename='images/TVTA_Neal.png') }}"
+                        alt=""
+                        loading="eager"
+                        onerror="this.onerror=null; this.src='/static/images/branding/mascot.svg';"
+                    >
+                </picture>
+            </div>
+
+            <a href="/" class="back-button">← Back to Main Menu</a>
+
+            <div class="my-words-header-actions" style="margin-left: auto;">
+                <a class="nav-button" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+
+            <h1>Account</h1>
+            <p class="term-counter">Manage your login</p>
+        </header>
+
+        <div class="my-words-panel">
+            {% if error %}
+            <div class="my-words-alert my-words-alert--error" role="alert">{{ error }}</div>
+            {% endif %}
+            {% if notice %}
+            <div class="my-words-alert my-words-alert--notice" role="status">{{ notice }}</div>
+            {% endif %}
+
+            <div class="my-words-grid">
+                <section class="my-words-card" aria-label="Account details">
+                    <h2 class="my-words-title">Signed in</h2>
+                    <div class="my-words-form">
+                        <p><strong>Username:</strong> {{ user.username }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <p class="my-words-hint">Tip: For App Store compliance, apps that let users create accounts should also let them delete accounts in-app.</p>
+                    </div>
+                </section>
+
+                <section class="my-words-card" aria-label="Delete account">
+                    <h2 class="my-words-title">Delete account</h2>
+                    <form method="post" action="{{ url_for('account_delete') }}" class="my-words-form" onsubmit="return confirm('Delete your account? This cannot be undone.');">
+                        <label class="my-words-label" for="password">Confirm your password</label>
+                        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+
+                        <label class="my-words-label" style="display:flex; gap:10px; align-items:center;">
+                            <input type="checkbox" name="confirm" value="yes" required>
+                            <span>I understand this permanently deletes my account.</span>
+                        </label>
+
+                        <button class="nav-button nav-button--danger" type="submit">🗑️ Delete my account</button>
+                        <p class="my-words-hint">If you add per-user data later (like saved words), this should delete that data too.</p>
+                    </form>
+                </section>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <p>Stay safe online — strong passwords are a black-belt skill.</p>
+        </footer>
+    </div>
+</body>
+</html>

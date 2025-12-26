@@ -48,6 +48,17 @@
             {% if belt.belt_id == 'my_words' %}
             <a href="/my-words" class="back-button" style="margin-left: 10px;">✍️ Manage My Words</a>
             {% endif %}
+
+            <div class="my-words-header-actions" style="margin-left: auto;">
+                {% if current_user %}
+                    <span class="chip chip--muted">{{ current_user.username }}</span>
+                    <a class="nav-button" href="{{ url_for('account') }}">Account</a>
+                    <a class="nav-button" href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a class="nav-button" href="{{ url_for('login', next=request.path) }}">Login</a>
+                    <a class="nav-button primary" href="{{ url_for('register', next=request.path) }}">Register</a>
+                {% endif %}
+            </div>
             <h1>{{ belt.belt_name }}</h1>
             <p class="term-counter">
                 <span id="current-term">1</span> / {{ belt.terms|length }}

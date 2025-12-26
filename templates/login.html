@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <meta name="theme-color" content="#667eea">
+
+    <title>Login - WUTA Vocabulary</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="theme-arcade theme-screenshot page-my-words">
+    <div class="container">
+        <header class="terms-header" style="--belt-color: #667eea">
+            <div class="terms-brand" aria-hidden="true">
+                <picture class="terms-brand-mascot">
+                    <img
+                        src="{{ url_for('static', filename='images/TVTA_Neal.png') }}"
+                        alt=""
+                        loading="eager"
+                        onerror="this.onerror=null; this.src='/static/images/branding/mascot.svg';"
+                    >
+                </picture>
+            </div>
+
+            <a href="/" class="back-button">← Back to Main Menu</a>
+            <h1>Login</h1>
+            <p class="term-counter">Sign in to your account</p>
+        </header>
+
+        <div class="my-words-panel">
+            {% if error %}
+            <div class="my-words-alert my-words-alert--error" role="alert">{{ error }}</div>
+            {% endif %}
+
+            <div class="my-words-grid">
+                <section class="my-words-card" aria-label="Login form">
+                    <h2 class="my-words-title">Welcome back</h2>
+
+                    <form method="post" action="{{ url_for('login', next=next) }}" class="my-words-form">
+                        <input type="hidden" name="next" value="{{ next or '' }}">
+
+                        <label class="my-words-label" for="identifier">Username or email</label>
+                        <input id="identifier" name="identifier" type="text" autocomplete="username" placeholder="yourname or you@example.com" value="{{ pref_identifier or '' }}" required>
+
+                        <label class="my-words-label" for="password">Password</label>
+                        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+
+                        <button class="nav-button primary" type="submit">🔐 Login</button>
+
+                        <p class="my-words-hint">
+                            New here?
+                            <a href="{{ url_for('register', next=next) }}">Create an account</a>
+                        </p>
+                    </form>
+                </section>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <p>Practice makes perfect — and accounts make it yours.</p>
+        </footer>
+    </div>
+</body>
+</html>

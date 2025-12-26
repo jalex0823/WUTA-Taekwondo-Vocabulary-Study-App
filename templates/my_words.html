@@ -33,6 +33,14 @@
             </p>
 
             <div class="my-words-header-actions">
+                {% if current_user %}
+                    <span class="chip chip--muted">{{ current_user.username }}</span>
+                    <a class="nav-button" href="{{ url_for('account') }}">Account</a>
+                    <a class="nav-button" href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a class="nav-button" href="{{ url_for('login', next=request.path) }}">Login</a>
+                    <a class="nav-button primary" href="{{ url_for('register', next=request.path) }}">Register</a>
+                {% endif %}
                 <a class="nav-button primary" href="/my-words/train">▶️ Train My Words</a>
                 <form method="post" action="/my-words/repair" style="display:inline; margin-left: 8px;">
                     <button class="nav-button" type="submit" onclick="return confirm('Repair missing/invalid Korean translations using auto-translate?');">🛠️ Repair translations</button>

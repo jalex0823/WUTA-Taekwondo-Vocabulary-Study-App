@@ -25,6 +25,16 @@
             </div>
 
             <a href="/" class="back-button">← Back to Main Menu</a>
+            <div class="my-words-header-actions" style="margin-left: auto;">
+                {% if current_user %}
+                    <span class="chip chip--muted">{{ current_user.username }}</span>
+                    <a class="nav-button" href="{{ url_for('account') }}">Account</a>
+                    <a class="nav-button" href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a class="nav-button" href="{{ url_for('login', next=request.path) }}">Login</a>
+                    <a class="nav-button primary" href="{{ url_for('register', next=request.path) }}">Register</a>
+                {% endif %}
+            </div>
             <h1>Admin Dictionary</h1>
             <p class="term-counter">
                 <span>{{ entries|length }}</span> entries
