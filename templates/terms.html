@@ -823,6 +823,33 @@
             cardInner.classList.toggle('flipped');
         }
 
+        // iOS Safari speechSynthesis workaround: Safari pauses speech after ~15s
+        // of inactivity. We keep it alive by periodically calling .pause()/.resume().
+        let _speechKeepAliveTimer = null;
+
+        function _startSpeechKeepAlive() {
+            _stopSpeechKeepAlive();
+            // Only needed on iOS Safari
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            if (!isIOS) return;
+            _speechKeepAliveTimer = setInterval(() => {
+                try {
+                    if (window.speechSynthesis && window.speechSynthesis.speaking) {
+                        window.speechSynthesis.pause();
+                        window.speechSynthesis.resume();
+                    }
+                } catch (e) {}
+            }, 10000); // every 10s, well before the 15s cutoff
+        }
+
+        function _stopSpeechKeepAlive() {
+            if (_speechKeepAliveTimer) {
+                clearInterval(_speechKeepAliveTimer);
+                _speechKeepAliveTimer = null;
+            }
+        }
+
         function _speakCardText(term, cardEl, visualizer, includeEnglish) {
             if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
                 return false;
@@ -877,9 +904,12 @@
 
                 if (visualizer) visualizer.classList.remove('hidden');
 
+                _startSpeechKeepAlive();
+
                 const speakNext = (idx) => {
                     if (idx >= sequence.length) {
                         if (visualizer) visualizer.classList.add('hidden');
+                        _stopSpeechKeepAlive();
                         return;
                     }
                     const item = sequence[idx];
@@ -893,6 +923,7 @@
                     utter.onerror = () => {
                         // Hide visualizer and stop the chain on any error.
                         if (visualizer) visualizer.classList.add('hidden');
+                        _stopSpeechKeepAlive();
                     };
                     window.speechSynthesis.speak(utter);
                 };
@@ -1543,23 +1574,45 @@
         });
 
         // Touch swipe support (manual mode only)
+        // Improved for iOS Safari: ignore edge swipes (Safari back/forward)
+        // and vertical scrolls.
         let touchStartX = 0;
+        let touchStartY = 0;
         let touchEndX = 0;
+        let touchEndY = 0;
 
         document.addEventListener('touchstart', e => {
             touchStartX = e.changedTouches[0].screenX;
-        });
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
 
         document.addEventListener('touchend', e => {
             touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
             if (currentMode === 'manual') {
                 handleSwipe();
             }
-        });
+        }, { passive: true });
 
         function handleSwipe() {
-            if (touchEndX < touchStartX - 50) nextCard();
-            if (touchEndX > touchStartX + 50) prevCard();
+            const dx = touchEndX - touchStartX;
+            const dy = touchEndY - touchStartY;
+            const absDx = Math.abs(dx);
+            const absDy = Math.abs(dy);
+
+            // Ignore if vertical movement dominates (user is scrolling)
+            if (absDy > absDx) return;
+
+            // Ignore swipes that start within 30px of screen edges
+            // (Safari uses edge swipes for back/forward navigation)
+            const screenW = window.innerWidth || screen.width;
+            if (touchStartX < 30 || touchStartX > screenW - 30) return;
+
+            // Require a minimum 60px horizontal swipe
+            if (absDx < 60) return;
+
+            if (dx < 0) nextCard();
+            if (dx > 0) prevCard();
         }
         
         // Initialize on page load

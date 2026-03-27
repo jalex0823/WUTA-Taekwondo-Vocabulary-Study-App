@@ -18,8 +18,11 @@ body {
     font-family: 'Comic Sans MS', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg-gradient);
     min-height: 100vh;
+    min-height: 100dvh; /* iOS Safari dynamic viewport fix */
     padding: 20px;
     color: #333;
+    /* iOS overscroll rubber-band: keep background visible */
+    -webkit-overflow-scrolling: touch;
 }
 
 .container {
@@ -485,6 +488,7 @@ body {
 .flashcard-container {
     position: relative;
     height: min(500px, 65vh);
+    height: min(500px, 65dvh); /* iOS Safari dynamic viewport */
     margin-bottom: 20px;
     perspective: 1000px;
 }
@@ -818,21 +822,45 @@ body {
 }
 
 .dot {
-    width: 12px;
-    height: 12px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background: rgba(255,255,255,0.3);
     cursor: pointer;
     transition: all 0.3s ease;
+    /* iOS: 44px minimum touch target */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
-.dot.active {
+/* Visual dot inside the touch target */
+.dot::after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: inherit;
+    transition: all 0.3s ease;
+}
+
+/* Reset background on the outer element since the ::after handles it */
+.dot {
+    background: transparent;
+}
+
+.dot::after {
+    background: rgba(255,255,255,0.3);
+}
+
+.dot.active::after {
     background: white;
     transform: scale(1.5);
     box-shadow: 0 0 10px rgba(255,255,255,0.5);
 }
 
-.dot:hover {
+.dot:hover::after {
     background: rgba(255,255,255,0.6);
     transform: scale(1.3);
 }
@@ -1177,6 +1205,23 @@ body {
     z-index: -1;
 }
 
+/* ============ iOS / SAFARI SPECIFIC FIXES ============ */
+
+/* Prevent iOS auto-zoom on input focus (font-size must be >= 16px) */
+@supports (-webkit-touch-callout: none) {
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* iOS safe area padding for notched devices */
+@supports (padding: env(safe-area-inset-top)) {
+    body {
+        padding-left: max(14px, env(safe-area-inset-left));
+        padding-right: max(14px, env(safe-area-inset-right));
+    }
+}
+
 /* ============ RESPONSIVE DESIGN ============ */
 
 @media (max-width: 480px) {
@@ -1222,6 +1267,7 @@ body {
     
     .flashcard-container {
         height: min(450px, 62vh);
+        height: min(450px, 62dvh);
     }
     
     .audio-button {
@@ -1267,6 +1313,17 @@ body {
     
     .auto-progress-indicator {
         justify-content: center;
+    }
+
+    /* Tighter progress dots on mobile */
+    .progress-dots {
+        gap: 2px;
+        padding: 10px 0;
+    }
+
+    .dot {
+        width: 36px;
+        height: 36px;
     }
 }
 
@@ -2822,6 +2879,7 @@ body.theme-arcade .mode-btn {
 
 body.theme-arcade .flashcard-container {
     height: min(540px, 68vh);
+    height: min(540px, 68dvh);
 }
 
 body.theme-arcade .flashcard.active {
@@ -2875,13 +2933,19 @@ body.theme-arcade .card-back .tap-hint {
 
 body.theme-arcade .navigation-controls {
     position: sticky;
+    position: -webkit-sticky; /* iOS Safari sticky fix */
     bottom: calc(10px + env(safe-area-inset-bottom));
     background: rgba(255, 255, 255, 0.16);
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); /* Safari prefix */
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 18px;
     padding: 10px;
     box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+    /* iOS: prevent sticky from jumping during scroll */
+    z-index: 100;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 body.theme-arcade .nav-button {
@@ -2926,6 +2990,7 @@ body.theme-arcade .progress-dots {
 
     body.theme-arcade .flashcard-container {
         height: min(520px, 62vh);
+        height: min(520px, 62dvh);
     }
 
     body.theme-arcade .progress-dots {
@@ -2941,6 +3006,7 @@ body.theme-arcade .progress-dots {
 
     body.theme-arcade .flashcard-container {
         height: min(560px, 66vh);
+        height: min(560px, 66dvh);
     }
 }
 
