@@ -114,6 +114,41 @@
           "english": "Front Kick",
           "category": "Kick",
           "image_path": "/static/images/moves/kicks/ap_chagi.svg"
+        },
+        {
+          "id": "dobok",
+          "hangul": "도복",
+          "romanization": "dobok",
+          "english": "Uniform",
+          "category": "Equipment"
+        },
+        {
+          "id": "dojang",
+          "hangul": "도장",
+          "romanization": "dojang",
+          "english": "Training Hall",
+          "category": "Place"
+        },
+        {
+          "id": "ti",
+          "hangul": "띠",
+          "romanization": "ti",
+          "english": "Belt",
+          "category": "Equipment"
+        },
+        {
+          "id": "sabomnim",
+          "hangul": "사범님",
+          "romanization": "sabomnim",
+          "english": "Master/Instructor",
+          "category": "Title"
+        },
+        {
+          "id": "kihap",
+          "hangul": "기합",
+          "romanization": "kihap",
+          "english": "Yell/Spirit Shout",
+          "category": "Command"
         }
       ]
     },
@@ -231,6 +266,27 @@
           "english": "Walking Stance Front Kick",
           "category": "Kick",
           "image_path": "/static/images/moves/kicks/default_kick.svg"
+        },
+        {
+          "id": "kalyeo",
+          "hangul": "갈려",
+          "romanization": "kalyeo",
+          "english": "Stop (Sparring)",
+          "category": "Command"
+        },
+        {
+          "id": "kaesok",
+          "hangul": "계속",
+          "romanization": "kaesok",
+          "english": "Continue",
+          "category": "Command"
+        },
+        {
+          "id": "kibon",
+          "hangul": "기본",
+          "romanization": "kibon",
+          "english": "Basic/Fundamental",
+          "category": "Training"
         }
       ]
     },
@@ -372,6 +428,34 @@
           "english": "Taegeuk Form 1",
           "category": "Form",
           "image_path": "/static/images/moves/forms/default_form.svg"
+        },
+        {
+          "id": "momtong",
+          "hangul": "몸통",
+          "romanization": "momtong",
+          "english": "Body/Torso",
+          "category": "Body Part"
+        },
+        {
+          "id": "eolgul",
+          "hangul": "얼굴",
+          "romanization": "eolgul",
+          "english": "Face",
+          "category": "Body Part"
+        },
+        {
+          "id": "dari",
+          "hangul": "다리",
+          "romanization": "dari",
+          "english": "Leg",
+          "category": "Body Part"
+        },
+        {
+          "id": "pal",
+          "hangul": "팔",
+          "romanization": "pal",
+          "english": "Arm",
+          "category": "Body Part"
         }
       ]
     },
@@ -489,6 +573,27 @@
           "english": "Double Punch",
           "category": "Strike",
           "image_path": "/static/images/moves/strikes/default_strike.svg"
+        },
+        {
+          "id": "mok",
+          "hangul": "목",
+          "romanization": "mok",
+          "english": "Neck",
+          "category": "Body Part"
+        },
+        {
+          "id": "sonmok",
+          "hangul": "손목",
+          "romanization": "sonmok",
+          "english": "Wrist",
+          "category": "Body Part"
+        },
+        {
+          "id": "balmok",
+          "hangul": "발목",
+          "romanization": "balmok",
+          "english": "Ankle",
+          "category": "Body Part"
         }
       ]
     },
@@ -628,6 +733,20 @@
           "english": "Taegeuk Form 2",
           "category": "Form",
           "image_path": "/static/images/moves/forms/default_form.svg"
+        },
+        {
+          "id": "bae",
+          "hangul": "배",
+          "romanization": "bae",
+          "english": "Abdomen/Stomach",
+          "category": "Body Part"
+        },
+        {
+          "id": "gaseum",
+          "hangul": "가슴",
+          "romanization": "gaseum",
+          "english": "Chest",
+          "category": "Body Part"
         }
       ]
     },
@@ -748,6 +867,27 @@
           "english": "Scooping Block",
           "category": "Block",
           "image_path": "/static/images/moves/blocks/default_block.svg"
+        },
+        {
+          "id": "jeonggangi",
+          "hangul": "정강이",
+          "romanization": "jeonggangi",
+          "english": "Shin",
+          "category": "Body Part"
+        },
+        {
+          "id": "heobeokji",
+          "hangul": "허벅지",
+          "romanization": "heobeokji",
+          "english": "Thigh",
+          "category": "Body Part"
+        },
+        {
+          "id": "pihagi",
+          "hangul": "피하기",
+          "romanization": "pihagi",
+          "english": "Dodge/Evade",
+          "category": "Movement"
         }
       ]
     },
@@ -1012,6 +1152,27 @@
           "english": "Palm Heel Block",
           "category": "Block",
           "image_path": "/static/images/moves/blocks/default_block.svg"
+        },
+        {
+          "id": "joo_sim",
+          "hangul": "주심",
+          "romanization": "joo sim",
+          "english": "Referee",
+          "category": "Competition"
+        },
+        {
+          "id": "kyunggo",
+          "hangul": "경고",
+          "romanization": "kyunggo",
+          "english": "Warning (Penalty)",
+          "category": "Competition"
+        },
+        {
+          "id": "gamjeom",
+          "hangul": "감점",
+          "romanization": "gamjeom",
+          "english": "Deduction (Penalty)",
+          "category": "Competition"
         }
       ]
     },
@@ -1029,14 +1190,16 @@
           "image_path": "/static/images/moves/kicks/default_kick.svg"
         },
         {
-          "id": "dobok",
+          "id": "dobok__blue",
+          "legacy_id": "dobok",
           "hangul": "도복",
           "romanization": "dobok",
           "english": "Uniform",
           "category": "Equipment"
         },
         {
-          "id": "dojang",
+          "id": "dojang__blue",
+          "legacy_id": "dojang",
           "hangul": "도장",
           "romanization": "dojang",
           "english": "Training Hall",
@@ -1149,6 +1312,21 @@
           "english": "Taegeuk Form 4",
           "category": "Form",
           "image_path": "/static/images/moves/forms/default_form.svg"
+        },
+        {
+          "id": "hak_saeng",
+          "hangul": "학생",
+          "romanization": "hak saeng",
+          "english": "Student",
+          "category": "Title"
+        },
+        {
+          "id": "dwi_huryeo_chagi",
+          "hangul": "뒤후려차기",
+          "romanization": "dwi huryeo chagi",
+          "english": "Spinning Hook Kick",
+          "category": "Kick",
+          "image_path": "/static/images/moves/kicks/default_kick.svg"
         }
       ]
     },
@@ -1274,6 +1452,21 @@
           "english": "Palm Heel Side Block",
           "category": "Block",
           "image_path": "/static/images/moves/blocks/default_block.svg"
+        },
+        {
+          "id": "kawi_chagi",
+          "hangul": "가위차기",
+          "romanization": "kawi chagi",
+          "english": "Scissor Kick",
+          "category": "Kick",
+          "image_path": "/static/images/moves/kicks/default_kick.svg"
+        },
+        {
+          "id": "jeon",
+          "hangul": "전",
+          "romanization": "jeon",
+          "english": "Round (Competition)",
+          "category": "Competition"
         }
       ]
     },
@@ -1291,7 +1484,8 @@
           "image_path": "/static/images/moves/forms/default_form.svg"
         },
         {
-          "id": "kihap",
+          "id": "kihap__purple",
+          "legacy_id": "kihap",
           "hangul": "기합",
           "romanization": "kihap",
           "english": "Yell/Spirit Shout",
@@ -1681,6 +1875,20 @@
           "english": "Taegeuk Form 6",
           "category": "Form",
           "image_path": "/static/images/moves/forms/default_form.svg"
+        },
+        {
+          "id": "jeom",
+          "hangul": "점",
+          "romanization": "jeom",
+          "english": "Point (Score)",
+          "category": "Competition"
+        },
+        {
+          "id": "geup",
+          "hangul": "급",
+          "romanization": "geup",
+          "english": "Grade/Rank (Color Belt)",
+          "category": "Rank"
         }
       ]
     },
@@ -1802,6 +2010,27 @@
           "english": "Pressing Block",
           "category": "Block",
           "image_path": "/static/images/moves/blocks/default_block.svg"
+        },
+        {
+          "id": "teok",
+          "hangul": "턱",
+          "romanization": "teok",
+          "english": "Chin",
+          "category": "Body Part"
+        },
+        {
+          "id": "ip",
+          "hangul": "입",
+          "romanization": "ip",
+          "english": "Mouth",
+          "category": "Body Part"
+        },
+        {
+          "id": "ko",
+          "hangul": "코",
+          "romanization": "ko",
+          "english": "Nose",
+          "category": "Body Part"
         }
       ]
     },
@@ -1945,6 +2174,20 @@
           "english": "Triple Kick Combination",
           "category": "Kick",
           "image_path": "/static/images/moves/kicks/default_kick.svg"
+        },
+        {
+          "id": "kwanjangnim",
+          "hangul": "관장님",
+          "romanization": "kwanjangnim",
+          "english": "Grandmaster (Honorific)",
+          "category": "Title"
+        },
+        {
+          "id": "jeongsin",
+          "hangul": "정신",
+          "romanization": "jeongsin",
+          "english": "Mind/Mental Discipline",
+          "category": "Philosophy"
         }
       ]
     },
@@ -2075,6 +2318,20 @@
           "english": "Taegeuk Form 8",
           "category": "Form",
           "image_path": "/static/images/moves/forms/default_form.svg"
+        },
+        {
+          "id": "musul",
+          "hangul": "무술",
+          "romanization": "musul",
+          "english": "Martial Arts",
+          "category": "Philosophy"
+        },
+        {
+          "id": "do",
+          "hangul": "도",
+          "romanization": "do",
+          "english": "The Way/Path",
+          "category": "Philosophy"
         }
       ]
     },
@@ -2236,6 +2493,21 @@
           "english": "Grabbing Block",
           "category": "Block",
           "image_path": "/static/images/moves/blocks/default_block.svg"
+        },
+        {
+          "id": "gyosannim",
+          "hangul": "교사님",
+          "romanization": "gyosannim",
+          "english": "Instructor (Teacher)",
+          "category": "Title"
+        },
+        {
+          "id": "taekwondo__black",
+          "legacy_id": "taekwondo",
+          "hangul": "태권도",
+          "romanization": "taekwondo",
+          "english": "The Way of Hand and Foot",
+          "category": "Philosophy"
         }
       ]
     }
